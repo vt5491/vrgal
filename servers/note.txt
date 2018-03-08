@@ -1,0 +1,9 @@
+This folder is not part of an angular proper.  This is where you should locate node servers that 
+need to access the same data as 'threejs-vr-gallery'.  We also have a 'meta-data' server in the 
+form of a rail-app in repo 'vrize-service'.  This rails server does *not* need to access the
+data in this repo, so it can be separate.  
+
+In here we have the 'examples' service, which is used by the 'vrize' module of VRGAL to read and
+lift the examples under 'assets/threejs-env/examples' and then write out new files to the 
+same directory.  Thus, this server needs to be tightly coupled to the angular2 client project and
+that's why it's included in this repo.

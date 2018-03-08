@@ -1,0 +1,27 @@
+<div class='controls'>
+</div>
+<div>
+  <form id='input-form' #f='ngForm' (ngSubmit)="onSubmit(f)">
+    <br/>
+    <select class="form-control" id="testFileId" #testFile (change)="onChange(testFile.value)" required>
+      <option *ngFor="let fn of testFiles" [value]="fn">{{fn}}</option>
+    </select>
+    <p>
+    <button id='vrize-it' >Convert File</button><br/>
+    <p>
+    Input:
+    <br/>
+    <textarea id='inputText' name="inputText" ngModel rows="4" cols="50">
+    </textarea>
+  <p>
+  <button id='vrize-it-input' >Convert Input Text</button><br/>
+  <div>
+    <p>
+      Output:
+      <br/>
+      <textarea id='outputText' name='outputText' [ngModel]="outputText" rows="4" cols="50">
+      </textarea>
+    </div>
+  </form>
+</div>
+<button (click)="commitExample()">Commit</button>
