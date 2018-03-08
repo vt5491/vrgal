@@ -11,6 +11,9 @@ import { VrGalleryModule } from './vr-gallery/vr-gallery.module';
 import { VrizeModule } from './vrize/vrize.module';
 // components
 import { AframeCubeComponent } from './vr-gallery/components/aframe-cube/aframe-cube.component';
+import { LinkSelectComponent } from './vr-gallery/components/link-select/link-select.component';
+import { QuerySelectComponent } from './vr-gallery/components/query-select/query-select.component';
+import { ResultsSceneComponent } from './vr-gallery/components/results-scene/results-scene.component';
 // services
 
 const appRoutes:Routes = [
@@ -18,9 +21,10 @@ const appRoutes:Routes = [
   // {path: '', component: VrGalleryComponent},
   // {path: 'vr-gallery', component: VrGalleryComponent},
   // {path: 'plane-select', component: PlaneSelectComponent},
-  // {path: 'link-select', component: LinkSelectComponent},
+  {path: 'vr-gallery/link-select', component: LinkSelectComponent},
   // {path: 'sb', component: SbComponent},
-  // {path: 'query-select', component: QuerySelectComponent},
+  {path: 'vr-gallery/query-select', component: QuerySelectComponent},
+  {path: 'vr-gallery/results-scene', component: ResultsSceneComponent},
   // {path: 'full-monty-scene', component: FullMontySceneComponent},
   // {path: 'results-scene', component: ResultsSceneComponent},
  ]
@@ -36,7 +40,8 @@ const appRoutes:Routes = [
     VrGalleryModule,
     VrizeModule,
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

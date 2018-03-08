@@ -1,3 +1,79 @@
-<p>
-  link-select works!
-</p>
+<a-scene id="link-select-scene">
+  <a-assets>
+    <img id="cokeThumbnail" src="assets/img/coke-label.jpg">
+    <!-- row 1 -->
+    <img id="webglGeometryCubeThumb" src="assets/img/webgl_geometry_cube_thumb.png">
+    <img id="webglGeometriesThumb" src="assets/img/webgl_geometries_thumb.png">
+    <img id="animationClothThumb" src="assets/img/animation_cloth_thumb.png">
+    <!-- row 2 -->
+    <img id="webglWaterThumb" src="assets/img/thumbs/webgl_water_thumb.png">
+    <img id="webglMirrorThumb" src="assets/img/thumbs/webgl_mirror_thumb.png">
+    <img id="webglPointsBillboardsThumb" src="assets/img/thumbs/webgl_points_billboards_thumb.png">
+    <img id="webglShadowmapPointlightThumb" src="assets/img/thumbs/webgl_shadowmap_pointlight_thumb.png">
+    <img id="webglDecalsThumb" src="assets/img/thumbs/webgl_decals_thumb.png">
+    <!-- row 3 -->
+    <img id="webglMorphTargetsHorseThumb" src="assets/img/thumbs/webgl_morphtargets_horse_thumb.png">
+    <img id="webglMaterialsWireframeThumb" src="assets/img/thumbs/webgl_materials_wireframe_thumb.png">
+    <img id="webglMaterialsVariationsToonThumb" src="assets/img/thumbs/webgl_materials_variations_toon_thumb.png">
+    <img id="webglMaterialsTransparencyThumb" src="assets/img/thumbs/webgl_materials_transparency_thumb.png">
+    <img id="webglLinesSphereThumb" src="assets/img/thumbs/webgl_lines_sphere_thumb.png">
+    <!-- row 4 -->
+    <img id="webglLightsPhysicalThumb" src="assets/img/thumbs/webgl_lights_physical_thumb.png">
+    <img id="webglLightsHemisphereThumb" src="assets/img/thumbs/webgl_lights_hemisphere_thumb.png">
+    <img id="webglGeometryNurbsThumb" src="assets/img/thumbs/webgl_geometry_nurbs_thumb.png">
+  </a-assets>
+  <!-- <a-entity id="dolly" position="0 0 3" wasd-controls> -->
+  <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
+    <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
+    <!-- <a-entity hand-controls="left" position="-0.1 -0.2 0" ></a-entity> -->
+    <a-entity oculus-touch-controls="hand: left" position="-0.1 -0.2 0"></a-entity>
+    <!-- <a-entity hand-controls="right" position="0.1 -0.2 0"></a-entity> -->
+    <a-entity laser-controls="hand: right" position="0.1 -0.2 0" raycaster="far: 5000"></a-entity>
+  </a-entity>
+  <a-entity save-state>
+    <!--  row 0 (sandbox)-->
+    <a-link href="assets/threejs-env/examples/vrize_webgl_geometry_cube_ct2.html" title="Geometry Cube ct2"
+    image="#webglGeometryCubeThumb" position="0 4 0"></a-link>
+    <!-- row 1 -->
+    <a-link href="assets/threejs-env/examples/vrize_webgl_geometry_cube.html" title="Geometry Cube"
+    image="#webglGeometryCubeThumb" position="-3 0 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_geometries.html" title="Geometries"
+    image="#webglGeometriesThumb" position="0 0 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_animation_cloth.html" title="Animation Cloth"
+    image="#animationClothThumb" position="3 0 0"></a-link>
+
+    <!-- row 2 -->
+    <a-link href="assets/threejs-env/examples/vrize_webgl_water.html" title="Water"
+    image="#webglWaterThumb" position="-6 -4 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_mirror.html" title="Mirror"
+    image="#webglMirrorThumb" position="-3 -4 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_points_billboards.html" title="Points Billboards"
+    image="#webglPointsBillboardsThumb" position="0 -4 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_shadowmap_pointlight.html" title="Shadowmap Pointlight"
+    image="#webglShadowmapPointlightThumb" position="3 -4 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_decals.html" title="Decals-x"
+    image="#webglDecalsThumb" position="6 -4 0"></a-link>
+
+    <!-- row 3 -->
+    <a-link href="assets/threejs-env/examples/vrize_webgl_morphtargets_horse.html" title="Horse"
+    image="#webglMorphTargetsHorseThumb" position="-6 -8 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_materials_wireframe.html" title="Wireframe"
+    image="#webglMaterialsWireframeThumb" position="-3 -8 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_materials_variations_toon.html" title="Variations Toon"
+    image="#webglMaterialsVariationsToonThumb" position="0 -8 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_materials_transparency.html" title="Transparency"
+    image="#webglMaterialsTransparencyThumb" position="3 -8 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_lines_sphere.html" title="Lines Sphere"
+    image="#webglLinesSphereThumb" position="6 -8 0"></a-link>
+
+    <!-- row 4 -->
+    <a-link href="assets/threejs-env/examples/vrize_webgl_lights_physical.html" title="Lights Physical-nk"
+    image="#webglLightsPhysicalThumb" position="-6 -12 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_lights_hemisphere.html" title="Lights Hemisphere"
+    image="#webglLightsHemisphereThumb" position="-3 -12 0"></a-link>
+    <a-link href="assets/threejs-env/examples/vrize_webgl_geometry_nurbs.html" title="Geometry NURBS"
+    image="#webglGeometryNurbsThumb" position="0 -12 0"></a-link>
+
+  </a-entity>
+  <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box> -->
+</a-scene>
