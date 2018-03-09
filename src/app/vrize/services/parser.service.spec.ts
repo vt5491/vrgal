@@ -32,7 +32,7 @@ let basicDoc : Document;
 let simpleScriptText : string;
 let parser : DOMParser;
 
-describe('ParserService', () => {
+fdescribe('ParserService', () => {
 
   //Note: the file load is not what causes the few seconds lag in the browser
   // running the uts.  What is slowing it down is the 'ng test' compile step
@@ -61,7 +61,7 @@ describe('ParserService', () => {
     let http = TestBed.get(HttpClient);
     // read 'webgl_geometry_cube.html' as a test for a non-vr-ized file.
     // let fn = '../../assets/test/examples/unix_style/webgl_geometry_cube.html';
-    let fn = '../../assets/test/examples/windows_style/webgl_geometry_cube.html';
+    let fn = '../../../assets/test/examples/windows_style/webgl_geometry_cube.html';
     http.get(fn, {responseType: 'text'})
     .subscribe(
       data => {
@@ -167,6 +167,7 @@ describe('ParserService', () => {
     // that 'findMainScript' and 'parseHtml' are working properly.
     testScriptDoc = service.parseHtml(testScriptHtml);
     let testScriptIndex = service.findMainScript(testScriptDoc);
+    // debugger;
     testScriptText = testScriptDoc.scripts[testScriptIndex].innerHTML;
     // debugger;
     // console.log(`testScriptText=${testScriptText}`);

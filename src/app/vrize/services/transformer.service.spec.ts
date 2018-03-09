@@ -60,7 +60,7 @@ let basicDoc : Document;
 let basicPostParseDoc : Document;
 // let base = TestBed.get(BaseService);
 
-describe('TransformerService', () => {
+fdescribe('TransformerService', () => {
 
   // beforeAll(() => {
   //   TestBed.configureTestingModule({
