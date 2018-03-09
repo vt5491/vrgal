@@ -7,7 +7,7 @@ export class ExamplesService {
   server : URL;
 
   constructor(private http: HttpClient) {
-    this.server = new URL('http://localhost:3000');
+    this.server = new URL('http://localhost:3001');
 
   }
 
@@ -26,7 +26,7 @@ export class ExamplesService {
 
     // let url = `${this.server}/${fn}`;
     let url = `${this.server}`;
-    console.log(`ExampleService.get: url=${url}`);
+    console.log(`ExampleService.get: url=${url}, port=3001`);
 
 
     return this.http
