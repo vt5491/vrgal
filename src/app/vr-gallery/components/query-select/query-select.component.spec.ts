@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuerySelectComponent } from './query-select.component';
 
-describe('QuerySelectComponent', () => {
+xdescribe('QuerySelectComponent', () => {
   let component: QuerySelectComponent;
   let fixture: ComponentFixture<QuerySelectComponent>;
 

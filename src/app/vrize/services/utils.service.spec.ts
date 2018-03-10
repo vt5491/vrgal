@@ -22,7 +22,7 @@ let htmlStr = `
 </html>
 `
 
-fdescribe('UtilsService', () => {
+describe('UtilsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [UtilsService, BaseService, HttpClient, HttpHandler],

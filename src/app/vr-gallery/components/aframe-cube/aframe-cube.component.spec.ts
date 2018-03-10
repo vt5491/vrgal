@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AframeCubeComponent } from './aframe-cube.component';
 
-describe('AframeCubeComponent', () => {
+xdescribe('AframeCubeComponent', () => {
   let component: AframeCubeComponent;
   let fixture: ComponentFixture<AframeCubeComponent>;
 

@@ -13,13 +13,14 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       //vt add
       require('karma-firefox-launcher'),
+      // require('karma-mocha-reporter'),
       //vt end
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma')
     ],
     //vt add
-    customContextFile: './src/environments/context_aframe_ut.html',
+    // customContextFile: './src/environments/context_aframe_ut.html',
     // customClientContextFile: './src/environments/context_aframe_ut.html',
     // files: [
     //   // { pattern: './src/test.ts', watched: false },
@@ -40,6 +41,7 @@ module.exports = function (config) {
       environment: 'dev'
     },
     reporters: ['progress', 'kjhtml'],
+    // reporters: ['progress', 'kjhtml', 'karma-mocha-reporter'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

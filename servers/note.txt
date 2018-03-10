@@ -7,3 +7,9 @@ In here we have the 'examples' service, which is used by the 'vrize' module of V
 lift the examples under 'assets/threejs-env/examples' and then write out new files to the 
 same directory.  Thus, this server needs to be tightly coupled to the angular2 client project and
 that's why it's included in this repo.
+
+# 2018-03-09
+2. How to run this server with nodemon and *not* have it monitor all the other dirs, which
+can cause an "ENOSP" error (trying to monitor too many files):
+
+nodemon --watch servers servers/examples/index2.js

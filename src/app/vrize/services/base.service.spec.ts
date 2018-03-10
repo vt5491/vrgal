@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { BaseService } from './base.service';
 
-fdescribe('BaseService', () => {
+describe('BaseService', () => {
 
   let service : BaseService;
 

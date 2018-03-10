@@ -20,7 +20,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TransformerService } from '../../services/transformer.service';
 import { ParserService } from '../../services/parser.service';
 import { ExamplesService } from '../../services/examples.service';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 @Component({
   selector: 'app-lift',
@@ -161,6 +161,21 @@ export class LiftComponent implements OnInit {
     })
     ;
     console.log(`liftComponent.vrizePost: back from put`);
+  }
+
+  createExample(e: Event) {
+    this.examples.post(
+      'src/assets/threejs-env/examples/abc.html', 
+      "Ritchie Blackmore"
+    //   {
+    //     // headers: new HttpHeaders().set('Content-Type', 'application/json'),
+    //     responseType: 'text' 
+    //  } 
+    )
+    .subscribe((rsp) => {
+      console.log(`createExample: rsp=${rsp}`);
+    })
+
   }
 }
 

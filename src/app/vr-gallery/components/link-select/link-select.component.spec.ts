@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LinkSelectComponent } from './link-select.component';
 
-describe('LinkSelectComponent', () => {
+xdescribe('LinkSelectComponent', () => {
   let component: LinkSelectComponent;
   let fixture: ComponentFixture<LinkSelectComponent>;
 

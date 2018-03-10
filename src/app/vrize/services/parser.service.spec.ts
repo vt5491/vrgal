@@ -32,7 +32,7 @@ let basicDoc : Document;
 let simpleScriptText : string;
 let parser : DOMParser;
 
-fdescribe('ParserService', () => {
+describe('ParserService', () => {
 
   //Note: the file load is not what causes the few seconds lag in the browser
   // running the uts.  What is slowing it down is the 'ng test' compile step

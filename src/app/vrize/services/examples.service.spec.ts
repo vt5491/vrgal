@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { ExamplesService } from './examples.service';
 
-describe('ExamplesService', () => {
+xdescribe('ExamplesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [ExamplesService]

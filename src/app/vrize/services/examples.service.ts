@@ -7,7 +7,7 @@ export class ExamplesService {
   server : URL;
 
   constructor(private http: HttpClient) {
-    this.server = new URL('http://localhost:3001');
+    this.server = new URL('http://localhost:3002');
 
   }
 
@@ -35,7 +35,31 @@ export class ExamplesService {
       // .map(res => res.text());
   }
 
-  // Update existing Hero
+  // Create a new Example
+  post(path: string, text) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        // 'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
+      }),
+      responseType : 'text'
+    };
+    // responseType: 'text'
+
+    // let url = this.server + '/' + path;
+    let url = this.server + path;
+
+    console.log(`exampleService.post: url=${url}`);
+    
+    return this.http
+      .post(url, { text: text }, httpOptions as any);
+    //   .post(url, {text: text},      {
+    //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
+    //     responseType: 'text' 
+    //  })
+  }
+
+  // Update existing Example
   put(fn: string, text: string) {
     // let headers = new Headers();
     // headers.append('Content-Type', 'application/json');
