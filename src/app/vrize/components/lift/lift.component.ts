@@ -20,7 +20,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TransformerService } from '../../services/transformer.service';
 import { ParserService } from '../../services/parser.service';
 import { ExamplesService } from '../../services/examples.service';
-// import * as _ from 'lodash';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-lift',
@@ -48,10 +48,13 @@ export class LiftComponent implements OnInit {
         'webgl_geometries.html',
         'webgl_shaders_ocean.html',
         'webgl_shaders_ocean2.html(x)',
-        'webgl_mirror.html'
+        'webgl_mirror.html',
+        'simple.html'
       ];
 
       this.testFileLookup = new Object();
+      //Note: this lookup is no longer really needed since we let the server
+      // come up with the full path name.
       // this.testFileLookup['webgl_geometry_cube.html'] = '../../../../../assets/test/examples/unix_style/webgl_geometry_cube.html';
       // this.testFileLookup['webgl_geometries.html'] = '../../../../../assets/test/examples/unix_style/webgl_geometries.html';
       // this.testFileLookup['webgl_shaders_ocean.html'] = '../../../../../assets/test/examples/unix_style/webgl_shaders_ocean.html';
@@ -61,7 +64,8 @@ export class LiftComponent implements OnInit {
       this.testFileLookup['webgl_geometry_cube.html'] = '../../../../../assets/threejs-env/examples/webgl_geometry_cube.html';
 
       // default to the default file in the select dropdown.
-      this.fn = this.testFileLookup['webgl_geometry_cube.html'];
+      // this.fn = this.testFileLookup['webgl_geometry_cube.html'];
+      this.fn = 'webgl_geometry_cube.html';
   }
 
   ngOnInit() {
@@ -80,19 +84,24 @@ export class LiftComponent implements OnInit {
         new XMLSerializer().serializeToString(this.inputDoc));
     }
     else {
-      this.http.get(this.fn, {responseType: 'text'})
-      .subscribe(
-        data => {
-          this.inputString = data;
-          // console.log(`inputString=${this.inputString}`);
-          this.userLift(this.inputString);
-          // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
-          // Note: we have to call decodeURI to get rid of things like '&lt;' in the
-          // javascript (XMLSerializer will escape all the javascript)
-          // debugger;
-          this.outputText = _.unescape(
+      this.examples.get(
+        `examples/${this.fn}`, 
+        ({responseType : 'text'} as any))
+      .subscribe((rsp) => {
+        // debugger;
+        // console.log(`onSubmit: rsp.data=${rsp.data}`);
+        // this.inputString = data;
+        this.inputString = (rsp as any).data;
+        // console.log(`inputString=${this.inputString}`);
+        this.userLift(this.inputString);
+        // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
+        // Note: we have to call decodeURI to get rid of things like '&lt;' in the
+        // javascript (XMLSerializer will escape all the javascript)
+        // debugger;
+        this.outputText = _.unescape(
           new XMLSerializer().serializeToString(this.inputDoc));
-          console.log(`outputText=${this.outputText}`);
+        console.log(`outputText=${this.outputText}`);
+        
         },
         (err: HttpErrorResponse) => {
           console.log('parseHtml: err=' + err, 'httperror=' + err.error);
@@ -102,6 +111,28 @@ export class LiftComponent implements OnInit {
           console.log('webgl_geometries loaded');
         }
       );
+      // this.http.get(`examples/${this.fn}`, {responseType: 'text'})
+      // .subscribe(
+      //   data => {
+      //     this.inputString = data;
+      //     // console.log(`inputString=${this.inputString}`);
+      //     this.userLift(this.inputString);
+      //     // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
+      //     // Note: we have to call decodeURI to get rid of things like '&lt;' in the
+      //     // javascript (XMLSerializer will escape all the javascript)
+      //     // debugger;
+      //     this.outputText = _.unescape(
+      //     new XMLSerializer().serializeToString(this.inputDoc));
+      //     console.log(`outputText=${this.outputText}`);
+      //   },
+      //   (err: HttpErrorResponse) => {
+      //     console.log('parseHtml: err=' + err, 'httperror=' + err.error);
+      //   },
+      //   () => {
+      //     //TODO: put calls for other files here and put the 'done()' call in the last of the chain
+      //     console.log('webgl_geometries loaded');
+      //   }
+      // );
 
     }
 
@@ -116,9 +147,10 @@ export class LiftComponent implements OnInit {
 
   onChange(fn) {
     console.log(`onChange: fn=${fn}`);
-    this.fn = this.testFileLookup[fn];
+    // this.fn = this.testFileLookup[fn];
+    this.fn = fn;
     console.log(`this.fn=${this.fn}`);
-  }
+  };
 
   onClick(e) {
     console.log(`onClick: e=${e}`);
@@ -145,22 +177,36 @@ export class LiftComponent implements OnInit {
     // console.log(`userlift: output=${inputDoc.scripts[3].innerHTML}`);
   }
 
-  commitExample(e: Event) {
-    console.log(`liftComponent.commitExample: e=${e}`);
-    // console.log(`liftComponent.vrizePost: entered`);
+  // commitExample(e: Event) {
+  //   console.log(`liftComponent.commitExample: e=${e}`);
+  //   // console.log(`liftComponent.vrizePost: entered`);
 
-    // this.examples.get('src/assets/threejs-env/examples/webgl_geometry_cube.html', "David Bowie")
-    // .subscribe((rsp) => {
-    //   console.log(`subscribe: rsp=${rsp}`);
-    // }) ;
-    // console.log(`liftComponent.vrizeGet: back from get`);
-    // this.examples.put('src/assets/threejs-env/examples/webgl_geometry_cube.html', "Angus Young")
-    this.examples.put('src/assets/threejs-env/examples/abc.html', "Angus Young")
+  //   // this.examples.get('src/assets/threejs-env/examples/webgl_geometry_cube.html', "David Bowie")
+  //   // .subscribe((rsp) => {
+  //   //   console.log(`subscribe: rsp=${rsp}`);
+  //   // }) ;
+  //   // console.log(`liftComponent.vrizeGet: back from get`);
+  //   // this.examples.put('src/assets/threejs-env/examples/webgl_geometry_cube.html', "Angus Young")
+  //   this.examples.put('src/assets/threejs-env/examples/abc.html', "Angus Young")
+  //   .subscribe((rsp) => {
+  //     console.log(`subscribe: rsp=${rsp}`);
+  //   })
+  //   ;
+  //   console.log(`liftComponent.vrizePost: back from put`);
+  // }
+
+  // This is basically just the call to either update an existing file
+  // or to create it if doesn't exist.  We leave it to the server to decide
+  // which case it is.  Thus, we just do a POST and don't do a POST (create) 
+  // vs PUT (update)
+  commitExample(e: Event) {
+    this.examples.post(
+      `examples/${this.fn}`, this.outputText  
+    )
     .subscribe((rsp) => {
-      console.log(`subscribe: rsp=${rsp}`);
+      console.log(`commitExample: rsp=${rsp}`);
     })
-    ;
-    console.log(`liftComponent.vrizePost: back from put`);
+
   }
 
   createExample(e: Event) {

@@ -11,7 +11,7 @@ export class ExamplesService {
 
   }
 
-  get(fn: string, text: string) {
+  get(route: string, text: string) {
     // let headers = new Headers();
     // headers.append('Content-Type', 'application/json');
     const httpOptions = {
@@ -25,8 +25,9 @@ export class ExamplesService {
     };
 
     // let url = `${this.server}/${fn}`;
-    let url = `${this.server}`;
-    console.log(`ExampleService.get: url=${url}, port=3001`);
+    let url = `${this.server}${route}`;
+    // let url = `${this.server}src/assets/threejs-env/${route}`;
+    console.log(`ExampleService.get: url=${url}`);
 
 
     return this.http
@@ -36,7 +37,10 @@ export class ExamplesService {
   }
 
   // Create a new Example
-  post(path: string, text) {
+  post(route: string, text) {
+    // console.log(`ExamplesService.post: path=${path}, text=${text}`);
+    console.log(`ExamplesService.post: path=${route}`);
+    
     const httpOptions = {
       headers: new HttpHeaders({
         // 'Content-Type': 'text/plain',
@@ -47,7 +51,8 @@ export class ExamplesService {
     // responseType: 'text'
 
     // let url = this.server + '/' + path;
-    let url = this.server + path;
+    let url = this.server + route;
+    // let url = `${this.server}${route}`;
 
     console.log(`exampleService.post: url=${url}`);
     

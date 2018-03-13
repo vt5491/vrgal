@@ -3,17 +3,24 @@ const app = express();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const port = 3002;
+// const serveStatic = require( "serve-static" );
+const util = require('util')
+
+// let basePath = 'src/assets/threejs-env/examples';
+let basePath = 'tmp/examples';
 
 app.listen(port, () => console.log(`Example app listening on port ${port}`))
 // app.get('../note.txt', (req, res, next) => {
 
 // Parsers for POST data
 app.use(bodyParser.json());
+// app.use(bodyParser.text());
+// app.use(bodyParser);
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const router = express.Router();
+// const router = express.Router();
 // all of our routes will be prefixed with /src/assets/threejs-env
-app.use('/src/assets/threejs-env', router);
+// app.use('/src/assets/threejs-env', router);
 
 var setCors = function(req, res, next) {
   console.log(`index2.js: now setting cors`);
@@ -34,58 +41,45 @@ var setCors = function(req, res, next) {
 }
 
 // app.use(setCors);
-router.use(setCors);
-// app.use((req, res, next) => {
-//   console.log(`index2.js: now setting cors`);
-//   // Set CORS headers
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Request-Method', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT');
-//   res.setHeader('Access-Control-Allow-Headers', '*');
+// router.use(setCors);
+// middleware to use for all requests
+// router.use(function(req, res, next) {
+//     // do logging
+//     console.log('Something is happening2.');
+//     next(); // make sure we go to the next routes and don't stop here
+// });
+// router.use(function (err, req, res, next) {
+//   console.error(err.stack)
+//   res.status(404).send('Caught 404 error')
 //
 //   next();
 // })
-// app.get('/servers/note.txt', (req, res, next) => {
-//   // console.log(`index.js=${res}`);
-//   fs.readFile("servers/note.txt", "utf8", function(err, data){
-//     if(err) throw err;
-//
-//     res.send(data);
-//   });
-//   // res.send('you want to see note.txt');
-//
-//   // next();
-// })
-//
-// Note: routes start with a leading slash, and files don't
-// app.get("/src/environments/environment.ts", (req, res, next) => {
-//   fs.readFile("src/environments/environment.ts", "utf8", function(err, data){
-//     if(err) throw err;
-//
-//     res.send(data);
-//   });
-// })
 
-// app.get("/src/assets/threejs-env/examples/abc.html", (req, res, next) => {
-//   fs.readFile("src/assets/threejs-env/examples/abc.html", "utf8", function(err, data){
-//     if(err) throw err;
-//
-//     res.send(data);
-//   });
+app.use(setCors);
+
+// app.use('/examples', serveStatic('src/assets/threejs-env/examples'));
+// app.use(express.static('./src/assets/threejs-env/'));
+// app.use('/url2', serveStatic('C:\\dirC'));
+
+// app.get('/abc.txt', function(req, res) {
+// app.get('/examples/abc.txt', function(req, res) {
+// app.get('/examples/webgl_geometry_cube.html', function(req, res) {
+//   console.log(`abc.txt get handler`);
+//   res.setHeader('Content-Type', 'text/plain'); //Tell the client you are sending plain text
+//   res.end(req.cookies);
 // });
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening2.');
-    next(); // make sure we go to the next routes and don't stop here
-});
-
 // app.get("/src/assets/threejs-env/examples/:example", (req, res, next) => {
-router.get("/examples/:example", (req, res, next) => {
+// router.get("/examples/:example", (req, res, next) => {
+app.get("/examples/:example", (req, res, next) => {
+// router.get("examples/:example", (req, res, next) => {
+// router.get("*/examples/:example", (req, res, next) => {
   console.log(`route match, req.params['example:']=${req.params['example:']}`);
   console.log(`route match, req.params['example']=${req.params['example']}`);
   console.log(`route match, req.params=${req.params}`);
-  fs.readFile(`src/assets/threejs-env/examples/${req.params['example']}`, "utf8", function(err, data){
+  // res.json({'data': data})
+  // res.charset = 'UTF-8';
+  // fs.readFile(`src/assets/threejs-env/examples/${req.params['example']}`, "utf8", function(err, data){
+  fs.readFile(`${basePath}/${req.params['example']}`, "utf8", function(err, data){
   // fs.readFile(`src/assets/threejs-env/examples/${req.params}`, "utf8", function(err, data){
     if(err) throw err;
     // res.send(data.substr(0,200));
@@ -101,13 +95,40 @@ router.get("/examples/:example", (req, res, next) => {
     // res.setHeader('Content-disposition', 'attachment; filename=theDocument.txt');
     // res.setHeader('Content-type', 'text/plain');
     res.charset = 'UTF-8';
-    res.send(data);
+    // res.send generates a 500 "can't reset headers after they're sent to the client"
+    // res.send(data);
+    res.end(data);
   });
   // res.send(req.params)
 })
 
-router.post("/examples/:example", (req, res, next) => {
+app.post("/examples/:example", (req, res, next) => {
   console.log(`index2.js.post.log: file=${req.params['example']}`);
+  // console.log(`index2.js.post.log: req.body=${req.body}`);
+  // console.log(`index2.js.post.log: req.body.text=${req.body.text}`);
+  let fp = basePath + '/' + req.params['example'];
+  console.log(`post: fp=${fp}`);
+  // console.log(`util.inspect req.body=` + util.inspect(req.body, { showHidden: true, depth: 2 }));
+  fs.open(fp, 'wx', (err, fd) => {
+    if (err) {
+      if (err.code === 'EEXIST') {
+        // basically ignore this error
+        console.error('myfile already exists');
+        // return;
+      }
+      else {
+        throw err;
+      }
+    }
+
+    // writeMyData(fd);
+    console.log(`post: about to call writeFile`);
+    // fs.writeFileSync(path,content,{encoding:'utf8',flag:'w'});
+    // fs.writeFileSync(fp, req.body.text, {encoding:'utf8',flag:'w'});
+    fs.writeFile(fp, req.body.text, 'utf8', () => {
+      console.log('app.post: file has been written');
+    });
+  });
   // res.setHeader('Content-type', 'text/plain');
   // res.charset = 'UTF-8';
   // res.send(`index2.js.post.html: file=${req.params['example']}`);
@@ -117,4 +138,12 @@ router.post("/examples/:example", (req, res, next) => {
   // res.send(`index2.js.post.html: hi`);
   res.send(`index2.js.post.html: file=${req.params['example']}`);
 })
+
+// router.get('*', function(req,res){
+//   console.log(`index2.js: now in / path handler`);
+//   // debugger;
+//
+//   res.send();
+//
+// });
 // app.get('/', (req, res) => res.send('Hello World 3'))
