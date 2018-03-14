@@ -6,8 +6,13 @@ const port = 3002;
 // const serveStatic = require( "serve-static" );
 const util = require('util')
 
-// let basePath = 'src/assets/threejs-env/examples';
-let basePath = 'tmp/examples';
+let readBasePath = 'src/assets/threejs-env/examples';
+let tmpPath = 'tmp/examples';
+let appPrefix = 'vrize';
+// writeBasePath can be overriden at runtime
+// let writeBasePath;
+// let writeBasePath = readBasePath ;
+// let readBasePath = 'tmp/examples';
 
 app.listen(port, () => console.log(`Example app listening on port ${port}`))
 // app.get('../note.txt', (req, res, next) => {
@@ -31,7 +36,7 @@ var setCors = function(req, res, next) {
   // res.setHeader('Access-Control-Allow-Headers', '*');
   // res.setHeader('Access-Control-Allow-Headers', 'responsetype');
   // Access-Control-Allow-Credentials: true
-  res.setHeader('Access-Control-Allow-Headers', 'content-type, responsetype');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type, responsetype, write-to-tmp');
   // I added these later.  Are they needed?
   // see https://stackoverflow.com/questions/12630230/how-do-cors-and-access-control-allow-headers-work
   // res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -79,7 +84,7 @@ app.get("/examples/:example", (req, res, next) => {
   // res.json({'data': data})
   // res.charset = 'UTF-8';
   // fs.readFile(`src/assets/threejs-env/examples/${req.params['example']}`, "utf8", function(err, data){
-  fs.readFile(`${basePath}/${req.params['example']}`, "utf8", function(err, data){
+  fs.readFile(`${readBasePath}/${req.params['example']}`, "utf8", function(err, data){
   // fs.readFile(`src/assets/threejs-env/examples/${req.params}`, "utf8", function(err, data){
     if(err) throw err;
     // res.send(data.substr(0,200));
@@ -106,10 +111,15 @@ app.post("/examples/:example", (req, res, next) => {
   console.log(`index2.js.post.log: file=${req.params['example']}`);
   // console.log(`index2.js.post.log: req.body=${req.body}`);
   // console.log(`index2.js.post.log: req.body.text=${req.body.text}`);
-  let fp = basePath + '/' + req.params['example'];
-  console.log(`post: fp=${fp}`);
+  // console.log(`app.post: req=${util.inspect(req, {showHidden: true, depth : 2})}`);
+  console.log(`index2.js.post: req.get('write-to-tmp')=${req.get('write-to-tmp')}`);
+  // let writeBasePath = (req.params['write-to-tmp'] == 'true') ? tmpPath : readBasePath;
+  let writeBasePath = (req.get('write-to-tmp') == 'true') ? tmpPath : readBasePath;
+  // let fp = writeBasePath + '/' + req.params['example'];
+  let lifted_fp = `${writeBasePath}/${appPrefix}-${req.params['example']}`;
+  console.log(`post: lifted_fp=${lifted_fp}`);
   // console.log(`util.inspect req.body=` + util.inspect(req.body, { showHidden: true, depth: 2 }));
-  fs.open(fp, 'wx', (err, fd) => {
+  fs.open(lifted_fp, 'wx', (err, fd) => {
     if (err) {
       if (err.code === 'EEXIST') {
         // basically ignore this error
@@ -125,7 +135,7 @@ app.post("/examples/:example", (req, res, next) => {
     console.log(`post: about to call writeFile`);
     // fs.writeFileSync(path,content,{encoding:'utf8',flag:'w'});
     // fs.writeFileSync(fp, req.body.text, {encoding:'utf8',flag:'w'});
-    fs.writeFile(fp, req.body.text, 'utf8', () => {
+    fs.writeFile(lifted_fp, req.body.text, 'utf8', () => {
       console.log('app.post: file has been written');
     });
   });

@@ -116,7 +116,7 @@ describe('TransformerService', () => {
     expect(resultText).toMatch(new RegExp(pat, 'm'));
   })
 
-  it ('beautifyJsLibChainHtml produces one lib per line', () => {
+  it ('beautifyMainScript indents comments properly', () => {
     // Since this is not an integration test, and the mainScriptIndex is set by
     // the parser service, we have to manually set this variable ourseleves, with
     // unfortunate side effect that we couple this test to 'basicPostParseDoc' as it's

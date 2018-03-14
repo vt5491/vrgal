@@ -240,7 +240,7 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
 
     // let newText = text.replace(/.*new THREE\.WebGLRenderer.*/m, `$&\n${insertText}\n`);
     // let re2 = new RegExp(`${elName}\.appendChild\(\s*${rendererName}\.domELement\s*\)`);
-    let re2 = new RegExp(`${elName}\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    let re2 = new RegExp(`${elName}\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\);`, 'm');
     // let newText = text.replace(re2, 
     //   `$&\n${elName}\.appendChild\(WEBVR.createButton\(${rendererName}\)\);\n`);
     let newText = text.replace(re2, `$&\n${insertText}\n`);

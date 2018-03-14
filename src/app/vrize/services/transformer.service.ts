@@ -55,8 +55,18 @@ export class TransformerService {
     // A customized webvr button function will do this automatically for us.
     // cf https://github.com/mrdoob/three.js/issues/13105
     // newText = this.parser.addVrDisplayActivate(newText, rendererName);
+    // newText = this.beautifyMainScript(newText);
+    // clean up the html <script> section
+    let newScriptText = this.beautifyJsLibChainHtml( doc.getElementsByTagName('body')[0].innerHTML);
+    console.log(`transformerService: newScriptText=${newScriptText}`);
+    // and replace it
+    doc.getElementsByTagName('body')[0].innerHTML = newScriptText; 
 
     doc.scripts[this.mainScriptIndex].innerHTML = newText;
+
+    // clean up the main script
+    this.beautifyMainScript(doc);
+    
     return doc;
   }
 

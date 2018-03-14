@@ -1,3 +1,7 @@
+# 2018-03-09
+1)  to get around the karma-jasmine-html-reporter problem.
 http://localhost:9876/debug.html
 
-to get around the karma-jasmine-html-reporter problem.
+note: you have to manually refresh the browser to drive the test.
+Just start with 'ng test' like always, then change the url in the browser.
+

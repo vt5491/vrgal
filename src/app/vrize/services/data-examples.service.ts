@@ -3,8 +3,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
-export class ExamplesService {
+export class DataExamplesService {
   server : URL;
+  // writeToTmp : boolean;
+  private _writeToTmp: boolean = true;
 
   constructor(private http: HttpClient) {
     this.server = new URL('http://localhost:3002');
@@ -39,12 +41,14 @@ export class ExamplesService {
   // Create a new Example
   post(route: string, text) {
     // console.log(`ExamplesService.post: path=${path}, text=${text}`);
-    console.log(`ExamplesService.post: path=${route}`);
+    console.log(`ExamplesService.post: path=${route}, writeToTmp=${this.writeToTmp}`);
+    // debugger;
     
     const httpOptions = {
       headers: new HttpHeaders({
         // 'Content-Type': 'text/plain',
         'Content-Type': 'application/json',
+        'write-to-tmp': this.writeToTmp.toString(),
       }),
       responseType : 'text'
     };
@@ -64,6 +68,7 @@ export class ExamplesService {
     //  })
   }
 
+  //Note: not used
   // Update existing Example
   put(fn: string, text: string) {
     // let headers = new Headers();
@@ -93,6 +98,16 @@ export class ExamplesService {
       // .map(res => res.text());
   }
 
+  // accessors
+  public get writeToTmp():boolean
+  {
+    return this._writeToTmp;
+  }
+
+  public set writeToTmp(value:boolean)
+  {
+      this._writeToTmp = value;
+  }
 
 
 }

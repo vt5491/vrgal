@@ -19,7 +19,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { TransformerService } from '../../services/transformer.service';
 import { ParserService } from '../../services/parser.service';
-import { ExamplesService } from '../../services/examples.service';
+import { DataExamplesService } from '../../services/data-examples.service';
+import { MetaDataExamplesService } from '../../../core/services/meta-data-examples.service';
+import { environment } from '../../../../environments/environment';
+
 import * as _ from 'lodash';
 
 @Component({
@@ -35,12 +38,14 @@ export class LiftComponent implements OnInit {
   testFiles : string[];
   testFileLookup : {};
   fn : string;
+  writeToTmp : boolean;
 
   constructor(
     private http: HttpClient,
     private transformer: TransformerService,
     private parser: ParserService,
-    private examples: ExamplesService,
+    private dataExamples: DataExamplesService,
+    private metaDataExamples: MetaDataExamplesService,
   )
     {
       this.testFiles = [
@@ -66,6 +71,8 @@ export class LiftComponent implements OnInit {
       // default to the default file in the select dropdown.
       // this.fn = this.testFileLookup['webgl_geometry_cube.html'];
       this.fn = 'webgl_geometry_cube.html';
+
+      this.writeToTmp = !environment.production;
   }
 
   ngOnInit() {
@@ -78,13 +85,13 @@ export class LiftComponent implements OnInit {
     // debugger;
     let inputText = f.controls.inputText.value;
     if (inputText) {
-      this.userLift(inputText);
+      this.lift(inputText);
 
       this.outputText = _.unescape(
         new XMLSerializer().serializeToString(this.inputDoc));
     }
     else {
-      this.examples.get(
+      this.dataExamples.get(
         `examples/${this.fn}`, 
         ({responseType : 'text'} as any))
       .subscribe((rsp) => {
@@ -93,7 +100,7 @@ export class LiftComponent implements OnInit {
         // this.inputString = data;
         this.inputString = (rsp as any).data;
         // console.log(`inputString=${this.inputString}`);
-        this.userLift(this.inputString);
+        this.lift(this.inputString);
         // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
         // Note: we have to call decodeURI to get rid of things like '&lt;' in the
         // javascript (XMLSerializer will escape all the javascript)
@@ -111,38 +118,12 @@ export class LiftComponent implements OnInit {
           console.log('webgl_geometries loaded');
         }
       );
-      // this.http.get(`examples/${this.fn}`, {responseType: 'text'})
-      // .subscribe(
-      //   data => {
-      //     this.inputString = data;
-      //     // console.log(`inputString=${this.inputString}`);
-      //     this.userLift(this.inputString);
-      //     // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
-      //     // Note: we have to call decodeURI to get rid of things like '&lt;' in the
-      //     // javascript (XMLSerializer will escape all the javascript)
-      //     // debugger;
-      //     this.outputText = _.unescape(
-      //     new XMLSerializer().serializeToString(this.inputDoc));
-      //     console.log(`outputText=${this.outputText}`);
-      //   },
-      //   (err: HttpErrorResponse) => {
-      //     console.log('parseHtml: err=' + err, 'httperror=' + err.error);
-      //   },
-      //   () => {
-      //     //TODO: put calls for other files here and put the 'done()' call in the last of the chain
-      //     console.log('webgl_geometries loaded');
-      //   }
-      // );
-
     }
 
     // let fn = '../../assets/test/examples/unix_style/webgl_geometry_cube.html';
     // let fn = '../../assets/test/examples/unix_style/webgl_geometries.html';
     // let fn = '../../assets/test/examples/unix_style/webgl_shaders_ocean.html';
 
-    // this.userlift(this.inputString);
-    // this.outputText = new XMLSerializer().serializeToString(this.inputDoc);
-    // console.log(`outputText=${this.outputText}`);
   }
 
   onChange(fn) {
@@ -156,51 +137,35 @@ export class LiftComponent implements OnInit {
     console.log(`onClick: e=${e}`);
 
   }
+
+  // toggleWriteToTmp(e: Event) {
+  toggleWriteToTmp() {
+    console.log(`toggleWriteToTmp.pre: this.writeToTmp=${this.writeToTmp}`);
+    this.writeToTmp = !(this.writeToTmp);
+    console.log(`toggleWriteToTmp.post: this.writeToTmp=${this.writeToTmp}`);
+
+    this.dataExamples.writeToTmp = this.writeToTmp;
+  }
+
   // userlift(e : Event) {
-  userLift(inputText : string) {
-    // console.log(`lift.userlift: e=${e});
-    // console.log(`lift.userlift: inputText=${inputText}`);
-    // console.log(`lift.userlift: inputText.value=${inputText.value}`);
-    // let el = document.querySelector('#inputText');
-    // let inputHtml = el.innerHTML;
+  lift(inputText : string) {
     let inputHtml = inputText;
-    // console.log(`lift.userlift: inputText.value=${el.innerHTML}`);
-    // console.log(`lift.userlift: inputText.value=${inputText}`);
     //
     let domParser = new DOMParser();
 
     this.inputDoc = domParser.parseFromString(inputHtml, "text/html");
-    // let inputDoc = domParser.parseFromString(this.inputString, "text/html");
 
     this.transformer.liftDoc(this.inputDoc);
-
-    // console.log(`userlift: output=${inputDoc.scripts[3].innerHTML}`);
   }
-
-  // commitExample(e: Event) {
-  //   console.log(`liftComponent.commitExample: e=${e}`);
-  //   // console.log(`liftComponent.vrizePost: entered`);
-
-  //   // this.examples.get('src/assets/threejs-env/examples/webgl_geometry_cube.html', "David Bowie")
-  //   // .subscribe((rsp) => {
-  //   //   console.log(`subscribe: rsp=${rsp}`);
-  //   // }) ;
-  //   // console.log(`liftComponent.vrizeGet: back from get`);
-  //   // this.examples.put('src/assets/threejs-env/examples/webgl_geometry_cube.html', "Angus Young")
-  //   this.examples.put('src/assets/threejs-env/examples/abc.html', "Angus Young")
-  //   .subscribe((rsp) => {
-  //     console.log(`subscribe: rsp=${rsp}`);
-  //   })
-  //   ;
-  //   console.log(`liftComponent.vrizePost: back from put`);
-  // }
 
   // This is basically just the call to either update an existing file
   // or to create it if doesn't exist.  We leave it to the server to decide
   // which case it is.  Thus, we just do a POST and don't do a POST (create) 
   // vs PUT (update)
   commitExample(e: Event) {
-    this.examples.post(
+    // form.controls['cb-use-tmp'].value; 
+    console.log(`LiftComponent.commitExample: this.writeToTmp=${this.writeToTmp}`); 
+    this.dataExamples.post(
       `examples/${this.fn}`, this.outputText  
     )
     .subscribe((rsp) => {
@@ -210,7 +175,7 @@ export class LiftComponent implements OnInit {
   }
 
   createExample(e: Event) {
-    this.examples.post(
+    this.dataExamples.post(
       'src/assets/threejs-env/examples/abc.html', 
       "Ritchie Blackmore"
     //   {
@@ -221,7 +186,10 @@ export class LiftComponent implements OnInit {
     .subscribe((rsp) => {
       console.log(`createExample: rsp=${rsp}`);
     })
+  }
 
+  getExampleMetaData(e: Event) {
+    this.metaDataExamples.getMetaData();
   }
 }
 

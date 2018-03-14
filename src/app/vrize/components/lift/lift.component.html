@@ -26,6 +26,8 @@
 </div>
 <button (click)="commitExample()">Commit</button>
 <p>
-<h3>Dev stuff: io to 'tmp'</h3>
+<input type="checkbox" name="cb-write-to-tmp" (change)="toggleWriteToTmp($event)" [ngModel]="writeToTmp"><label>Write to tmp Dir.</label>
 <p>
-<button (click)="createExample()">Post New Example</button>
+<h3>Read from meta-data service</h3>
+<p>
+<button (click)="getExampleMetaData()">Get Example meta-data</button>

@@ -380,6 +380,10 @@ describe('ParserService', () => {
 
     expect(result).toMatch(re, 'm');
     // console.log(`ut:result=${result}`);
+
+    // Found during manual testing: Verify the appendChild line has a
+    // semicolon at the end
+    expect(result).toMatch(/appendChild\(.*domElement.*\);/m);
     // debugger;
   });
 
