@@ -20,7 +20,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TransformerService } from '../../services/transformer.service';
 import { ParserService } from '../../services/parser.service';
 import { DataExamplesService } from '../../services/data-examples.service';
-import { MetaDataExamplesService } from '../../../core/services/meta-data-examples.service';
+import { ExamplesService } from '../../../core/services/examples.service';
+import { ExampleComponent } from '../../../shared/components/example/example.component';
 import { environment } from '../../../../environments/environment';
 
 import * as _ from 'lodash';
@@ -45,7 +46,7 @@ export class LiftComponent implements OnInit {
     private transformer: TransformerService,
     private parser: ParserService,
     private dataExamples: DataExamplesService,
-    private metaDataExamples: MetaDataExamplesService,
+    private examples: ExamplesService,
   )
     {
       this.testFiles = [
@@ -107,7 +108,7 @@ export class LiftComponent implements OnInit {
         // debugger;
         this.outputText = _.unescape(
           new XMLSerializer().serializeToString(this.inputDoc));
-        console.log(`outputText=${this.outputText}`);
+        // console.log(`outputText=${this.outputText}`);
         
         },
         (err: HttpErrorResponse) => {
@@ -170,6 +171,15 @@ export class LiftComponent implements OnInit {
     )
     .subscribe((rsp) => {
       console.log(`commitExample: rsp=${rsp}`);
+      // and let meta-data server know that that example has been lifted.
+      let example = new ExampleComponent();
+
+      //TODO: figure out how to get id in general
+      example.id = 260;
+      // example.name = this.fn;
+      example.lifted = true;
+
+      this.examples.setLifted(example);
     })
 
   }
@@ -189,7 +199,7 @@ export class LiftComponent implements OnInit {
   }
 
   getExampleMetaData(e: Event) {
-    this.metaDataExamples.getMetaData();
+    this.examples.getMetaData();
   }
 }
 

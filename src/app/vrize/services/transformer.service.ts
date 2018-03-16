@@ -58,7 +58,7 @@ export class TransformerService {
     // newText = this.beautifyMainScript(newText);
     // clean up the html <script> section
     let newScriptText = this.beautifyJsLibChainHtml( doc.getElementsByTagName('body')[0].innerHTML);
-    console.log(`transformerService: newScriptText=${newScriptText}`);
+    // console.log(`transformerService: newScriptText=${newScriptText}`);
     // and replace it
     doc.getElementsByTagName('body')[0].innerHTML = newScriptText; 
 

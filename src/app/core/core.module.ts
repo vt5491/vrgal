@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CoreBaseService } from './services/core-base.service';
 import { CoreUtilsService } from './services/core-utils.service';
+import { ExamplesService } from './services/examples.service';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { CoreUtilsService } from './services/core-utils.service';
   providers: [
     CoreBaseService,
     CoreUtilsService,
+    ExamplesService,
   ],
   declarations: []
 })

@@ -10,7 +10,7 @@ import { UtilsService } from './services/utils.service';
 import { ParserService } from './services/parser.service';
 import { TransformerService } from './services/transformer.service';
 import { DataExamplesService } from './services/data-examples.service';
-import { MetaDataExamplesService } from '../core/services/meta-data-examples.service';
+import { ExamplesService } from '../core/services/examples.service';
 //components
 import { LiftComponent } from './components/lift/lift.component';
 
@@ -27,7 +27,7 @@ import { LiftComponent } from './components/lift/lift.component';
     ParserService,
     TransformerService,
     DataExamplesService,
-    MetaDataExamplesService,
+    ExamplesService,
   ],
   // we need this since we dynamically add this route
   entryComponents: [LiftComponent]
