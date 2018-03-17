@@ -37,7 +37,7 @@ export class LiftComponent implements OnInit {
   inputString : string;
   outputText: string;
   testFiles : string[];
-  testFileLookup : {};
+  testFileIdLookup : {};
   fn : string;
   writeToTmp : boolean;
 
@@ -58,7 +58,7 @@ export class LiftComponent implements OnInit {
         'simple.html'
       ];
 
-      this.testFileLookup = new Object();
+      this.testFileIdLookup = new Object();
       //Note: this lookup is no longer really needed since we let the server
       // come up with the full path name.
       // this.testFileLookup['webgl_geometry_cube.html'] = '../../../../../assets/test/examples/unix_style/webgl_geometry_cube.html';
@@ -67,7 +67,7 @@ export class LiftComponent implements OnInit {
       // this.testFileLookup['webgl_shaders_ocean2.html(x)'] = '../../../../../assets/test/examples/unix_style/webgl_shaders_ocean2.html';
       // this.testFileLookup['webgl_mirror.html'] = '../../../../../assets/test/examples/unix_style/webgl_mirror.html';
 
-      this.testFileLookup['webgl_geometry_cube.html'] = '../../../../../assets/threejs-env/examples/webgl_geometry_cube.html';
+      // this.testFileLookup['webgl_geometry_cube.html'] = '../../../../../assets/threejs-env/examples/webgl_geometry_cube.html';
 
       // default to the default file in the select dropdown.
       // this.fn = this.testFileLookup['webgl_geometry_cube.html'];
@@ -77,6 +77,18 @@ export class LiftComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.examples.getExampleIds(this.testFiles)
+      .subscribe(rsp => {
+        console.log(`getExampleIds: rsp=${rsp}`);
+        for( let i=0; i< (rsp as any).length; i++) {
+          let id = rsp[i].id;
+          let name = rsp[i].name;
+
+          this.testFileIdLookup[name] = id;
+        }
+
+        // debugger;
+      })
   }
 
   onSubmit(f: NgForm) {
@@ -159,13 +171,15 @@ export class LiftComponent implements OnInit {
     this.transformer.liftDoc(this.inputDoc);
   }
 
-  // This is basically just the call to either update an existing file
-  // or to create it if doesn't exist.  We leave it to the server to decide
-  // which case it is.  Thus, we just do a POST and don't do a POST (create) 
-  // vs PUT (update)
+  // file has been transformed. Now save it the output directory and update
+  // the db to reflect 'lifted' and 'lifted_at'.
   commitExample(e: Event) {
     // form.controls['cb-use-tmp'].value; 
     console.log(`LiftComponent.commitExample: this.writeToTmp=${this.writeToTmp}`); 
+    // This is basically just the call to either update an existing file
+    // or to create it if doesn't exist.  We leave it to the server to decide
+    // which case it is.  Thus, we just do a POST and don't do a POST (create) 
+    // vs PUT (update)
     this.dataExamples.post(
       `examples/${this.fn}`, this.outputText  
     )
@@ -174,11 +188,22 @@ export class LiftComponent implements OnInit {
       // and let meta-data server know that that example has been lifted.
       let example = new ExampleComponent();
 
-      //TODO: figure out how to get id in general
-      example.id = 260;
+      console.log(`commitExample: this.fn=${this.fn}, fn.id=${this.testFileIdLookup[this.fn]}`);
+      
+      example.id = this.testFileIdLookup[this.fn];
+      // example.id = 260
       // example.name = this.fn;
-      example.lifted = true;
+      // if lifted is already true, rails won't schedule the request. Nice
+      // feature, except it doesn't cause 'lifted_at' (and indirectly
+      // 'updated_at') to get driven.  So we need to set it to false, and
+      // then true to get these to change. 
+      // example.lifted = false;
+      // // example.lifted = 0;
+      // this.examples.setLifted(example);
 
+      example.lifted = true;
+      // example.lifted = false;
+      // // example.lifted = 1;
       this.examples.setLifted(example);
     })
 
@@ -201,5 +226,28 @@ export class LiftComponent implements OnInit {
   getExampleMetaData(e: Event) {
     this.examples.getMetaData();
   }
+
+  // development only
+  getExampleIdsDriver() {
+    // let files = 
+    let files = ['webgl_geometry_cube.html', 'webgl_mirror.html'];
+
+    // let result;
+    // result = this.examples.getExampleIds(files);
+    this.examples.getExampleIds(files)
+      .subscribe(rsp => {
+        console.log(`getExampleIds: rsp=${rsp}`);
+        
+        // debugger;
+        // result = rsp;
+
+        // return result;
+      })
+
+
+    // console.log(`getExampleIdsDriver: result=${result}`);
+    
+  }
+
 }
 
