@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { ExampleComponent } from '../../shared/components/example/example.component';
+import { CoreBaseService } from './core-base.service';
 
 @Injectable()
 export class ExamplesService {
   server : URL;
 
-  constructor(private http: HttpClient) { 
-    this.server = new URL('http://localhost:3000');
+  constructor(
+    private base : CoreBaseService,
+    private http: HttpClient
+  ) { 
+    // this.server = new URL('http://localhost:3000');
+    this.server = new URL(this.base.vrizeSvcUrl);
   }
 
   getMetaData() {

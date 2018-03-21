@@ -1,0 +1,21 @@
+<p>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <td>id</td>
+        <td>example-id</td>
+        <td>name</td>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngFor="let liftReq of liftReqs" [routerLink]="['/transfer']" [queryParams]="{ id: transfer.id }"> -->
+      <tr *ngFor="let liftReq of liftReqs" >
+        <td>{{liftReq.id}}</td>
+        <td>{{liftReq.example_id}}</td>
+        <!-- <td>{{liftReq.example.name}}</td> -->
+      </tr>
+    </tbody>
+  </table>
+<h3>Batch Lift All</h3>
+<p>
+<button (click)="batchLift($event)">Batch Lift</button>

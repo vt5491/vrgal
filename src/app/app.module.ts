@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // user modules
 import { AppComponent } from './app.component';
 import { VrGalleryModule } from './vr-gallery/vr-gallery.module';
-import { VrizeModule } from './vrize/vrize.module';
+// import { VrizeModule } from './vrize/vrize.module';
 // components
 import { AframeCubeComponent } from './vr-gallery/components/aframe-cube/aframe-cube.component';
 import { LinkSelectComponent } from './vr-gallery/components/link-select/link-select.component';
@@ -27,6 +27,7 @@ const appRoutes:Routes = [
   {path: 'vr-gallery/results-scene', component: ResultsSceneComponent},
   // {path: 'full-monty-scene', component: FullMontySceneComponent},
   // {path: 'results-scene', component: ResultsSceneComponent},
+  // {path: 'vrize', loadChildren: 'app/vrize/vrize.module#VrizeModule'}
  ]
 
 @NgModule({
@@ -38,7 +39,7 @@ const appRoutes:Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     VrGalleryModule,
-    VrizeModule,
+    // VrizeModule,
   ],
   providers: [
   ],

@@ -24,13 +24,13 @@
     </div>
   </form>
 </div>
-<button (click)="commitExample()">Commit</button>
+<button (click)="commitExample($event)">Commit</button>
 <p>
-<input type="checkbox" name="cb-write-to-tmp" (change)="toggleWriteToTmp($event)" [ngModel]="writeToTmp"><label>Write to tmp Dir.</label>
+<input type="checkbox" name="cb-write-to-tmp" (change)="toggleWriteToTmp()" [ngModel]="writeToTmp"><label>Write to tmp Dir.</label>
 <p>
 <h3>Read from meta-data service</h3>
 <p>
-<button (click)="getExampleMetaData()">Get Example meta-data</button>
+<button (click)="getExampleMetaData($event)">Get Example meta-data</button>
 <p>
 <h3>Call getExampleIds</h3>
 <p>
