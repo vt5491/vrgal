@@ -12,10 +12,13 @@
       <tr *ngFor="let liftReq of liftReqs" >
         <td>{{liftReq.id}}</td>
         <td>{{liftReq.example_id}}</td>
-        <!-- <td>{{liftReq.example.name}}</td> -->
+        <td>{{liftReq.example.name}}</td>
       </tr>
     </tbody>
   </table>
 <h3>Batch Lift All</h3>
 <p>
-<button (click)="batchLift($event)">Batch Lift</button>
+<button (click)="liftBatch($event)">Batch Lift</button>
+<p>
+<input type="checkbox" name="cb-write-to-tmp" (change)="toggleWriteToTmp()" [ngModel]="writeToTmp"><label>Write to tmp Dir.</label>
+<p>

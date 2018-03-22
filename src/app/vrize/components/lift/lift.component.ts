@@ -1,18 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-lift',
-//   templateUrl: './lift.component.html',
-//   styleUrls: ['./lift.component.css']
-// })
-// export class LiftComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit() {
-//   }
-
-// }
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
