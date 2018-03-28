@@ -81,20 +81,6 @@ window.addEventListener( 'vr controller connected', function( event ){
 	meshColorOff = 0xDB3236,//  Red.
 	meshColorOn  = 0xF4C20D;//  Yellow.
 
-  // var lastDollyPos = new THREE.Vector3();
-  // var prevDollyPos = {};
-  // var prevControllerPos = {};
-  // var prevLockedControllerPos = {};
-  // // prevLockedControllerPos = Object.assign({}, prevControllerPos);
-  //   // if (Object.keys(prevLockedControllerPos).length === 0) {
-  //   //   // need to do a deep copy
-  //     prevLockedControllerPos = Object.assign({}, prevControllerPos);
-  //     prevLockedControllerPos.x = controller.position.x;
-  //     prevLockedControllerPos.y = controller.position.y;
-  //     prevLockedControllerPos.z = controller.position.z;
-  //   // }
-  // var startControllerPos = {};
-  // startControllerPos = Object.assign({}, controller.position);
   // controller pos
   var firstControllerPos = {};
   firstControllerPos = Object.assign({}, controller.position);
@@ -108,12 +94,11 @@ window.addEventListener( 'vr controller connected', function( event ){
   var lastControllerRot = {};
   lastControllerRot = Object.assign({}, controller.rotation);
   var firstDollyRot = {};
-  // var lastDollyPos = {};
-  // lastDollyPos = Object.assign({}, dolly.position);
-  // endControllerPos = {};
-  // endControllerPos = Object.assign({}, controller.position);
   // var sf = 100;
-  var sf = 200;
+  // var sf = 200;
+  //TODO: consider using controls.maxDistance - controls.minDistance in the lifted
+  // script (OrbitControls) to scale sf apporpriately.
+  var sf = 400;
   var tickRun = false;
   // var sf = 1.1;
   var tickReq;
@@ -153,22 +138,20 @@ window.addEventListener( 'vr controller connected', function( event ){
 	// var guiInputHelper = dat.GUIVR.addInputObject( controller )
 	// scene.add( guiInputHelper )
   //
-  //
-	//  Button events. How easy is this?!
-	//  We’ll just use the “primary” button -- whatever that might be ;)
 	//  Check out the THREE.VRController.supported{} object to see
 	//  all the named buttons we’ve already mapped for you!
-
 	controller.addEventListener( 'primary press began', function( event ){
 
 		event.target.userData.mesh.material.color.setHex( meshColorOn )
 		// guiInputHelper.pressed( true )
 	})
+
 	controller.addEventListener( 'primary press ended', function( event ){
 
 		event.target.userData.mesh.material.color.setHex( meshColorOff )
 		// guiInputHelper.pressed( false )
 	})
+
 	controller.addEventListener( 'trigger press began', function( event ){
     triggering = true;
     checkForGrabbing();
@@ -178,6 +161,7 @@ window.addEventListener( 'vr controller connected', function( event ){
       grabStart();
     }
 	})
+
 	controller.addEventListener( 'trigger press ended', function( event ){
     triggering = false;
     checkForGrabbing();
@@ -187,21 +171,25 @@ window.addEventListener( 'vr controller connected', function( event ){
       grabEnd();
     }
 	})
+
 	controller.addEventListener( 'A press began', function( event ){
     aButtonPressing = true;
     checkForGrabbing();
     console.log(`vrize_controller: A press began detected`);
 	})
+
 	controller.addEventListener( 'A press ended', function( event ){
     aButtonPressing = false;
     checkForGrabbing();
     console.log(`vrize_controller: A press ended detected`);
 	})
+
   // oculus "go back to prior page"
 	controller.addEventListener( 'thumbstick press began', function( event ){
     console.log(`vrize_controller: thumbstick press began detected`);
     window.history.back();
 	})
+
   // vive "go back to prior page"
 	controller.addEventListener( 'menu press began', function( event ){
     console.log(`vrize_controller: menu press began detected`);
@@ -209,7 +197,9 @@ window.addEventListener( 'vr controller connected', function( event ){
 	})
 
 	controller.addEventListener( 'grip press began', function( event ){
-    gripping = true;
+    if (!grabbing) {
+      gripping = true;
+    }
     checkForGrabbing();
 
     firstControllerRot.x = controller.rotation.x;
@@ -222,8 +212,12 @@ window.addEventListener( 'vr controller connected', function( event ){
     tickRun = true;
     tick();
   })
+
 	controller.addEventListener( 'grip press ended', function( event ){
-    gripping = false;
+    // gripping = false;
+    if (!grabbing) {
+      gripping = false;
+    }
     checkForGrabbing();
 
     tickRun = false;
@@ -235,11 +229,14 @@ window.addEventListener( 'vr controller connected', function( event ){
 
 	// controller.addEventListener( 'grip press began', function( event ){
   function grabStart() {
+    //vt add
+    // we need to pre-emptively set gripping to false, so that if the a-key
+    // and trigger-key are released before the grip-key (during a "grab-end"
+    // operation), we don't get a lingering rotation due to the grip-key
+    // being residually active.
+    gripping = false;
+    //vt end
 
-    // console.log(`vrize_controller: grip press began detected`);
-    // startControllerPos.x = controller.position.x;
-    // startControllerPos.y = controller.position.y;
-    // startControllerPos.z = controller.position.z;
     firstControllerPos.x = controller.position.x;
     firstControllerPos.y = controller.position.y;
     firstControllerPos.z = controller.position.z;
@@ -253,44 +250,16 @@ window.addEventListener( 'vr controller connected', function( event ){
 
 	// controller.addEventListener( 'grip press ended', function( event ){
   function grabEnd () {
+    //vt add
+    // gripping = false;
+    //vt end
     // console.log(`vrize_controller: grip press ended detected`);
     tickRun = false;
 
-    // if (Object.keys(prevLockedControllerPos).length === 0) {
-    //   // need to do a deep copy
-    //   // prevLockedControllerPos = Object.assign({}, prevControllerPos);
-    //   prevLockedControllerPos.x = controller.position.x;
-    //   prevLockedControllerPos.y = controller.position.y;
-    //   prevLockedControllerPos.z = controller.position.z;
-    // }
-    // else {
-      // prevLockedControllerPos = Object.assign({}, prevControllerPos);
-      // prevLockedControllerPos.x = prevControllerPos.x;
-      // prevLockedControllerPos.y = prevControllerPos.y;
-      // prevLockedControllerPos.z = prevControllerPos.z;
-      // debugger;
-    // prevLockedControllerPos.x = (controller.position.x - startControllerPos.x);
-    // prevLockedControllerPos.y = (controller.position.y - startControllerPos.y);
-    // prevLockedControllerPos.z = (controller.position.z - startControllerPos.z);
     lastControllerPos.x = controller.position.x;
     lastControllerPos.y = controller.position.y;
     lastControllerPos.z = controller.position.z;
-
-    // lastDollyPos.x = firstDollyPos.x;
-    // lastDollyPos.y = firstDollyPos.y;
-    // lastDollyPos.z = firstDollyPos.z;
-    // }
-
-    // lastDollyPos = dolly.position;
-    // lastDollyPos.x = dolly.position.x;
-    // lastDollyPos.y = dolly.position.y;
-    // lastDollyPos.z = dolly.position.z - 400;
-    // moveDollyByGrip();
 	}
-	// controller.addEventListener( 'grip down', function( event ){
-  //   console.log(`vrize_controller: grip press down detected`);
-  //   // moveDollyByGrip();
-	// })
 
   function getTickRun() {
     return tickRun;
@@ -298,25 +267,14 @@ window.addEventListener( 'vr controller connected', function( event ){
 
 
   function tick() {
-    // dolly.position.x = lastDollyPos.x + controller.position.x * sf;
-    // dolly.position.y = lastDollyPos.y + controller.position.y * sf;
-    // dolly.position.z = lastDollyPos.z + controller.position.z * sf + 400;
-    // dolly.position.x += controller.position.x * sf;
-    // dolly.position.y += controller.position.y * sf;
-    // dolly.position.z += controller.position.z * sf;
-    // let deltaPos = getDeltaDollyPos();
-    // console.log(`tick: deltaPos.x=${deltaPos.x},deltaPos.y=${deltaPos.y},deltaPos.z=${deltaPos.z}`);
-    // dolly.position.x = dolly.position.x + (deltaPos.x * sf);
-    // dolly.position.y = dolly.position.y + (deltaPos.y * sf);
-    // dolly.position.z = dolly.position.z + (deltaPos.z * sf);
     if (grabbing) {
       updateDollyPos();
     }
-    else if (gripping) {
+    // else if (gripping) {
+    else if (gripping && !grabbing) {
       updateDollyRot();
     }
 
-    // if (getTickRun()) {
     if (tickRun) {
       tickReq = requestAnimationFrame(tick);
     }
@@ -324,20 +282,7 @@ window.addEventListener( 'vr controller connected', function( event ){
   }
 
   function updateDollyPos () {
-    // let tmpController = controller.clone();
     let tmpControllerPos = controller.position.clone();
-    // dolly.position.x = firstDollyPos.x - (controller.position.x - firstControllerPos.x) * sf;
-    // dolly.position.y = firstDollyPos.y - (controller.position.y - firstControllerPos.y) * sf;
-    // dolly.position.z = firstDollyPos.z - (controller.position.z - firstControllerPos.z) * sf;
-    // let rotObjectMatrix = new THREE.Matrix4();
-    // rotObjectMatrix.makeRotationFromQuaternion(controller.quaternion);
-    // tmpControllerPos.applyAxisAngle( new THREE.Vector3(0,1,0), dolly.rotation.y );
-    //Next we just have to apply a rotation to the quaternion using the created matrix
-    // boxme1.quaternion.setFromRotationMatrix(rotObjectMatrix);
-    // tmpControllerPos.multiply(rotObjectMatrix);
-    // dolly.position.x = firstDollyPos.x - (tmpControllerPos.x - firstControllerPos.x) * sf;
-    // dolly.position.y = firstDollyPos.y - (tmpControllerPos.y - firstControllerPos.y) * sf;
-    // dolly.position.z = firstDollyPos.z - (tmpControllerPos.z - firstControllerPos.z) * sf;
     let yAxis = new THREE.Vector3(0,1,0);
     let deltaVec = new THREE.Vector3();
     deltaVec.x = (controller.position.x - firstControllerPos.x) * sf
@@ -347,118 +292,11 @@ window.addEventListener( 'vr controller connected', function( event ){
     dolly.position.x = firstDollyPos.x - deltaVec.x;
     dolly.position.y = firstDollyPos.y - deltaVec.y;
     dolly.position.z = firstDollyPos.z - deltaVec.z;
-    // console.log(`updateDollyPos: controller.rotation.y=${controller.rotation.y}`);
-    // dolly.position.x = (firstDollyPos.x - (controller.position.x - firstControllerPos.x) * sf) * Math.cos(controller.rotation.y);
-    // dolly.position.y = (firstDollyPos.y - (controller.position.y - firstControllerPos.y) * sf) * Math.sin(controller.rotation.y);
-    // dolly.position.x = firstDollyPos.x -
-    //   ( (controller.position.x - firstControllerPos.x) * Math.cos(controller.rotation.y)) * sf;
-    // dolly.position.y = firstDollyPos.y -
-    //   ( (controller.position.y - firstControllerPos.y) * Math.sin(controller.rotation.y)) * sf;
-    // dolly.position.x = firstDollyPos.x -
-    //   ( controller.position.x  * Math.cos(controller.rotation.y) - firstControllerPos.x) * sf;
-    // dolly.position.y = firstDollyPos.y -
-    //   ( controller.position.y  * Math.sin(controller.rotation.y) - firstControllerPos.y) * sf;
-    // let theta = controller.rotation.y -  0.0 * Math.PI / 1.0;
-    // let theta = dolly.rotation.y -  1.0 * Math.PI / 1.0;
-    // let deltaX = controller.position.x - firstControllerPos.x;
-    // let deltaZ = controller.position.z - firstControllerPos.z;
-    // let r = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-    // console.log(`r=${r}`);
-    // dolly.position.x = firstDollyPos.x - r * Math.cos(theta) * sf;
-    // dolly.position.z = firstDollyPos.z - r * Math.sin(theta) * sf;
-    // let deltaX = (controller.position.x - firstControllerPos.x) * Math.cos(theta) * sf * 1.0;
-    // let deltaZ = (controller.position.z - firstControllerPos.z) * Math.sin(theta) * sf * 1.0;
-    // let deltaX = (controller.position.x * Math.cos(theta) - firstControllerPos.x) * sf * 1.5;
-    // let deltaZ = (controller.position.z * Math.sin(theta) - firstControllerPos.z) * sf * 1.5;
-
-    // dolly.position.x = firstDollyPos.x - deltaX;
-    // dolly.position.z = firstDollyPos.z - deltaZ;
-      // (deltaX * Math.cos(theta) + deltaY * Math.sin(theta));
-
-
   }
 
   function updateDollyRot () {
-    // dolly.rotation.x = (controller.rotation.x - firstControllerRot.x) * 1 + firstDollyRot.x;
     dolly.rotation.y = (controller.rotation.y - firstControllerRot.y) * 1 + firstDollyRot.y;
-    // dolly.rotation.z = (controller.rotation.z - firstControllerRot.z) * 1 + firstDollyRot.z;
   }
-
-  // function getDeltaDollyPos () {
-  //   // var currentPosition = this.el.getAttribute('position');
-  //   let currentDollyPos = {};
-  //   currentDollyPos.x = dolly.position.x;
-  //   currentDollyPos.y = dolly.position.y;
-  //   currentDollyPos.z = dolly.position.z;
-  //   // var currentPosition = dolly.position;
-  //   if (Object.keys(prevDollyPos).length === 0) {
-  //     // need to do a deep copy
-  //     prevDollyPos = Object.assign({}, currentDollyPos);
-  //   }
-  //   console.log(`getDeltaDollyPos: currentDollyPos.x=${currentDollyPos.x},currentDollyPos.y=${currentDollyPos.y},currentDollyPos.z=${currentDollyPos.z}`);
-  //   console.log(`getDeltaDollyPos: prevDollyPos.x=${prevDollyPos.x},prevDollyPos.y=${prevDollyPos.y},prevDollyPos.z=${prevDollyPos.z}`);
-  //
-  //   let currentControllerPos = {};
-  //   currentControllerPos.x = controller.position.x + prevLockedControllerPos.x * 1;
-  //   currentControllerPos.y = controller.position.y + prevLockedControllerPos.y * 1;
-  //   currentControllerPos.z = controller.position.z + prevLockedControllerPos.z * 1;
-  //   if (Object.keys(prevControllerPos).length === 0) {
-  //     // need to do a deep copy
-  //     prevControllerPos = Object.assign({}, currentControllerPos);
-  //   }
-  //
-  //   let dollyDeltaX = currentDollyPos.x - prevDollyPos.x;
-  //   let dollyDeltaY = currentDollyPos.y - prevDollyPos.y;
-  //   let dollyDeltaZ = currentDollyPos.z - prevDollyPos.z;
-  //   console.log(`getDeltaDollyPos: dollyDeltaX=${dollyDeltaX}, dollyDeltaY=${dollyDeltaY}, dollyDeltaZ=${dollyDeltaZ}`);
-  //
-  //   let controllerDeltaX = (currentControllerPos.x ) - prevControllerPos.x;
-  //   let controllerDeltaY = (currentControllerPos.y ) - prevControllerPos.y;
-  //   let controllerDeltaZ = (currentControllerPos.z ) - prevControllerPos.z;
-  //   console.log(`getDeltaDollyPos: controllerDeltaX=${controllerDeltaX}, controllerDeltaY=${controllerDeltaY}, controllerDeltaZ=${controllerDeltaZ}`);
-  //
-  //   // var deltaPos = {
-  //   //   x: dollyDeltaX + controllerDeltaX,
-  //   //   y: dollyDeltaY + controllerDeltaY,
-  //   //   z: dollyDeltaZ + controllerDeltaZ
-  //   // };
-  //   var deltaPos = {
-  //     x:  controllerDeltaX,
-  //     y:  controllerDeltaY,
-  //     z:  controllerDeltaZ
-  //   };
-  //   prevDollyPos = Object.assign({}, currentDollyPos);
-  //   prevControllerPos = Object.assign({}, currentControllerPos);
-  //
-  //   // this.deltaPosition = deltaPosition;
-  //   return deltaPos;
-  // };
-  //
-  // // function moveCameraByGrip(el) {
-  // function moveDollyByGrip() {
-  //   // let dollyEl = document.querySelector('#dolly') as AFrame.Entity;
-  //   // let dollyObj = dolly;
-  //   // let dollyObj = dollyEl.object3D;
-  //
-  //   // let controllerEl = document.querySelector('#oc-control-right');
-  //   // let controllerEl = controller;
-  //   // let controllerObj = controller.object3D;
-  //   // let controllerObj = controller;
-  //   // debugger;
-  //   console.log(`moveDollyByGrip: cp.x=${controller.position.x},cp.y=${controller.position.y},cp.z=${controller.position.z}`);
-  //   console.log(`moveDollyByGrip.pre: dp.x=${dolly.position.x},cp.y=${dolly.position.y},cp.z=${dolly.position.z}`);
-  //
-  //   let sf = 10;
-  //   // dolly.position.x += controller.position.x * sf;
-  //   // dolly.position.y += controller.position.y * sf;
-  //   // dolly.position.z += controller.position.z * sf;
-  //   dolly.position.x = controller.position.x * sf;
-  //   dolly.position.y = controller.position.y * sf;
-  //   dolly.position.z = controller.position.z * sf + 400;
-  //
-  //   console.log(`moveDollyByGrip.pst: dp.x=${dolly.position.x},cp.y=${dolly.position.y},cp.z=${dolly.position.z}`);
-  // }
-
 
   function checkForGrabbing() {
     if (gripping && triggering && aButtonPressing) {
@@ -471,8 +309,6 @@ window.addEventListener( 'vr controller connected', function( event ){
     }
     console.log(`checkForGrabbing: grabbing=${grabbing}`);
   }
-
-	//  Daddy, what happens when we die?
 
 	controller.addEventListener( 'disconnected', function( event ){
 

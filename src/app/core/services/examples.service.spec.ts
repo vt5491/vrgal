@@ -4,7 +4,7 @@ import { HttpClientModule, HttpClient, HttpHandler } from '@angular/common/http'
 import { ExamplesService } from './examples.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-describe('ExamplesService', () => {
+xdescribe('ExamplesService', () => {
   let httpMock: HttpTestingController;
   let service: ExamplesService;
   // beforeAll(() => {

@@ -30,6 +30,7 @@ let testScriptDoc : Document;
 let basicHtml : string;
 let basicDoc : Document;
 let simpleScriptText : string;
+let simpleScriptText2 : string;
 let parser : DOMParser;
 
 describe('ParserService', () => {
@@ -135,7 +136,16 @@ describe('ParserService', () => {
 
     }
     `
+
+    simpleScriptText2 =
+    `
+     function init() {
+       camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+     }
+
+    `
   });
+
 
   beforeEach(() => {
     // console.log(`ut.beforeEach: entered`);
@@ -533,17 +543,42 @@ camera.position.set( 30, 40, 100 );
 
   })
 
-  xit('alterCameraNearPlane changes nearplane parm to 0.1', () => {
+  it('alterCameraNearPlane changes nearplane parm to "1 / 10.0"', () => {
     let newScriptText = service.alterCameraNearPlane(simpleScriptText);
+    // console.log(`newScriptText=${newScriptText}`)
 
     // original is commented out
     let pat1 = new RegExp(`${base.jsMarkupAlter}.*camera`);
     expect(newScriptText).toMatch(pat1, 'm');
     // expect(newScriptText).toMatch(/0\.1, 1000 \)/);
     // and new has '0.1' in the third parameter
-    let pat2 = new RegExp(`camera = new THREE\.PerspectiveCamera.*0.1,`);
-    expect(newScriptText).toMatch(pat2, 'm');
+    // let pat2 = new RegExp(`camera = new THREE\.PerspectiveCamera.*0.1,`);
+    // let pat2 = new RegExp("camera = new THREE\.PerspectiveCamera\([^,]*,[^,]*,([^,]*)");
+    // let pat2 = new RegExp(/camera = new THREE\.PerspectiveCamera\(/);
+    // get the camera line that is *not* a comment
+    let pat2 = new RegExp(/^[^/]{2}.*camera = new THREE\.PerspectiveCamera\([^,]*,[^,]*,([^,]*)/m);
+    // note: we take the second element of the match.  The first is the commented out line
+    let result = newScriptText.match(pat2);
+    // debugger;
+    // console.log(`result=${result}`);
+    // console.log(`result[1]=${result[1]}`);
+    expect(result[1]).toMatch("1 / 10.0");
+    // expect(newScriptText).toMatch(pat2, 'm');
   })
 
+  // test a use case that arose during testing, nameley where the camera parms
+  // are variables e.g.:
+  // camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+  it('alterCameraNearPlane changes near plane parm to NEAR / 10.0', () => {
+    let newScriptText = service.alterCameraNearPlane(simpleScriptText2);
+
+    // original is commented out
+    let pat1 = new RegExp(`${base.jsMarkupAlter}.*camera`);
+    expect(newScriptText).toMatch(pat1, 'm');
+    // and new has the var divided by 10.0 in  the third parameter
+    let pat2 = new RegExp(`camera = new THREE\.PerspectiveCamera.*NEAR / 10.0,`);
+    expect(newScriptText).toMatch(pat2, 'm');
+
+  })
 
 });

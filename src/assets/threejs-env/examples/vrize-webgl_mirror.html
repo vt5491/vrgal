@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Sat Mar 17 2018 00:17:05 GMT-0700 (PDT)--><head>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Tue Mar 27 2018 20:57:56 GMT-0700 (PDT)--><head>
 		<title>three.js webgl - mirror</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -97,7 +97,7 @@ function init() {
 
     // camera
     //vrize alter				camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR );
-    camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+    camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR / 10.0, FAR);
     //vrize add start
     dolly.add(camera);
     //vrize add end

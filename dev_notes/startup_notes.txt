@@ -1,0 +1,22 @@
+# 2018-03-27
+1) How to startup a full environment (including the admin server)
+
+a). cd to $VRGAL and type 'ng serve --host 0.0.0.0'.  This will start the main angular SPA on
+port 4200
+
+(black on white console)
+
+b) Start the express server.  cd to $VRGAL and run from the root directory:
+(in black on yellow console)
+
+nodemon servers/data-examples/index2.js 
+
+This will be port 3002.  It's the data server that updates the files in the git repo
+
+c) Start the the rails server.  cd to $VRZSRV and run
+(green on black console):
+
+rails s
+
+This will start on port 3002, and the server interfaces with the meta-data in the mysql server.
+

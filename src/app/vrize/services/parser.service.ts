@@ -474,11 +474,20 @@ function animate() {
     let newText, newScriptText;
 
     if (cameraCreationText) {
+      // camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+      // camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
       // newText = cameraCreationText.replace(/([\d]+)([\s]*,[\s\d]+)$/, "0.1,$2");
       // let match = cameraCreationText.match(/([\d]+)([\s]*,[\s\d]+)$/);
       // let match = /([\d]+)([\s]*,[\s\d]+)$/.exec(cameraCreationText);
       // console.log(`$1=${match[1]}, $2=${match[2]}`);
-      newText = cameraCreationText.replace(/(.*)([\d]+)([\s]*,[\s\d]+\);)$/, "$1" + "0.1" + "$3");
+      // newText = cameraCreationText.replace(/(.*)([\d]+)([\s]*,[\s\d]+\);)$/, "$1" + "0.1" + "$3");
+      newText = cameraCreationText
+        // .replace(/(.*)([\d]+)([\s]*,[\s\d]+\);)$/, "$1" + "0.1" + "$3");
+        // .replace(/(\(.*,.*,)([^,]*)/, "$1" + "$2 / 10.0");
+        .replace(/(\([^,]*,[^,]*,)([^,]*)/, "$1" + "$2 / 10.0")
+
+      console.log(`newText=${newText}`);
+      
 
       // now put the new string into the scriptText after original statement
       if (newText) {
