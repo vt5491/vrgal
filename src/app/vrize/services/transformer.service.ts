@@ -57,10 +57,12 @@ export class TransformerService {
     // newText = this.parser.addVrDisplayActivate(newText, rendererName);
     // newText = this.beautifyMainScript(newText);
     // clean up the html <script> section
-    let newScriptText = this.beautifyJsLibChainHtml( doc.getElementsByTagName('body')[0].innerHTML);
+    // let newScriptText = this.beautifyJsLibChainHtml( doc.getElementsByTagName('body')[0].innerHTML);
+    let newScriptText = this.beautifyJsLibChainHtml( doc.getElementsByTagName('html')[0].innerHTML);
     // console.log(`transformerService: newScriptText=${newScriptText}`);
     // and replace it
-    doc.getElementsByTagName('body')[0].innerHTML = newScriptText; 
+    // doc.getElementsByTagName('body')[0].innerHTML = newScriptText; 
+    doc.getElementsByTagName('html')[0].innerHTML = newScriptText; 
 
     doc.scripts[this.mainScriptIndex].innerHTML = newText;
 
@@ -99,6 +101,7 @@ export class TransformerService {
     // that has all the concatenated libs
     let regex = /<script\s+src=['"].*three\.js.*/
     let threeJsLibMatch = text.match(regex)
+    // debugger;
 
     // if found, pass to beautify
     if (threeJsLibMatch && threeJsLibMatch[0]) {

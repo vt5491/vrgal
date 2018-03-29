@@ -6,7 +6,8 @@ const port = 3002;
 // const serveStatic = require( "serve-static" );
 const util = require('util')
 
-let readBasePath = 'src/assets/threejs-env/examples';
+// let readBasePath = 'src/assets/threejs-env/examples';
+let readBasePath = 'data/examples';
 let tmpPath = 'tmp/examples';
 let appPrefix = 'vrize';
 // writeBasePath can be overriden at runtime

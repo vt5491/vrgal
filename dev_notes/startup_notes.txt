@@ -20,3 +20,18 @@ rails s
 
 This will start on port 3002, and the server interfaces with the meta-data in the mysql server.
 
+d) startup msql session:
+(blue whale console)
+mysql -u root -p
+
+e) if you want to lift files via the admin tool some links are:
+http://localhost:4200/vrize/lift
+http://localhost:4200/vrize/lift-batch
+
+f) Note: ip addresses of the servers are specified in :
+
+$VRGAL/src/app/core/services/core-base.service.ts
+
+
+
+

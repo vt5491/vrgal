@@ -94,6 +94,7 @@ window.addEventListener( 'vr controller connected', function( event ){
   var lastControllerRot = {};
   lastControllerRot = Object.assign({}, controller.rotation);
   var firstDollyRot = {};
+  // var sf = 25;
   // var sf = 100;
   // var sf = 200;
   //TODO: consider using controls.maxDistance - controls.minDistance in the lifted
