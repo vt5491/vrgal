@@ -9,6 +9,7 @@ AFRAME.registerComponent('grab', {
   init: function () {
     this.GRABBED_STATE = 'grabbed';
     //vt add
+    console.log(`grab-vt.init entered`);
     this.grabbing = false;
     this.triggering = false;
     //vt end
@@ -83,7 +84,7 @@ AFRAME.registerComponent('grab', {
 
   //vt add
   onTriggerDown: function (evt) {
-    // console.log(`now in onTriggerDown`);
+    console.log(`now in onTriggerDown`);
     this.triggering = true;
     // delete this.previousPosition;
     this.previousPosition = {};
