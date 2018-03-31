@@ -164,7 +164,7 @@ export class QuerySelectComponent implements OnInit {
 
     this.exampleResults.push(example)
 
-    if (this.exampleResults.length == this.expectedResultCnt) {
+    // if (this.exampleResults.length == this.expectedResultCnt) {
       // debugger
       // localStorage.setItem('currentUser', JSON.stringify({ token: token, name: name }));
       // We have to use sessionStorage to transfer data among routes, because a pure a-frame
@@ -188,7 +188,7 @@ export class QuerySelectComponent implements OnInit {
       scene.dispatchEvent(evt)
 
 
-    }
+    // }
   }
 
 

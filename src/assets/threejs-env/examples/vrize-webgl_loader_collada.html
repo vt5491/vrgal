@@ -1,0 +1,188 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Fri Mar 30 2018 21:24:59 GMT-0700 (PDT)--><head>
+		<title>three.js webgl - collada</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+		<style>
+			body {
+				background:#777;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> collada loader
+			| Elf Girl by <a href="https://sketchfab.com/yellow09" target="_blank" rel="noopener">halloween</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC Attribution</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+<!--vrize add start-->
+<script src="js/vr/WebVR.js"></script>
+<script src="js/vrize/vrize_kbd.js"></script>
+<script src="js/vrize/vrize_controller.js"></script>
+<script src="js/vr/VRController.js"></script>
+<!--vrize add end-->
+
+		<script src="js/loaders/ColladaLoader.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+var container, stats, clock;
+var camera, scene, renderer, elf;
+//vrize add start
+var dolly;
+//vrize add end
+
+
+init();
+animate();
+
+function init() {
+    //vrize add start
+    dolly = new THREE.Object3D();
+    dolly.position.set(8, 10, 8);
+    //vrize add end
+
+
+    container = document.getElementById('container');
+
+    //vrize alter				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1 / 10.0, 2000);
+    //vrize add start
+    dolly.add(camera);
+    //vrize add end
+
+    camera.position.set(8, 10, 8);
+    camera.lookAt(new THREE.Vector3(0, 3, 0));
+
+    scene = new THREE.Scene();
+    //vrize add start
+    scene.add(dolly);
+    //vrize add end
+
+
+    clock = new THREE.Clock();
+
+    // loading manager
+
+    var loadingManager = new THREE.LoadingManager(function() {
+
+        scene.add(elf);
+
+    });
+
+    // collada
+
+    var loader = new THREE.ColladaLoader(loadingManager);
+    loader.load('./models/collada/elf/elf.dae', function(collada) {
+
+        elf = collada.scene;
+
+    });
+
+    //
+
+    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+    scene.add(ambientLight);
+
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 0).normalize();
+    scene.add(directionalLight);
+
+    //
+
+    renderer = new THREE.WebGLRenderer();
+    //vrize add start
+    renderer.vr.enabled = true;
+    //vrize add end
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    //vrize add start
+    container.appendChild(WEBVR.createButton(renderer));
+    //vrize add end
+
+
+    //
+
+    stats = new Stats();
+    container.appendChild(stats.dom);
+
+    //
+
+    window.addEventListener('resize', onWindowResize, false);
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+}
+
+//vrize alter start
+//function animate() {
+function vrize_render() {
+    //vrize alter end
+
+    //vrize comment out start
+    //				requestAnimationFrame( animate );
+    //vrize comment out end
+    //vrize add start
+    THREE.VRController.update();
+    //vrize add end
+
+    render();
+    stats.update();
+
+}
+
+function render() {
+
+    var delta = clock.getDelta();
+
+    if (elf !== undefined) {
+
+        elf.rotation.z += delta * 0.5;
+
+    }
+
+    renderer.render(scene, camera);
+
+}
+
+//vrize add start
+
+function animate() {
+    renderer.animate(vrize_render);
+};
+
+//vrize add end</script>
+	
+
+</body></html>

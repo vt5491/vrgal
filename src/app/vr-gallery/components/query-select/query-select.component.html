@@ -1,11 +1,13 @@
 <a-scene id="query-select-scene">
   <a-assets>
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
+    <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
   </a-assets>
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
-    <a-entity oculus-touch-controls="hand: left" position="-0.1 -0.2 0"></a-entity>
-    <a-entity laser-controls="hand: right" position="0.1 -0.2 0"></a-entity>
+    <!-- <a-entity oculus-touch-controls="hand: left" position="0 0 0"></a-entity> -->
+    <a-entity hand-controls="left" position="0 0 0" grab></a-entity>
+    <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
   </a-entity>
   <a-entity id="links">
   </a-entity>
@@ -19,5 +21,6 @@
   <a-box id="all-query" position="0 0.5 -3" rotation="0 0 0" color="#4CC3C9" height="2" width="2"></a-box>
   <a-text value="All" position="0 -1.5 -3"></a-text>
   <!-- <a-sky color="#6EBAA7"></a-sky> -->
-  <a-sky color="#101010"></a-sky>
+  <!-- <a-sky color="#101010"></a-sky> -->
+  <a-sky src="#sky" theta-length="330"></a-sky>
 </a-scene>

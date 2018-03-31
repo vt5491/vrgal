@@ -1,4 +1,8 @@
 # 2018-03-27
+ng2 server: 4200
+rails server: 3000
+express server: 3002
+
 1) How to startup a full environment (including the admin server)
 
 a). cd to $VRGAL and type 'ng serve --host 0.0.0.0'.  This will start the main angular SPA on
@@ -18,7 +22,7 @@ c) Start the the rails server.  cd to $VRZSRV and run
 
 rails s
 
-This will start on port 3002, and the server interfaces with the meta-data in the mysql server.
+This will start on port 3000, and the server interfaces with the meta-data in the mysql server.
 
 d) startup msql session:
 (blue whale console)

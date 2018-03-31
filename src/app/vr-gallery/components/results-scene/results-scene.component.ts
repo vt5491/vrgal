@@ -75,7 +75,7 @@ export class ResultsSceneComponent implements OnInit {
     console.log(`querySelect: evtPrefix=${evtPrefix}`);
 
     let evtDetail = {}
-    evtDetail['href'] = `assets/threejs-env/examples/vrize_${data.name}`
+    evtDetail['href'] = `assets/threejs-env/examples/vrize-${data.name}`
     evtDetail['pos'] = data.pos
     evtDetail['title'] = data.name;
     let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
