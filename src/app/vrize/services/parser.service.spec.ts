@@ -99,6 +99,7 @@ describe('ParserService', () => {
     basicHtml =
     `<html>
       <head>
+        <script>console.log('a script with no src attribute')</script>
         <script src="../../build/three.js"></script>
         <script>
            var a=7;
@@ -237,7 +238,7 @@ describe('ParserService', () => {
     expect(text).toBeTruthy();
     expect(typeof text).toEqual("string");
     expect(text).toMatch(/var a=7/gm);
-    expect(scriptIndex).toEqual(1);
+    expect(scriptIndex).toEqual(2);
 
     // let parentEl = doc.querySelectorAll('script')[scriptIndex];
     // service.appendWebVrScript(parentEl);
@@ -275,7 +276,7 @@ describe('ParserService', () => {
     expect(text).toBeTruthy();
     expect(typeof text).toEqual("string");
     expect(text).toMatch(/three\.js/gm);
-    expect(scriptIndex).toEqual(0);
+    expect(scriptIndex).toEqual(1);
   });
 
   it('findThreeJsScript works with full html', () => {

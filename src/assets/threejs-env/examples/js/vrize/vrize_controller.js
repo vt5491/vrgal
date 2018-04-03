@@ -156,7 +156,7 @@ window.addEventListener( 'vr controller connected', function( event ){
 	controller.addEventListener( 'trigger press began', function( event ){
     triggering = true;
     checkForGrabbing();
-    console.log(`vrize_controller: trigger press began detected`);
+    // console.log(`vrize_controller: trigger press began detected`);
     if (controller.style === 'vive') {
       grabbing = true;
       grabStart();
@@ -166,7 +166,7 @@ window.addEventListener( 'vr controller connected', function( event ){
 	controller.addEventListener( 'trigger press ended', function( event ){
     triggering = false;
     checkForGrabbing();
-    console.log(`vrize_controller: trigger press ended detected`);
+    // console.log(`vrize_controller: trigger press ended detected`);
     if (controller.style === 'vive') {
       grabbing = false;
       grabEnd();
@@ -176,24 +176,24 @@ window.addEventListener( 'vr controller connected', function( event ){
 	controller.addEventListener( 'A press began', function( event ){
     aButtonPressing = true;
     checkForGrabbing();
-    console.log(`vrize_controller: A press began detected`);
+    // console.log(`vrize_controller: A press began detected`);
 	})
 
 	controller.addEventListener( 'A press ended', function( event ){
     aButtonPressing = false;
     checkForGrabbing();
-    console.log(`vrize_controller: A press ended detected`);
+    // console.log(`vrize_controller: A press ended detected`);
 	})
 
   // oculus "go back to prior page"
 	controller.addEventListener( 'thumbstick press began', function( event ){
-    console.log(`vrize_controller: thumbstick press began detected`);
+    // console.log(`vrize_controller: thumbstick press began detected`);
     window.history.back();
 	})
 
   // vive "go back to prior page"
 	controller.addEventListener( 'menu press began', function( event ){
-    console.log(`vrize_controller: menu press began detected`);
+    // console.log(`vrize_controller: menu press began detected`);
     window.history.back();
 	})
 
@@ -308,7 +308,7 @@ window.addEventListener( 'vr controller connected', function( event ){
       grabbing = false;
       grabEnd();
     }
-    console.log(`checkForGrabbing: grabbing=${grabbing}`);
+    // console.log(`checkForGrabbing: grabbing=${grabbing}`);
   }
 
 	controller.addEventListener( 'disconnected', function( event ){

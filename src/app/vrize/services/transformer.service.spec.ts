@@ -14,6 +14,7 @@ let service : TransformerService;
 let basicHtml =
 `<html>
   <head>
+    <script>console.log('a script with no src attribute')</script>
     <script src="../../build/three.js"></script>
     <script>
         var a=7;

@@ -58,6 +58,11 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
     let maxLen = 0;
 
     for (let i = 0; i < scriptEls.length; i++) {
+      // don't consider shader scripts as they can be longer than the
+      // 'main' script, and thus improperly tagged as the main script. 
+      if (scriptEls[i].type.match(/x-shader/)) {
+        continue;
+      }
       let scriptLen = scriptEls[i].innerHTML.length;
 
       if (scriptLen > maxLen) {
@@ -104,7 +109,8 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
 
     for (let i = 0; i < scriptEls.length; i++) {
       // if( scriptEls[i].innerHTML.match(/\/three\.js/)) {
-      if (scriptEls[i].getAttribute('src').match(/three\.js/) ) {
+      // debugger;
+      if (scriptEls[i].getAttribute('src') && scriptEls[i].getAttribute('src').match(/three\.js/) ) {
         foundCand = true;
         candScriptEl = i;
         break;

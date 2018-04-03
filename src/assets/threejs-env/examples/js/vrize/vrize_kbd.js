@@ -24,10 +24,10 @@ function onDocumentKeyDown(event) {
     // move
     case 'w':
       // dolly.position.z -= zSpeed;
-      console.log(`vrize_kbd: w key pressed. dolly.position.z pre=${dolly.position.z}`);
+      // console.log(`vrize_kbd: w key pressed. dolly.position.z pre=${dolly.position.z}`);
       // dolly.position.z -= directionVector.z;
       dolly.translateZ(-speed);
-      console.log(`vrize_kbd: dolly.position.z post=${dolly.position.z}`);
+      // console.log(`vrize_kbd: dolly.position.z post=${dolly.position.z}`);
     break;
     case 's':
       // dolly.position.z += zSpeed;
