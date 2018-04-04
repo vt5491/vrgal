@@ -108,6 +108,20 @@ app.get("/examples/:example", (req, res, next) => {
   // res.send(req.params)
 })
 
+app.get("/src/assets/threejs-env/examples/:example", (req, res, next) => {
+  console.log(`route match, req.params['example:']=${req.params['example:']}`);
+  console.log(`route match, req.params['example']=${req.params['example']}`);
+  console.log(`route match, req.params=${req.params}`);
+  fs.readFile(`src/assets/threejs-env/examples/${req.params['example']}`, "utf8", function(err, data){
+    if(err) throw err;
+    res.json({'data': data})
+    res.charset = 'UTF-8';
+    res.end(data);
+  });
+})
+
+
+
 app.post("/examples/:example", (req, res, next) => {
   console.log(`index2.js.post.log: file=${req.params['example']}`);
   // console.log(`index2.js.post.log: req.body=${req.body}`);

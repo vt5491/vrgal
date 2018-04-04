@@ -19,6 +19,8 @@ import { CoreUtilsService } from '../../../core/services/core-utils.service';
 // import THREE from "THREE";
 // declare var THREE: any;
 import * as THREE from "three";
+// import * as AFRAME from "AFRAME";
+// declare var AFRAME: any;
 import {Router} from '@angular/router';
 // import { BaseComponent} from '../base/base.component'
 import { debug } from 'util';

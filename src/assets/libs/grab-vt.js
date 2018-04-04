@@ -64,7 +64,7 @@ AFRAME.registerComponent('grab', {
   },
 
   onGripClose: function (evt) {
-    console.log(`now in onGripClose`);
+    // console.log(`now in onGripClose`);
     this.grabbing = true;
     //vt add
     this.gripping = false;
@@ -74,7 +74,7 @@ AFRAME.registerComponent('grab', {
   },
 
   onGripOpen: function (evt) {
-    console.log(`now in onGripOpen`);
+    // console.log(`now in onGripOpen`);
     var hitEl = this.hitEl;
     this.grabbing = false;
     if (!hitEl) { return; }

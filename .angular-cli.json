@@ -23,13 +23,13 @@
         "styles.css"
       ],
       "scripts": [
-	    "assets/libs/wasd-plus-controls.js",
+        "assets/libs/wasd-plus-controls.js",
         "assets/libs/aframe/sticky-state.js",
         "assets/libs/aframe/save-state.js",
         "assets/libs/aframe/system-base.js",
         "assets/libs/aframe/system-utils.js",
         "assets/libs/grab-vt.js"
-	  ],
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
