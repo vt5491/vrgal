@@ -23,6 +23,11 @@
     <img id="webglLightsHemisphereThumb" src="assets/img/thumbs/webgl_lights_hemisphere_thumb.png">
     <img id="webglGeometryNurbsThumb" src="assets/img/thumbs/webgl_geometry_nurbs_thumb.png">
   </a-assets>
+  <a-log
+    position="10 4 -1"
+    geometry="primitive: plane; width: 12; height: 25"
+    text="align: left; baseline: center; wrapCount: 120"
+  ></a-log>
   <!-- <a-entity id="dolly" position="0 0 3" wasd-controls> -->
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state hrab>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
@@ -42,12 +47,11 @@
     image="#webglGeometryCubeThumb" position="0 4 0"></a-link> -->
     <a-link href="assets/threejs-env/examples/vrize-webgl_lights_pointlights.html" title="Lights PointLights"
     image="#cokeThumbnail" position="0 4 0"></a-link>
-    <a-plane color="#CCC" position="3 4 0" height="1" width="1" id="vrize-webgl_lights_pointlights-view-source"></a-plane>
-    <a-log
-      position="10 4 -1"
-      geometry="primitive: plane; width: 12; height: 25"
-      text="align: left; baseline: center; wrapCount: 120"
-      ></a-log>
+    <a-entity>
+      <a-plane color="#CCC" position="3 4 0" height="0.5" width="1" id="vrize-webgl_lights_pointlights-view-source"></a-plane>
+      <a-text value="source" position="3 4 0" align="left"></a-text>
+      <a-circle color="#C8C" position="3 5 0" radius="0.5" id="vrize-webgl_lights_pointlights-view-source_2"></a-plane>
+    </a-entity>
     <!-- row 1 -->
     <a-link href="assets/threejs-env/examples/vrize-webgl_geometry_cube.html" title="Geometry Cube"
     image="#webglGeometryCubeThumb" position="-3 0 0"></a-link>

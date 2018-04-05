@@ -27,10 +27,18 @@ export class LinkSelectComponent implements OnInit {
 
   registerViewSourceListeners() {
     let btn = null;
+    let btn_2= null;
     // debugger;
 
     btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
+    btn_2 = document.querySelector('#vrize-webgl_lights_pointlights-view-source_2');
 
+    btn.addEventListener('mouseenter', (evt) => {
+      console.log(`registerViewListeners: now in mouseenter`);
+    });
+    btn.addEventListener('mouseleave', (evt) => {
+      console.log(`registerViewListeners: now in mouseleave`);
+    });
     // btn.addEventListener('click', function(evt) {
     btn.addEventListener('click', (evt) => {
       var logEl = document.querySelector("a-log");
