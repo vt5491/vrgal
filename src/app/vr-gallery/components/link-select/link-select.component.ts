@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import 'rxjs/add/operator/map';
 // import { StickyPosService } from '../../aframe/sticky-pos.service';
+// import { ExamplesService } from '../../../core/services/examples.service';
 import * as THREE from "three";
 
 @Component({
@@ -12,14 +15,18 @@ export class LinkSelectComponent implements OnInit {
 
   // constructor(stickyPos: StickyPosService ) {
   constructor(
-    private utils : CoreUtilsService
+    private utils : CoreUtilsService,
+    private http: HttpClient
+    // private examples: ExamplesService,
   ) {
     console.log(`LinkSelectComponent.ctor: entered`);
   }
 
   ngOnInit() {
     var el = document.querySelector("a-log");
+    el.setAttribute("visible", "false");
 
+    el = document.querySelector("#img_0");
     el.setAttribute("visible", "false");
 
     this.registerViewSourceListeners();
@@ -33,10 +40,10 @@ export class LinkSelectComponent implements OnInit {
     btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
     btn_2 = document.querySelector('#vrize-webgl_lights_pointlights-view-source_2');
 
-    btn.addEventListener('mouseenter', (evt) => {
+    btn_2.addEventListener('mouseenter', (evt) => {
       console.log(`registerViewListeners: now in mouseenter`);
     });
-    btn.addEventListener('mouseleave', (evt) => {
+    btn_2.addEventListener('mouseleave', (evt) => {
       console.log(`registerViewListeners: now in mouseleave`);
     });
     // btn.addEventListener('click', function(evt) {
@@ -56,16 +63,53 @@ export class LinkSelectComponent implements OnInit {
       // window.AFRAME.log('talking to <a-log>');
       // AFRAME.log('talking to <a-log>');
       // http://192.168.50.158:3002/src/assets/threejs-env/examples/vrize-webgl_geometry_cube.html
-      let msg = this.utils
-        // .getExampleObservable("http://192.168.50.158:3002/examples/webgl_animation_cloth.html")
-        // .getExampleObservable("http://192.168.50.158:3002/examples/webgl_geometry_cube.html")
-        .getExampleObservable("http://192.168.50.158:3002/src/assets/threejs-env/examples/vrize-webgl_geometry_cube.html")
-        .subscribe( (rsp) => {
-          (document.querySelector('a-scene') as any)
-            .emit('log', {message: (rsp as any).data, channel: 'bar'});
+      // let msg = this.utils
+      //   // .getExampleObservable("http://192.168.50.158:3002/examples/webgl_animation_cloth.html")
+      //   // .getExampleObservable("http://192.168.50.158:3002/examples/webgl_geometry_cube.html")
+      //   .getExampleObservable("http://192.168.50.158:3002/src/assets/threejs-env/examples/vrize-webgl_geometry_cube.html")
+      //   .subscribe( (rsp) => {
+      //     (document.querySelector('a-scene') as any)
+      //       .emit('log', {message: (rsp as any).data, channel: 'bar'});
+      //     // debugger;
+      //     console.log(`registerViewSouceListeners: data=${(rsp as any).data}`);
+      //   })
+      // let msg = this.examples.get('assets/threejs-env/examples/vrize-webgl_geometry_cube.html');
+      // (document.querySelector('a-scene') as any)
+      //   .emit('log', { message: msg, channel: 'bar' });
+      // console.log(`registerViewSouceListeners: msg=${msg}`);
+      let msg = this.http
+        .get('assets/threejs-env/examples/vrize-webgl_geometry_cube.html', {responseType: 'text'})
+        // .map( rsp => {
+        //   debugger;
+        // })
+        .subscribe((rsp) => {
           // debugger;
-          console.log(`registerViewSouceListeners: data=${(rsp as any).data}`);
+          (document.querySelector('a-scene') as any)
+            .emit('log', {message: rsp, channel: 'bar'});
+
         })
+    })
+
+    let link = document.querySelector('#link_0'); 
+
+    link.addEventListener('mouseenter', (e) => {
+      let el = document.querySelector('#img_0');
+      // toggle visibility
+      let elVisibility = el.getAttribute("visible");
+      // let newVisibility = 'true';
+      let newVisibility = !elVisibility;
+
+      el.setAttribute("visible", String(newVisibility));
+    });
+
+    link.addEventListener('mouseleave', (e) => {
+      let el = document.querySelector('#img_0');
+      // toggle visibility
+      let elVisibility = el.getAttribute("visible");
+      // let newVisibility = 'true';
+      let newVisibility = !elVisibility;
+
+      el.setAttribute("visible", String(newVisibility));
     })
     // btn.addEventListener('click', function (evt) {
     //   console.log(`LinkSelectComponent: you clicked on vrize-webgl_lights_pointlights-view-source`);

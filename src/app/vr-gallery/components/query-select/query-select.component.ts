@@ -105,6 +105,8 @@ export class QuerySelectComponent implements OnInit {
     exObservable.subscribe(this.processResult.bind(this))
   }
 
+  //TODO: use example service to do get.  Don't use this
+  //no..ok
   getExampleObservable(apiURL: string, pos: THREE.Vector3) {
     try {
       return this.http.get(apiURL)
@@ -132,29 +134,35 @@ export class QuerySelectComponent implements OnInit {
     }
   }
 
-  // process a (potentially) many rowed result
+  // process a  many rowed result
   processResult(data) {
     // debugger
     console.log(`QuerySelect.processResult: data.length=${data.length}`);
-    let pos = new THREE.Vector3(-6, 0 ,0)
-    let xPos = -6
+    // let pos = new THREE.Vector3(-6, 0 ,0)
+    let xPos = -10;
+    let yPos = 10;
 
     for(let i=0; i < data.length; i++) {
       // data[i].pos = pos
       // data[i].pos.x = pos.x 
       data[i].pos = {}
       data[i].pos.x = xPos
-      console.log(`data.${i}.pos.x=${data[i].pos.x}`);
-      console.log(`data.${i}.name=${data[i].name}`);
+      data[i].pos.y = yPos
+      // console.log(`data.${i}.pos.x=${data[i].pos.x}`);
+      // console.log(`data.${i}.name=${data[i].name}`);
       
       this.aggregateResults(data[i])
 
       // pos.x += 3
-      xPos += 3
-    }
-    
+      xPos += 4
 
+      if (i % 5 == 0) {
+        xPos = -10;
+        yPos -= 4;
+      }
+    }
   }
+
   aggregateResults(data) {
     let example = {}
 
@@ -168,12 +176,15 @@ export class QuerySelectComponent implements OnInit {
 
     // if (this.exampleResults.length == this.expectedResultCnt) {
       // debugger
-      // localStorage.setItem('currentUser', JSON.stringify({ token: token, name: name }));
-      // We have to use sessionStorage to transfer data among routes, because a pure a-frame
-      // link is more of a pure DOM transfer and is kind of out reach of the NG environment, thus
-      // NG injects a new services into the transferred-to component, instead of the existing one.
-      // We can do an offical NG route with something like 'this.router.navigate', but that
-      // drop the a-frame vr-mode, and you can't carry vr mode into the next route.
+    //   localStorage.setItem('currentUser', JSON.stringify({ token: token,
+    //   name: name })); 
+    //   We have to use sessionStorage to transfer data among routes, because a
+    //   pure a-frame link is more of a pure DOM transfer and is kind of out
+    //   reach of the NG environment, thus NG injects new services into the
+    //   transferred-to component instead of the existing one. We can do an
+    //   offical NG route with something like 'this.router.navigate', but that
+    //   drops the a-frame vr-mode, and you can't carry vr mode into the next
+    //   route.
       sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
 
       // create dynamic link

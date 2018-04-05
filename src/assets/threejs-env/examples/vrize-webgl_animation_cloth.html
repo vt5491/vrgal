@@ -331,6 +331,9 @@ function vrize_render() {
 function render() {
 
     var p = cloth.particles;
+		//vt: note: clothGeometry.vertices not set with three r91.
+		// need to use three.js r89
+		// debugger;
 
     for (var i = 0, il = p.length; i < il; i++) {
 
@@ -356,6 +359,6 @@ function animate() {
 };
 
 //vrize add end</script>
-	
+
 
 </body></html>

@@ -3,64 +3,30 @@
 // Attempt to add an a-frame <laser-control> to the existing three.js scene
 //
 console.log(`vrize_cntrl: now adding body vrize-init event`);
-// document.querySelector('a-scene').addEventListener('loaded', function () {...})
-// let canvas = document.querySelector('canvas');
-// canvas.addEventListener(("loaded"), addAfCntrl);
-
-// let body = document.querySelector('window');
 window.addEventListener(("vrize-init"), addAfCntrl);
-// window.addEventListener(("onload"), addAfCntrl);
 
 var controller;
 function addAfCntrl(event) {
   console.log(`vrize_cntrl.addAfCntrl: entered, dolly=${dolly}`);
-
-  // controller = new THREE.ViveController();
-  // dolly.add( controller );
-  //
-  // var loader = new THREE.OBJLoader();
-  // loader.setPath( 'models/obj/vive-controller/' );
-  // loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
-  //
-  //   var loader = new THREE.TextureLoader();
-  //   loader.setPath( 'models/obj/vive-controller/' );
-  //
-  //   let controller_tmp = object.children[ 0 ];
-  //   controller_tmp.material.map = loader.load( 'onepointfive_texture.png' );
-  //   controller_tmp.material.specularMap = loader.load( 'onepointfive_spec.png' );
-  //   controller_tmp.castShadow = true;
-  //   controller_tmp.receiveShadow = true;
-  //
-  //   controller.add( controller_tmp.clone() );
-  //   // debugger;
-  // })
 }
 
-// this.el.sceneEl.addEventListener('camera-set-active', function (evt) {
-// scene.addEventListener('camera-set-active', function (evt) {
-//   console.log(`vrize_cntrl.camare-set-active: camera=${evt.detail.cameraEl}`);
-// });
 window.addEventListener( 'vr controller connected', function( event ){
   console.log(`vrize_controller.VRController now activated!`);
-  // THREE.VRController.verbosity = 1
 
-	//  Here it is, your VR controller instance.
-	//  It’s really a THREE.Object3D so you can just add it to your scene:
+  var controller;
+	// var controller = event.detail
 
-	var controller = event.detail
-  console.log(`controller.style=${controller.style}`);
-	// scene.add( controller )
-  //vt add
-  // controller.position.y = 400;
-  //vt end
-	dolly.add( controller )
-
-
-	//  HEY HEY HEY! This is important. You need to make sure you do this.
-	//  For standing experiences (not seated) we need to set the standingMatrix
-	//  otherwise you’ll wonder why your controller appears on the floor
-	//  instead of in your hands! And for seated experiences this will have no
-	//  effect, so safe to do either way:
+  console.log(`controller.style=${event.detail.style}, controller.Handedness=${event.detail.getHandedness()}`);
+  controller = event.detail
+  dolly.add( controller )
+  // we designate the left controller as the 'grabbing' controller.
+  // if (event.detail.getHandedness() === 'left') {
+	//    controller = event.detail
+	//    dolly.add( controller )
+  // }
+  // else {
+  //   return;
+  // }
 
 	controller.standingMatrix = renderer.vr.getStandingMatrix()
 
@@ -101,11 +67,11 @@ window.addEventListener( 'vr controller connected', function( event ){
   // script (OrbitControls) to scale sf apporpriately.
   var sf = 400;
   var tickRun = false;
-  // var sf = 1.1;
   var tickReq;
   var gripping = false;
   var triggering = false;
   var aButtonPressing = false;
+  var xButtonPressing = false;
   var grabbing = false;
 
 	controllerMaterial = new THREE.MeshStandardMaterial({
@@ -129,10 +95,8 @@ window.addEventListener( 'vr controller connected', function( event ){
 	controllerMesh.add( handleMesh )
 	controller.userData.mesh = controllerMesh//  So we can change the color later.
 	controller.add( controllerMesh )
-
 	// castShadows( controller )
 	// receiveShadows( controller )
-
 
 	// //  Allow this controller to interact with DAT GUI.
   //
@@ -173,6 +137,7 @@ window.addEventListener( 'vr controller connected', function( event ){
     }
 	})
 
+  // A button is on the right controller
 	controller.addEventListener( 'A press began', function( event ){
     aButtonPressing = true;
     checkForGrabbing();
@@ -181,6 +146,19 @@ window.addEventListener( 'vr controller connected', function( event ){
 
 	controller.addEventListener( 'A press ended', function( event ){
     aButtonPressing = false;
+    checkForGrabbing();
+    // console.log(`vrize_controller: A press ended detected`);
+	})
+
+  // X button is on the left controller
+	controller.addEventListener( 'X press began', function( event ){
+    xButtonPressing = true;
+    checkForGrabbing();
+    // console.log(`vrize_controller: X press began detected`);
+	})
+
+	controller.addEventListener( 'X press ended', function( event ){
+    xButtonPressing = false;
     checkForGrabbing();
     // console.log(`vrize_controller: A press ended detected`);
 	})
@@ -300,7 +278,7 @@ window.addEventListener( 'vr controller connected', function( event ){
   }
 
   function checkForGrabbing() {
-    if (gripping && triggering && aButtonPressing) {
+    if (gripping && triggering && (aButtonPressing || xButtonPressing)) {
       grabbing = true;
       grabStart();
     }
