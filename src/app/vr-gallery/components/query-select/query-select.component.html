@@ -3,18 +3,18 @@
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
   </a-assets>
-  <a-entity id="dolly" position="0 0 8" wasd-plus-controls>
+  <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
     <!-- <a-entity oculus-touch-controls="hand: left" position="0 0 0"></a-entity> -->
     <a-entity hand-controls="left" position="0 0 0" grab></a-entity>
     <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
   </a-entity>
-  <a-entity id="links">
+  <a-entity id="links" >
   </a-entity>
   <!-- <a-link id="results-link" href="/results-scene" qeekMode="true" title="See Results"
     image="#cokeThumb" position="0 0 0" on="no-manual-click"></a-link> -->
 
-  <a-entity qosition="-3 0.5 -3" >
+  <a-entity qosition="-3 0.5 -3" save-state>
     <a-box id="sb-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
     <a-text value="sandbox" position="-3.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
   </a-entity>

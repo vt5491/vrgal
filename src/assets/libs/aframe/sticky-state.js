@@ -1,4 +1,4 @@
-
+// Save the state of selected scene components between link transferrals.
 AFRAME.registerComponent('sticky-state', {
 
   init: function () {
@@ -41,31 +41,5 @@ AFRAME.registerComponent('sticky-state', {
     //   // debugger;
     // })
 
-    // debugger;
-    // let rayCaster = document.querySelectorAll('a-entity[laser-controls]')[0];
-
-    // rayCaster.addEventListener('raycaster-intersected', function(evt) {
-    // rayCaster.addEventListener('raycaster-intersection', function(evt) {
-    //   // console.log('sticky-pos: raycaster-intersected event triggered');
-    //   console.log('sticky-pos: raycaster-intersection event triggered');
-    //   // debugger;
-    //
-    // })
-
-
-    // this.el.setAttribute('position', { z: 12});
-    // console.log(`sticky-pos.init: post: el.components.position.z=${this.el.components.position.z}`);
-//
-    // this.el.addEventListener('play', function (evt) {
-    //   console.log(`entity loaded`);
-    //   console.log(`evt pos pre=${evt.target.components.position.z}`);
-    //   // evt.target.components.position.z = 20;
-    //   evt.target.setAttribute('position', { z: 20});
-    //   // debugger;
-    //   console.log(`evt pos post=${evt.target.components.position.z}`);
-    //   // if (evt.detail.name === 'position') {
-    //   //   console.log('Entity has moved from', evt.detail.oldData, 'to', evt.detail.newData, '!');
-    //   // }
-    // });
   }
 });

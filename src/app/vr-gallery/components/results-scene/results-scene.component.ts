@@ -50,19 +50,26 @@ export class ResultsSceneComponent implements OnInit {
     console.log('ResultComponent.ngOnInit: entered');
 
     console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${this.exampleResults.length}`);
-    document.querySelector('a-scene').addEventListener('loaded', this.addLinks.bind(this))
+    document.querySelector('a-scene')
+      .addEventListener('loaded', this.addResources.bind(this))
+  }
+
+  addResources() {
+    this.addLinks();
+    // this.addImgAssets();
+    this.addExamplePopupImgs();
   }
 
   addLinks() {
     console.log(`ResultsScene.addLinks: this.exampleResults.length=${this.exampleResults.length}`);
     
     for(let i=0; i < this.exampleResults.length; i++) {
-      this.addLink(this.exampleResults[i])
+      this.addLink(this.exampleResults[i], i);
     }
 
   }
 
-  addLink(data) {
+  addLink(data, index) {
     console.log(`resultsSceneComponent.addLink: http result=${data}`);
     console.log(`resultsSceneComponent.addLink: http result.name=${data.name}`);
     console.log(`resultsSceneComponent.addLink: http result.category=${data.category}`);
@@ -78,10 +85,80 @@ export class ResultsSceneComponent implements OnInit {
     evtDetail['href'] = `assets/threejs-env/examples/vrize-${data.name}`
     evtDetail['pos'] = data.pos
     evtDetail['title'] = data.name;
+
+    // evtDetail['id'] = `example-link-${index}`;
+    let imgRoot = data['name'].replace(/\.html$/, '')
+    evtDetail['id'] = `${imgRoot}-link`;
+    evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+
     let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
     evt.initEvent(`${appPrefix}_createlink`, true, true);
     // scene.emit(`${appPrefix}_createlink`);
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
     scene.dispatchEvent(evt)
   }
+
+  // add thumbs to the assets list
+  addImgAssets() {
+    for (let i = 0; i < this.exampleResults.length; i++) {
+      this.addImgAsset(this.exampleResults[i], i);
+    }
+  }
+
+  addImgAsset(data, index) {
+    let scene: any = document.querySelector('a-scene');
+    let appPrefix = this.base.appPrefix
+    // let evtPrefix = `${appPrefix}_createasset`
+    // console.log(`querySelect: evtPrefix=${evtPrefix}`);
+
+    let evtDetail = {}
+    // debugger;
+    let imgRoot = data['name'].replace(/\.html$/, '')
+    evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    evtDetail['id'] = `${imgRoot}-thumb`;
+
+    let evt = new CustomEvent(`${appPrefix}_create_img_asset`, { detail: evtDetail });
+    evt.initEvent(`${appPrefix}_create_img_asset`, true, true);
+    // scene.emit(`${appPrefix}_createlink`);
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+    scene.dispatchEvent(evt)
+  }
+
+  addExamplePopupImgs() {
+    for (let i = 0; i < this.exampleResults.length; i++) {
+      this.addExamplePopupImg(this.exampleResults[i], i);
+    }
+  }
+
+  addExamplePopupImg(data, index) {
+    let scene: any = document.querySelector('a-scene');
+    let appPrefix = this.base.appPrefix
+
+    let evtDetail = {}
+    // debugger;
+    let imgRoot = data['name'].replace(/\.html$/, '')
+    // evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    // we want to use the asseted (pre-loaded) version
+    evtDetail['src'] = `#${imgRoot}-thumb`;
+    // evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    evtDetail['pos'] = `1 0 0`;
+    evtDetail['width'] = 5;
+    evtDetail['height'] = 5;
+    evtDetail['visible'] = false;
+    // evtDetail['visible'] = "true";
+    evtDetail['linkId'] = `example-link-${index}`;
+    evtDetail['id'] = `${imgRoot}-popup`;
+
+    let evt = new CustomEvent(`${appPrefix}_create_popup_img`, { detail: evtDetail });
+    evt.initEvent(`${appPrefix}_create_popup_img`, true, true);
+    // scene.emit(`${appPrefix}_createlink`);
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+    scene.dispatchEvent(evt)
+  }
+  // add a 'mouseenter' listener so we can show a popup screen print of what
+  // the example looks like.
+  // addLinkHoverEvtListener() {
+
+  // }
 
 }

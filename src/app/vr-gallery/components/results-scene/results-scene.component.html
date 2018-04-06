@@ -1,20 +1,27 @@
-<!-- <p>
-  results-scene works!
-</p> -->
 <a-scene id="results-scene">
   <a-assets>
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
+    <!-- <img id="animationClothThumb" src="assets/img/animation_cloth_thumb.png"> -->
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
+    <img src="assets/img/thumbs/webgl_morphtargets_horse_thumb.png"
+      id="webgl_morphtargets_horse-thumb">
   </a-assets>
-  <a-entity id="dolly" position="0 0 8" wasd-plus-controls>
+  <!-- <a-image src="#animationClothThumb" position="0 -1 1" width="5" height="5" id="img_0"></a-image> -->
+  <a-image id="webgl_geometries-popup2"
+    src="assets/img/thumbs/webgl_geometries_thumb.png"
+    position="8 0 0.4" width="5" height="5"></a-image>
+  <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
     <!-- <a-entity oculus-touch-controls="hand: left" position="0 0 0"></a-entity> -->
     <a-entity hand-controls="left" position="0 0 0" grab></a-entity>
     <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
   </a-entity>
-  <a-entity id="links">
+  <a-entity id="links" save-state>
   </a-entity>
-  <a-link href="vr-gallery/query-select" title="Return to Query Scene" image="#cokeThumb" position="0 -4 0"></a-link>
-  <a-box position="-1 0.5 -3" rotation="0 60 0" color="#C4C309" height="2" width="2"></a-box>
+  <a-entity id="popups">
+  </a-entity>
+  <a-link href="vr-gallery/query-select" title="Return to Query Scene"
+    image="#cokeThumb" position="0 14 0"></a-link>
+  <!-- <a-box position="-1 0.5 -3" rotation="0 60 0" color="#C4C309" height="2" width="2"></a-box> -->
   <a-sky src="#sky" theta-length="330"></a-sky>
 </a-scene>

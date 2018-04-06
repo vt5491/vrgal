@@ -102,7 +102,7 @@ export class QuerySelectComponent implements OnInit {
 
     let exObservable = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`, new THREE.Vector3(-6, 0 ,0))
 
-    exObservable.subscribe(this.processResult.bind(this))
+    exObservable.subscribe(this.processResults.bind(this))
   }
 
   //TODO: use example service to do get.  Don't use this
@@ -135,11 +135,11 @@ export class QuerySelectComponent implements OnInit {
   }
 
   // process a  many rowed result
-  processResult(data) {
+  processResults(data) {
     // debugger
-    console.log(`QuerySelect.processResult: data.length=${data.length}`);
+    console.log(`QuerySelect.processResults: data.length=${data.length}`);
     // let pos = new THREE.Vector3(-6, 0 ,0)
-    let xPos = -10;
+    let xPos = -8;
     let yPos = 10;
 
     for(let i=0; i < data.length; i++) {
@@ -156,8 +156,8 @@ export class QuerySelectComponent implements OnInit {
       // pos.x += 3
       xPos += 4
 
-      if (i % 5 == 0) {
-        xPos = -10;
+      if ((i + 1) % 5 == 0) {
+        xPos = -8;
         yPos -= 4;
       }
     }
@@ -185,20 +185,21 @@ export class QuerySelectComponent implements OnInit {
     //   offical NG route with something like 'this.router.navigate', but that
     //   drops the a-frame vr-mode, and you can't carry vr mode into the next
     //   route.
-      sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
+    sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
 
-      // create dynamic link
-      let scene: any = document.querySelector('a-scene');
+    // create dynamic link
+    let scene: any = document.querySelector('a-scene');
 
-      let evtDetail = {}
-      // evtDetail['href'] = `results-scene`
-      evtDetail['href'] = `vr-gallery/results-scene`
-      evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
-      evtDetail['title'] = "dynamic results link";
-      let appPrefix = this.base.appPrefix
-      let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
-      evt.initEvent(`${appPrefix}_createlink`, true, true);
-      scene.dispatchEvent(evt)
+    let evtDetail = {}
+    // evtDetail['href'] = `results-scene`
+    evtDetail['href'] = `vr-gallery/results-scene`
+    evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
+    evtDetail['title'] = "dynamic results link";
+    let appPrefix = this.base.appPrefix
+    let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
+    evt.initEvent(`${appPrefix}_createlink`, true, true);
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+    scene.dispatchEvent(evt)
 
 
     // }

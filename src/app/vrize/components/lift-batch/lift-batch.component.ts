@@ -31,7 +31,7 @@ export class LiftBatchComponent implements OnInit {
     private parser: ParserService,
     private dataExamples: DataExamplesService,
     private examples: ExamplesService
-  ) { 
+  ) {
     this.liftReqs = new Array();
 
     this.writeToTmp = !environment.production;
@@ -55,11 +55,11 @@ export class LiftBatchComponent implements OnInit {
         }
 
         // debugger;
-        
+
       })
   }
 
-  liftBatch() {
+  liftBatch(e) {
     console.log(`LiftBatchComponent.liftBatch: entered`);
     for (let i = 0; i < this.liftReqs.length; i++) {
 
@@ -88,7 +88,7 @@ export class LiftBatchComponent implements OnInit {
           console.log(`${fn} loaded`);
         })
     }
-  } 
+  }
 
   lift(inputText : string) {
     let inputHtml = inputText;
@@ -101,14 +101,14 @@ export class LiftBatchComponent implements OnInit {
   }
 
   commitExample(liftedText, fn, exampleId) {
-    // form.controls['cb-use-tmp'].value; 
-    console.log(`LiftComponent.commitExample: this.writeToTmp=${this.writeToTmp}`); 
+    // form.controls['cb-use-tmp'].value;
+    console.log(`LiftComponent.commitExample: this.writeToTmp=${this.writeToTmp}`);
     // This is basically just the call to either update an existing file
     // or to create it if doesn't exist.  We leave it to the server to decide
-    // which case it is.  Thus, we just do a POST and don't do a POST (create) 
+    // which case it is.  Thus, we just do a POST and don't do a POST (create)
     // vs PUT (update)
     this.dataExamples.post(
-      `examples/${fn}`, liftedText  
+      `examples/${fn}`, liftedText
     )
     .subscribe((rsp) => {
       console.log(`commitExample: rsp=${rsp}`);
@@ -116,7 +116,7 @@ export class LiftBatchComponent implements OnInit {
       let example = new ExampleComponent();
 
       // console.log(`commitExample: fn=${fn}, fn.id=${this.testFileIdLookup[this.fn]}`);
-      
+
       // example.id = this.testFileIdLookup[this.fn];
       example.id = exampleId;
       // example.id = 260
@@ -124,7 +124,7 @@ export class LiftBatchComponent implements OnInit {
       // if lifted is already true, rails won't schedule the request. Nice
       // feature, except it doesn't cause 'lifted_at' (and indirectly
       // 'updated_at') to get driven.  So we need to set it to false, and
-      // then true to get these to change. 
+      // then true to get these to change.
       // example.lifted = false;
       // // example.lifted = 0;
       // this.examples.setLifted(example);
