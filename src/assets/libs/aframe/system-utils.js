@@ -1,11 +1,24 @@
 AFRAME.registerSystem('system-utils', {
+  // Note: schemas don't seem to work for systems.  In spite of what the doc
+  // says, you cannot refer to any system schema variables, either as
+  // this.abc, or this.data.abc.  Ergo, just avoid using them.
+  // Note: I also tried binding the event handler functions to 'this' context
+  // (via a fat arrow), but still makes no difference.
+
+  // schema: {
+  //   // utilsSceneEl,
+  //   abc: {type: 'int', default: 5},
+  //   utilsSceneEl: {type: 'int'},
+  // },
   init: function () {
     console.log(`system-utils.init: entered`);
     console.log(`system-utils: now enabling vttestevt listener`);
     window.addEventListener('vttestevt', this.onVtTestEvt);
     // console.log(`system-utils: prefix=${AFRAME.systems['system-base'].data.appPrefix}`);
-    let scene = this.el.sceneEl
+    let scene = this.el.sceneEl;
     let base = scene.systems['system-base'];
+    // this.utilsSceneEl = this.el.sceneEl;
+    // this.abc = 7;
     //TODO: update base to have this as a convenience method
     // let appPrefixLc = String.prototype.toLocaleLowerCase(base.data.appPrefix);
     let appPrefixLc = 'vrgal';
@@ -16,6 +29,7 @@ AFRAME.registerSystem('system-utils', {
     window.addEventListener(appPrefixLc + '_' + 'createlink', this.createLink);
     window.addEventListener(appPrefixLc + '_' + 'create_img_asset', this.createImgAsset);
     window.addEventListener(appPrefixLc + '_' + 'create_popup_img', this.createExamplePopupImg);
+    window.addEventListener(appPrefixLc + '_' + 'create_view_source_btn', this.createViewSourceBtn);
   },
   onVtTestEvt: function () {
     console.log(`system-utils.onVtTestEvt: now in vttestevt handler`);
@@ -43,6 +57,7 @@ AFRAME.registerSystem('system-utils', {
   // because it's a timing thing ..e.g you have to make sure you do this when a-frame
   // is ready for it (?)
   createLink: function (evt) {
+  // createLink: (evt) => {
     // console.log(`system-utils.createLink: url=${url}, pos=${pos}, title=${title}`)
     // console.log(`system-utils.createLink: name=${evt.target.vrgal_createlink_name}`)
     console.log(`system-utils.createLink: entered, evt.detail.title=${evt.detail.title}`);
@@ -73,10 +88,18 @@ AFRAME.registerSystem('system-utils', {
     // addLinkHoverEvtListener(linkEl);
     // this.addLinkHoverEvtListener(linkEl);
     // calling a helper method in an afame system cannot be done using 'this'.
-    let scene = document.querySelector('a-scene');
-    let utils = scene.systems['system-utils'];
+    let sceneEl = document.querySelector('a-scene');
+    // let utils = scene.systems['system-utils'];
     // debugger;
-    utils.addLinkHoverEvtListener(linkEl);
+    // console.log(`this.data.abc=${this.data.abc}, this.data.utilsSceneEl=${this.data.utilsSceneEl}`);
+    // utils.addLinkHoverEvtListener(linkEl);
+
+    // console.log(`system-utils: calling addLinkHoverEvtListener in new way`);
+    // el.systems['system-utils'].addLinkHoverEvtListener(linkEl);
+    sceneEl.systems['system-utils'].addLinkHoverEvtListener(linkEl);
+    // this.sceneElement.systems['system-utils'].addLinkHoverEvtListener(linkEl);
+    // debugger;
+    // this.utilsSceneEl.systems['system-utils'].addLinkHoverEvtListener(linkEl);
   },
 
   // add a 'mouseenter' listener so we can show a popup screen print of what
@@ -93,24 +116,28 @@ AFRAME.registerSystem('system-utils', {
       // let el = document.querySelector('#img_0');
       let el = document.querySelector(`#${exampleRoot}-popup`);
       // toggle visibility
-      let elVisibility = el.getAttribute("visible");
-      let newVisibility = !elVisibility;
-
-      el.setAttribute("visible", String(newVisibility));
+      let sceneEl = document.querySelector('a-scene');
+      sceneEl.systems['system-utils'].toggleVisibility(el);
+      // let elVisibility = el.getAttribute("visible");
+      // let newVisibility = !elVisibility;
+      //
+      // el.setAttribute("visible", String(newVisibility));
     });
 
     linkEl.addEventListener('mouseleave', (e) => {
       console.log(`SU:mouseleave activated`);
       // let el = document.querySelector('#img_0');
       let tgtId = e.target.id;
-      let exampleRoot = tgtId.replace(/-link$/, '');
+      let exampleRoot = tgtId.replace(/-link/, '');
       // debugger;
       let el = document.querySelector(`#${exampleRoot}-popup`);
       // toggle visibility
-      let elVisibility = el.getAttribute("visible");
-      let newVisibility = !elVisibility;
-
-      el.setAttribute("visible", String(newVisibility));
+      let sceneEl = document.querySelector('a-scene');
+      sceneEl.systems['system-utils'].toggleVisibility(el);
+      // let elVisibility = el.getAttribute("visible");
+      // let newVisibility = !elVisibility;
+      //
+      // el.setAttribute("visible", String(newVisibility));
     })
   },
   createImgAsset: function (evt) {
@@ -127,7 +154,7 @@ AFRAME.registerSystem('system-utils', {
   },
   createExamplePopupImg: function (evt) {
     let src = evt.detail.src;
-    let pos = evt.detail.id;
+    let pos = evt.detail.pos;
     let width = evt.detail.width;
     let height = evt.detail.height;
     let visible = evt.detail.visible;
@@ -141,6 +168,7 @@ AFRAME.registerSystem('system-utils', {
     let linkParentEl = document.querySelector('#popups');
     let popupEl = document.createElement('a-image');
 
+    // debugger;
     popupEl.setAttribute('src', src);
     popupEl.setAttribute('position', pos);
     popupEl.setAttribute('width', width);
@@ -150,6 +178,86 @@ AFRAME.registerSystem('system-utils', {
 
     // popupEl.appendChild(linkParentEl);
     linkParentEl.appendChild(popupEl);
-  }
+  },
+  toggleVisibility: function (el) {
+      let elVisibility = el.getAttribute("visible");
+      el.setAttribute("visible", String(!elVisibility));
+      // let newVisibility = !elVisibility;
+      //
+      // el.setAttribute("visible", String(newVisibility));
+      //
+  },
+  createViewSourceBtn: function (evt) {
+    let src = evt.detail.src;
+    let pos = evt.detail.pos;
+    let exampleRoot = evt.detail.exampleRoot;
+    let id = evt.detail.id;
 
+    let linkParentEl = document.querySelector('#view-source-btns');
+    let btnEl = document.createElement('a-circle');
+
+    // add a hover button
+    btnEl.setAttribute('position', pos);
+    btnEl.setAttribute('radius', 0.25);
+    btnEl.id = id;
+
+    linkParentEl.appendChild(btnEl);
+
+    // add 'view Source' text (toggled visible upon hover)
+    let textEl = document.createElement('a-text');
+
+    textEl.setAttribute('value', "View Source");
+    textEl.setAttribute('position', {x: pos.x + 0.5, y: pos.y, z: pos.z});
+    textEl.setAttribute('align', 'left');
+    textEl.setAttribute('visible', 'false');
+    textEl.id = `${exampleRoot}-viewSourceText`;
+
+    linkParentEl.appendChild(textEl);
+
+    // and add hover capability to show text upon button hover
+    let sceneEl = document.querySelector('a-scene');
+    sceneEl.systems['system-utils'].addViewSourceHoverListener(btnEl);
+
+    // and emit a done event so ng2 can do any processing
+    sceneEl.dispatchEvent(new CustomEvent(
+      'vrgal_view_source_btn_added',
+    { detail: {'exampleRoot': exampleRoot} }));
+  },
+  addViewSourceHoverListener: function(linkEl) {
+    console.log(`SU.addViewSourceHoverListener: entered`);
+
+    linkEl.addEventListener('mouseenter', (e) => {
+      console.log(`SU.addViewSourceHoverListener:mouseenter activated`);
+      // debugger;
+      let tgtId = e.target.id;
+      let exampleRoot = tgtId.replace(/-viewSourceBtn/, '')
+      // let el = document.querySelector('#img_0');
+      let el = document.querySelector(`#${exampleRoot}-viewSourceText`);
+      // let el = e.target;
+      // toggle visibility
+      let sceneEl = document.querySelector('a-scene');
+      sceneEl.systems['system-utils'].toggleVisibility(el);
+      // let elVisibility = el.getAttribute("visible");
+      // let newVisibility = !elVisibility;
+      //
+      // el.setAttribute("visible", String(newVisibility));
+    });
+
+    linkEl.addEventListener('mouseleave', (e) => {
+      console.log(`SU.addViewSourceHoverListener:mouseleave activated`);
+      // let el = document.querySelector('#img_0');
+      let tgtId = e.target.id;
+      let exampleRoot = tgtId.replace(/-viewSourceBtn/, '');
+      // // debugger;
+      let el = document.querySelector(`#${exampleRoot}-viewSourceText`);
+      // let el = e.target;
+      // toggle visibility
+      let sceneEl = document.querySelector('a-scene');
+      sceneEl.systems['system-utils'].toggleVisibility(el);
+      // let elVisibility = el.getAttribute("visible");
+      // let newVisibility = !elVisibility;
+      //
+      // el.setAttribute("visible", String(newVisibility));
+    })
+  },
 });

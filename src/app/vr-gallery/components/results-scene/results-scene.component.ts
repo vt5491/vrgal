@@ -27,6 +27,8 @@ export class ResultsSceneComponent implements OnInit {
   // category: string;
   // utils : UtilsService
   exampleResults : Object[] = []
+  sceneEl : Element;
+  appPrefix : string;
 
   // constructor() { }
   // constructor(private http: Http, private base: BaseService, private utils: UtilsService) { 
@@ -55,9 +57,13 @@ export class ResultsSceneComponent implements OnInit {
   }
 
   addResources() {
+    this.sceneEl = document.querySelector('a-scene');
+    this.appPrefix = this.base.appPrefix
+
     this.addLinks();
-    // this.addImgAssets();
+    this.addImgAssets();
     this.addExamplePopupImgs();
+    this.addViewSourceBtns();
   }
 
   addLinks() {
@@ -89,7 +95,8 @@ export class ResultsSceneComponent implements OnInit {
     // evtDetail['id'] = `example-link-${index}`;
     let imgRoot = data['name'].replace(/\.html$/, '')
     evtDetail['id'] = `${imgRoot}-link`;
-    evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    // evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    evtDetail['image'] = `#${imgRoot}-thumb`;
 
     let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
     evt.initEvent(`${appPrefix}_createlink`, true, true);
@@ -141,7 +148,17 @@ export class ResultsSceneComponent implements OnInit {
     // we want to use the asseted (pre-loaded) version
     evtDetail['src'] = `#${imgRoot}-thumb`;
     // evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
-    evtDetail['pos'] = `1 0 0`;
+    // evtDetail['pos'] = `1 0 0`;
+    // evtDetail['pos'] = {x: 1, y: 0, z: 0.5};
+    // evtDetail['pos'] = data.pos;
+    // we need to move out the popup a little on z-axis to reduce interference
+    // with the originating link image above.
+    // We also need to make sure it's above the area of cursor focus, otherwise
+    // the appearance of the overlay causes the cursor to think it's lost focus
+    // Note: data.pos only supplies x and y coords.
+    // debugger;
+    evtDetail['pos'] = {x: data.pos.x, y: data.pos.y + 5, z: 0.1};
+    // evtDetail['pos'] = {x: data.pos.x, y: data.pos.y + 5};
     evtDetail['width'] = 5;
     evtDetail['height'] = 5;
     evtDetail['visible'] = false;
@@ -160,5 +177,48 @@ export class ResultsSceneComponent implements OnInit {
   // addLinkHoverEvtListener() {
 
   // }
+  addViewSourceBtns() {
+    for (let i = 0; i < this.exampleResults.length; i++) {
+      this.addViewSourceBtn(this.exampleResults[i], i);
+      // this.registerViewSourceListener(this.exampleResults[i], i);
+    }
+  }
+
+  addViewSourceBtn(data, index) {
+    let evtDetail = {};
+    let exampleRoot = data['name'].replace(/\.html$/, '')
+    // let appPrefix = this.base.appPrefix
+
+    evtDetail['pos'] = { x: data.pos.x + 1.5, y: data.pos.y -1, z: 0.1};
+    evtDetail['exampleRoot'] = exampleRoot;
+    evtDetail['id'] = `${exampleRoot}-viewSourceBtn`;
+
+    let evt = new CustomEvent(`${this.appPrefix}_create_view_source_btn`, { detail: evtDetail });
+    evt.initEvent(`${this.appPrefix}_create_view_source_btn`, true, true);
+
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+    this.sceneEl.dispatchEvent(evt)
+
+    // and register a click handler
+    this.sceneEl.addEventListener('vrgal_view_source_btn_added', (evt : CustomEvent) => {
+      // debugger;
+      console.log(`-->view source button added: exampleRoot=${evt.detail.exampleRoot}`);
+      
+    })
+
+  }
+  
+
+  // registerViewSourceListeners() {
+  //   for (let i = 0; i < this.exampleResults.length; i++) {
+  //     this.registerViewSourceListener(this.exampleResults[i], i);
+  //   }
+  // }
+
+  registerViewSourceListener(data, index) {
+    // let btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
+    // let exampleRoot = 
+    let exampleRoot = data['name'].replace(/\.html$/, '');
+  }
 
 }
