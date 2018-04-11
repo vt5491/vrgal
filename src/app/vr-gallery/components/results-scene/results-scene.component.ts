@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  Renderer2 } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 // import {HttpModule, Http, Response} from '@angular/http';
@@ -29,13 +29,15 @@ export class ResultsSceneComponent implements OnInit {
   exampleResults : Object[] = []
   sceneEl : Element;
   appPrefix : string;
+  debugCounter: number = 0;
 
   // constructor() { }
   // constructor(private http: Http, private base: BaseService, private utils: UtilsService) { 
   constructor( 
     // private http: Http, 
     private base: CoreBaseService,
-    private utils: CoreUtilsService 
+    private utils: CoreUtilsService,
+    private renderer: Renderer2,
   ) { 
     // super()
     console.log(`ResultsSceneComponent.ctor: entered`);
@@ -54,6 +56,9 @@ export class ResultsSceneComponent implements OnInit {
     console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${this.exampleResults.length}`);
     document.querySelector('a-scene')
       .addEventListener('loaded', this.addResources.bind(this))
+
+    var el = document.querySelector("a-log");
+    el.setAttribute("visible", "false");
   }
 
   addResources() {
@@ -64,6 +69,7 @@ export class ResultsSceneComponent implements OnInit {
     this.addImgAssets();
     this.addExamplePopupImgs();
     this.addViewSourceBtns();
+    this.addViewSrcClickHandler();
   }
 
   addLinks() {
@@ -89,6 +95,8 @@ export class ResultsSceneComponent implements OnInit {
 
     let evtDetail = {}
     evtDetail['href'] = `assets/threejs-env/examples/vrize-${data.name}`
+    //temp hack to move it down during testing
+    // data.pos.y += 5;
     evtDetail['pos'] = data.pos
     evtDetail['title'] = data.name;
 
@@ -199,12 +207,99 @@ export class ResultsSceneComponent implements OnInit {
     //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
     this.sceneEl.dispatchEvent(evt)
 
+  }
+
+  addViewSrcClickHandler() {
     // and register a click handler
-    this.sceneEl.addEventListener('vrgal_view_source_btn_added', (evt : CustomEvent) => {
+    this.sceneEl.addEventListener('vrgal_view_source_btn_clicked', (evt : CustomEvent) => {
       // debugger;
-      console.log(`-->view source button added: exampleRoot=${evt.detail.exampleRoot}`);
-      
+      // grey out the color, so we know it's selected
+      let btnColor = evt.detail.btnEl.getAttribute('color');
+      if (!btnColor || btnColor == '#FFF') {
+        evt.detail.btnEl.setAttribute('color', '#444');
+      }
+      else {
+        evt.detail.btnEl.setAttribute('color', '#FFF');
+      }
+      // evt.target.setAttribute()
+      console.log(`---->view source button added: exampleRoot=${evt.detail.exampleRoot}`);
+      let exampleRoot = evt.detail.exampleRoot;
+
+      this.utils.getLiftedExample(exampleRoot).subscribe(
+        res => {
+          console.log(`result-scene ${Math.random()}: res=${res.substr(0,500)}`);
+          this.showSource(res);
+        },
+        err => {
+          console.log(`result-scene: err=${err}`);
+        }
+      );
+      // let el = evt.target; 
+      // // Add listeners
+      // let global = this.renderer.listen(el, 'click', (evt) => {
+      //   console.log(`Clicking for exampleRoot=${exampleRoot}`);
+      // })
     })
+  }
+
+  showSource(exampleText) {
+    // debugger;
+    var logEl = document.querySelector("a-log");
+
+    // toggle visibility
+    let logVisibility = logEl.getAttribute("visible");
+    let newVisibility = !logVisibility;
+
+    logEl.setAttribute("visible", String(newVisibility));
+
+    // debugger;
+    if (logEl.getAttribute("visible")) {
+      let sceneEl: any = document.querySelector('a-scene');
+      let logEl : any = document.querySelector('a-log');
+      let logSystem = sceneEl.systems['log'];
+
+      // this just stretches w/o increasing the size
+      // logEl.object3D.scale.y *= 1.5;
+      // logEl.getAttribute('geometry').height = 50;
+      // let logGeom = logEl.getAttribute('geometry');
+      // logGeom.height = 50;
+      // logEl.setAttribute('geometry', logGeom);
+      // clear out the prior contents (we do *not* want to accumulate)
+      // This is an empirical hack for how to clear out the log.  AFAIK,
+      // there is no official API to clear out the contents (?)
+      // debugger;
+      // this.debugCounter++;
+      // console.log(`debugCounter=${this.debugCounter}`);
+      console.log(`logSystem.loggers[0].logs.length=${logSystem.loggers[0].logs.length}`);
+      
+
+      // if (this.debugCounter >= 2) {
+      //   debugger;
+      // }
+      logSystem.loggers[0].logs = [];
+      // if (logSystem.loggers[0] && logSystem.loggers[0].logs[0]) {
+      //   console.log(`showSource: prior logText=${logSystem.loggers[0].logs[0]}`);
+
+      //   // logSystem.loggers[0].logs[0] = '';
+      //   logSystem.loggers[0].logs = [];
+      // }
+
+      // (document.querySelector('a-scene') as any)
+      // (sceneEl as any)
+      // sceneEl.emit('log', { message: exampleText.substr(0, 100), channel: 'vrgal-src' });
+      sceneEl.emit('log', { message: exampleText, channel: 'vrgal-src' });
+      if (logSystem.loggers[0] && logSystem.loggers[0].logs[0]) {
+        let lineCnt = logSystem.loggers[0].logs[0].split(/\r\n|\r|\n/).length
+        console.log(`lineCnt=${lineCnt}`);
+        // debugger;
+        let logGeom = logEl.getAttribute('geometry');
+        logGeom.height = lineCnt / 5;
+        logEl.setAttribute('geometry', logGeom);
+        
+      }
+      console.log(`logSystem.loggers[0].logs.length-post=${logSystem.loggers[0].logs.length}`);
+      // debugger;
+    }
 
   }
   
@@ -215,10 +310,10 @@ export class ResultsSceneComponent implements OnInit {
   //   }
   // }
 
-  registerViewSourceListener(data, index) {
-    // let btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
-    // let exampleRoot = 
-    let exampleRoot = data['name'].replace(/\.html$/, '');
-  }
+  // registerViewSourceListener(data, index) {
+  //   // let btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
+  //   // let exampleRoot = 
+  //   let exampleRoot = data['name'].replace(/\.html$/, '');
+  // }
 
 }

@@ -12,7 +12,8 @@ export class CoreBaseService {
   // remote server (server is not running on same ip as the SPA)
   // vrizeSvcUrl = "http://localhost:3000"
   appPrefix = "vrgal"
-  examplesPath = 'src/assets/threejs-env/examples';
+  liftPrefix = "vrize-";
+  examplesPath = 'assets/threejs-env/examples';
 
   constructor() { 
 

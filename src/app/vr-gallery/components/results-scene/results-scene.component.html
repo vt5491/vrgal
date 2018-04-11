@@ -11,7 +11,7 @@
   </a-assets>
   <a-log
     position="10 4 -1"
-    geometry="primitive: plane; width: 12; height: 25"
+    geometry="primitive: plane; width: 12; height: 37"
     text="align: left; baseline: center; wrapCount: 120"
     visible="false"
   ></a-log>
@@ -25,11 +25,11 @@
     <a-entity hand-controls="left" position="0 0 0" grab></a-entity>
     <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
   </a-entity>
-  <a-entity id="links" save-state>
+  <a-entity id="links" position="0 -10 0" save-state>
   </a-entity>
-  <a-entity id="popups">
+  <a-entity id="popups" position="0 -10 0" >
   </a-entity>
-  <a-entity id="view-source-btns">
+  <a-entity id="view-source-btns" position="0 -10 0" >
   </a-entity>
   <a-link href="vr-gallery/query-select" title="Return to Query Scene"
     image="#cokeThumb" position="0 14 0" peekMode="true"></a-link>

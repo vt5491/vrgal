@@ -219,9 +219,11 @@ AFRAME.registerSystem('system-utils', {
     sceneEl.systems['system-utils'].addViewSourceHoverListener(btnEl);
 
     // and emit a done event so ng2 can do any processing
-    sceneEl.dispatchEvent(new CustomEvent(
-      'vrgal_view_source_btn_added',
-    { detail: {'exampleRoot': exampleRoot} }));
+    // sceneEl.dispatchEvent(new CustomEvent(
+    //   'vrgal_view_source_btn_added',
+    // { detail: {'exampleRoot': exampleRoot} }));
+    //
+    sceneEl.systems['system-utils'].addViewSourceClickHandler(btnEl, exampleRoot);
   },
   addViewSourceHoverListener: function(linkEl) {
     console.log(`SU.addViewSourceHoverListener: entered`);
@@ -260,4 +262,39 @@ AFRAME.registerSystem('system-utils', {
       // el.setAttribute("visible", String(newVisibility));
     })
   },
-});
+  addViewSourceClickHandler: function(el, exampleRoot) {
+    console.log(`addViewSourceClickHandler: entered`);
+    el.addEventListener('click', (evt) => {
+      // console.log(`system-utils: click for exampleRoot=${evt.detail.exampleRoot}`);
+      console.log(`system-utils: click for exampleRoot=${exampleRoot}`);
+      let sceneEl = document.querySelector('a-scene');
+      // and emit a done event so ng2 can do any processing
+      sceneEl.dispatchEvent(new CustomEvent(
+        'vrgal_view_source_btn_clicked',
+        { detail: {
+          'exampleRoot': exampleRoot,
+          'btnEl' : el,
+        }
+        }));
+      /*
+      let base = sceneEl.systems['system-base'];
+      // debugger;
+      // let fp = `${base.examplesPath}/${base.liftPrefix}${exampleRoot}.html`;})
+      // let fp = 'assets/threejs-env/examples/vrize-webgl_mirror.html';
+      let fp = `assets/threejs-env/examples/${base.data.liftPrefix}${exampleRoot}.html`;
+      console.log(`addViewSourceClickHandler: fp=${fp}`);
+      let callback = (rsp) => {
+        console.log(`callback: rsp=${rsp}`);
+      }
+      let xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          callback(xmlHttp.responseText);
+        }
+      }
+      xmlHttp.open("GET", fp, true); // true for asynchronous
+      xmlHttp.send(null);
+      */
+    })
+  }
+  });
