@@ -1,3 +1,8 @@
+// Note: there also exists 'data-example.service.ts' (singular) in the core
+// module.  The (weak) justification for having two is the core
+// one is needed by public users and thus only expose read-only methods.
+// This services is only part of the vrize module, which is only loaded
+// during development, and thus should have the update methods.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
@@ -9,6 +14,7 @@ export class DataExamplesService {
   private _writeToTmp: boolean = true;
 
   constructor(private http: HttpClient) {
+    //TODO: use base.vrizeSvcUrl instead of hard-coding
     this.server = new URL('http://localhost:3002');
 
   }

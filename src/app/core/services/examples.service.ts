@@ -36,11 +36,12 @@ export class ExamplesService {
       })
     };
   
-  let url = `${this.server}${route}.json`;
-  console.log(`MetaDataExamples.get: url=${url}`);
+  // let url = `${this.server}${route}.json`;
+  // console.log(`MetaDataExamples.get: url=${url}`);
   
 
-  return this.http.get(url, httpOptions)
+  // return this.http.get(url, httpOptions)
+  return this.http.get(route, httpOptions)
   }
 
   setLifted(example: ExampleComponent) {

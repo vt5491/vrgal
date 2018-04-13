@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreBaseService } from './services/core-base.service';
 import { CoreUtilsService } from './services/core-utils.service';
 import { ExamplesService } from './services/examples.service';
+import { StatsService } from './services/stats.service';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { ExamplesService } from './services/examples.service';
     CoreBaseService,
     CoreUtilsService,
     ExamplesService,
+    StatsService,
   ],
   declarations: []
 })

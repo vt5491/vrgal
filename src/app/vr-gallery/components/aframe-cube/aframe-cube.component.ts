@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 
+import { ExamplesService } from '../../../core/services/examples.service';
+import { StatsService } from '../../../core/services/stats.service';
+
 @Component({
   selector: 'app-aframe-cube',
   templateUrl: './aframe-cube.component.html',
@@ -9,7 +12,11 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class AframeCubeComponent implements OnInit {
 
-  constructor(private http: HttpClient) { 
+  constructor(
+    private http: HttpClient,
+    private examples: ExamplesService,
+    private stats: StatsService,
+  ) { 
     console.log(`AframeCubeComponent.ctor: entered`);
     // debugger;
   }
@@ -45,6 +52,28 @@ export class AframeCubeComponent implements OnInit {
     //   console.log(`err=${err}`);
     //   debugger;
     // });
+  }
+
+  writeToStats(evt) {
+    console.log(`AframeCubeComponent.writeToStats: entered`);
+
+    // return this.http.put<Hero>(this.heroesUrl, hero, httpOptions)
+    // .pipe(
+    //   catchError(this.handleError('updateHero', hero))
+    // );
+    // return this.http.put<Hero>(this.heroesUrl, hero, httpOptions)
+    // .pipe(
+    //   catchError(this.handleError('updateHero', hero))
+    // );
+    let stat =  { 'likes': 2};
+    // let stat = {'stat' : {'example_id' : 260, 'likes': 2}};
+
+    this.stats.put('stats/1', stat)
+      .subscribe(
+        rsp => {console.log(`AframeCubeComoponent.writeToStats: rsp=${rsp}`)},
+        err => {console.log(`AframeCubeComoponent.writeToStats: err=${err.message}`)}
+      );
+
   }
 
 }

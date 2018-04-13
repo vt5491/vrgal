@@ -1,3 +1,6 @@
+// This service should be for read-only operations done by public
+// methods that need to read the examples.  All other admin activites
+// against the rails examples table should be done in 'vrize.data-examples.service'
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
