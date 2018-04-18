@@ -1,7 +1,9 @@
 // This is an interface to the rails server.  It gets data from the 'examples'
-// table of the rails server.  It is not intended for reading the examples (files)
-// under $VRGAL/src/assets/threejs-env/examples'
+// table of the rails server (and its extensions, such as 'stats').  It is not
+// intended for reading the examples (files) under
+// $VRGAL/src/assets/threejs-env/examples'
 // Consider using the general 'core-utils.service' to handle reading example files
+// No: use core-data-example.service in core module.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders, HttpParams } from '@angular/common/http';

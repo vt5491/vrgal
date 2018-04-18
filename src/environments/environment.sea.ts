@@ -6,6 +6,5 @@
 export const environment = {
   production: false,
   // the url for the rails meta-data service
-  // Note: use --environment=val or --environment=sea to get the appropriate val
   metaDataServiceUrl : "http://192.168.1.147:3000"
 };

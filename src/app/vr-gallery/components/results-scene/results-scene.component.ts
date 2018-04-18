@@ -13,6 +13,8 @@ import 'rxjs/add/operator/do';
 // import { UtilsService } from '../../services/utils.service';
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
+import { ExamplesService } from '../../../core/services/examples.service';
+// import { StatsService } from '../../../core/services/stats.service';
 import * as THREE from "three";
 // import { BaseComponent} from '../base/base.component'
 
@@ -38,6 +40,7 @@ export class ResultsSceneComponent implements OnInit {
     private base: CoreBaseService,
     private utils: CoreUtilsService,
     private renderer: Renderer2,
+    private examples: ExamplesService,
   ) { 
     // super()
     console.log(`ResultsSceneComponent.ctor: entered`);
@@ -70,10 +73,12 @@ export class ResultsSceneComponent implements OnInit {
     this.addExamplePopupImgs();
     this.addViewSourceBtns();
     this.addViewSrcClickHandler();
+    this.incStats("impressions");
   }
 
   addLinks() {
     console.log(`ResultsScene.addLinks: this.exampleResults.length=${this.exampleResults.length}`);
+    // debugger;
     
     for(let i=0; i < this.exampleResults.length; i++) {
       this.addLink(this.exampleResults[i], i);
@@ -83,6 +88,7 @@ export class ResultsSceneComponent implements OnInit {
 
   addLink(data, index) {
     console.log(`resultsSceneComponent.addLink: http result=${data}`);
+    console.log(`resultsSceneComponent.addLink: http result.id=${data.id}`);
     console.log(`resultsSceneComponent.addLink: http result.name=${data.name}`);
     console.log(`resultsSceneComponent.addLink: http result.category=${data.category}`);
     console.log(`resultsSceneComponent.addLink: http result.created_at=${data.created_at}`);
@@ -105,6 +111,9 @@ export class ResultsSceneComponent implements OnInit {
     evtDetail['id'] = `${imgRoot}-link`;
     // evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
     evtDetail['image'] = `#${imgRoot}-thumb`;
+
+    // add in the rails example_id, so event handler can update stats
+    evtDetail['example_id'] = data.id;
 
     let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
     evt.initEvent(`${appPrefix}_createlink`, true, true);
@@ -211,6 +220,7 @@ export class ResultsSceneComponent implements OnInit {
 
   addViewSrcClickHandler() {
     // and register a click handler
+    // TODO: change to this.appPrefix instead of 'vrgal'
     this.sceneEl.addEventListener('vrgal_view_source_btn_clicked', (evt : CustomEvent) => {
       // debugger;
       // grey out the color, so we know it's selected
@@ -302,6 +312,44 @@ export class ResultsSceneComponent implements OnInit {
     }
 
   }
+
+  incStats(metric) {
+    for(let i=0; i < this.exampleResults.length; i++) {
+      this.incStat(this.exampleResults[i], metric);
+    }
+
+    let stat =  { 'impressions': null};
+    this.examples.put(`${this.base.vrizeSvcUrl}/examples/260/stats/increment.json`, stat)
+      .subscribe(
+        rsp => {console.log(`ResultsSceneComoponent.incStats: rsp.likes=${(rsp as any).impressions}`)},
+        err => {console.log(`ResultsSceneComoponent.incStats: err=${err.message}`)}
+      );
+  }
+
+  incStat(data, metric) {
+    let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data.id}/stats.json`;
+    console.log(`incStat.statsUrl=${statsUrl}`);
+
+    this.examples.get(statsUrl)
+      .subscribe(
+        rsp => {
+          // debugger;
+          // let result= (rsp as any).json(); 
+          console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
+        },
+        err => { console.log(`err=${err.message}`) }
+      )
+
+    // increment impressions stats
+    let stat = { 'impressions': null };
+    statsUrl = `${this.base.vrizeSvcUrl}/examples/${data.id}/stats/increment.json`;
+    this.examples.put(statsUrl, stat)
+    // this.examples.put(`${this.base.vrizeSvcUrl}/examples/260/stats/increment.json`, stat)
+      .subscribe(
+        rsp => { console.log(`ResultsSceneComoponent.incStats: rsp.impressions=${(rsp as any).impressions}`) },
+        err => { console.log(`ResultsSceneComoponent.incStats: err=${err.message}`) }
+      );
+  } 
   
 
   // registerViewSourceListeners() {

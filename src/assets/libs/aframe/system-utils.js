@@ -34,6 +34,7 @@ AFRAME.registerSystem('system-utils', {
   onVtTestEvt: function () {
     console.log(`system-utils.onVtTestEvt: now in vttestevt handler`);
   },
+  // Note: I don't think this is actually being driven anywhere. Ok to delete?
   onAddExample: function () {
     console.log(`system-utils.onAddExample: now in addexample handler`);
     let linkParentEl = document.querySelector('#links');
@@ -69,6 +70,7 @@ AFRAME.registerSystem('system-utils', {
     let title = evt.detail.title;
     let id = evt.detail.id;
     let image = evt.detail.image;
+    let example_id = evt.detail.example_id;
 
     console.log(`system-utils.createLink: href=${href}`)
 
@@ -100,6 +102,21 @@ AFRAME.registerSystem('system-utils', {
     // this.sceneElement.systems['system-utils'].addLinkHoverEvtListener(linkEl);
     // debugger;
     // this.utilsSceneEl.systems['system-utils'].addLinkHoverEvtListener(linkEl);
+
+    // add a click event listener so we can increment the clicks count for the examples
+    console.log(`SystemUtils.onAddExample: now adding click listener`);
+    // linkEl.addEventListener('click', this.inc_clicks);
+    // sceneEl.addEventListener('click', this.inc_clicks);
+    // sceneEl.addEventListener('mouseenter', this.inc_clicks);
+    // linkEl.addEventListener('mouseenter', (e) => {console.log(`hi from mousketeer`)});
+    // linkEl.addEventListener('mouseenter', sceneEl.systems['system-utils'].inc_clicks);
+    // linkEl.addEventListener('mouseenter', sceneEl.systems['system-utils'].inc_clicks, {'abc': 7});
+    linkEl.addEventListener('click', (evt) => {
+      let info = {};
+      info.example_id = example_id;
+      sceneEl.systems['system-utils'].inc_clicks(evt, info);
+    // linkEl.addEventListener(type, listener, this, ev, options)
+    })
   },
 
   // add a 'mouseenter' listener so we can show a popup screen print of what
@@ -139,6 +156,33 @@ AFRAME.registerSystem('system-utils', {
       //
       // el.setAttribute("visible", String(newVisibility));
     })
+  },
+  inc_clicks: function (evt, info) {
+    // debugger;
+    // console.log(`SystemUtils.inc_clicks: evt=${evt}`);
+    // console.log(`SystemUtils.inc_clicks: evt.target=${evt.target}`);
+    console.log(`SystemUtils.inc_clicks: info.example_id=${info.example_id}`);
+    let server = 'http://192.168.1.147:3000';
+    xhr = new XMLHttpRequest();
+
+    // xhr.open('PUT', 'myservice/username?id=some-unique-id');
+    // Note: the 'false' makes it synchronous.  We have to do is synchronously
+    // otherwise the 'onload' event is not driven becuase the example web page
+    // has already assumed control, and the onload event handler is no longer there.
+    xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, false);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+      console.log(`onLoad: xhr.status=${xhr.status}`);
+      // if (xhr.status === 200 && xhr.responseText !== newName) {
+      //   alert('Something went wrong.  Name is now ' + xhr.responseText);
+      // }
+      // else if (xhr.status !== 200) {
+      //   alert('Request failed.  Returned status of ' + xhr.status);
+      // }
+    };
+    // xhr.send(encodeURI('name=' + newName));
+    // Note: what's in send is the put body.
+    xhr.send(JSON.stringify({'clicks' : null}));
   },
   createImgAsset: function (evt) {
     let src = evt.detail.src;

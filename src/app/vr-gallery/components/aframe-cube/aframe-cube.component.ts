@@ -65,12 +65,14 @@ export class AframeCubeComponent implements OnInit {
     // .pipe(
     //   catchError(this.handleError('updateHero', hero))
     // );
-    let stat =  { 'likes': 2};
+    // let stat =  { 'likes': 3};
+    let stat =  { 'likes': null};
     // let stat = {'stat' : {'example_id' : 260, 'likes': 2}};
 
-    this.stats.put('stats/1', stat)
+    // this.stats.put('stats/1.json', stat)
+    this.stats.put('stats/increment/1.json', stat)
       .subscribe(
-        rsp => {console.log(`AframeCubeComoponent.writeToStats: rsp=${rsp}`)},
+        rsp => {console.log(`AframeCubeComoponent.writeToStats: rsp.likes=${(rsp as any).likes}`)},
         err => {console.log(`AframeCubeComoponent.writeToStats: err=${err.message}`)}
       );
 

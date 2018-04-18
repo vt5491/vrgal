@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataExampleService } from '../../../core/services/data-example.service';
+import { CoreDataExampleService } from '../../../core/services/core-data-example.service';
 
 @Component({
   selector: 'app-data-example',
@@ -13,7 +13,7 @@ export class DataExampleComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataExample: DataExampleService
+    private coreDataExample: CoreDataExampleService
   ) { 
     console.log(`DataExampleComponent.ctor: entered`);
 
@@ -27,7 +27,7 @@ export class DataExampleComponent implements OnInit {
       console.log(`DataExampleComponent.ngOnInit: params['id']=${params['id']}`);
 
       // In a real app: dispatch action to load the details here.
-      this.dataExample.get(params.id).subscribe((rsp) => {
+      this.coreDataExample.get(params.id).subscribe((rsp) => {
         debugger;
         console.log(`rsp=${rsp}`);
       })

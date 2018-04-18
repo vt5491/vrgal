@@ -7,7 +7,7 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class DataExampleService {
+export class CoreDataExampleService {
   server : URL;
 
   constructor(private http: HttpClient) { 

@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // user modules
 import { AppComponent } from './app.component';
 import { VrGalleryModule } from './vr-gallery/vr-gallery.module';
+import { SharedModule } from './shared/shared.module';
 // import { VrizeModule } from './vrize/vrize.module';
 // components
 import { AframeCubeComponent } from './vr-gallery/components/aframe-cube/aframe-cube.component';
@@ -16,7 +17,7 @@ import { QuerySelectComponent } from './vr-gallery/components/query-select/query
 import { ResultsSceneComponent } from './vr-gallery/components/results-scene/results-scene.component';
 import { DataExampleComponent } from './shared/components/data-example/data-example.component';
 // services
-import { DataExampleService } from './core/services/data-example.service';
+import { CoreDataExampleService } from './core/services/core-data-example.service';
 
 const appRoutes:Routes = [
   {path: '', component: AframeCubeComponent},
@@ -44,9 +45,10 @@ const appRoutes:Routes = [
     RouterModule.forRoot(appRoutes),
     VrGalleryModule,
     // VrizeModule,
+    SharedModule,
   ],
   providers: [
-    DataExampleService,
+    CoreDataExampleService,
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

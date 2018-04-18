@@ -128,6 +128,7 @@ export class QuerySelectComponent implements OnInit {
   processResults(data) {
     let xPos = -8;
     let yPos = 10;
+    // debugger;
 
     for(let i=0; i < data.length; i++) {
       data[i].pos = {}
@@ -142,6 +143,20 @@ export class QuerySelectComponent implements OnInit {
         xPos = -8;
         yPos -= 4;
       }
+
+      // and increment the stats
+      let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data[i].id}/stats.json`;
+      console.log(`processResults.statsUrl=${statsUrl}`);
+      
+
+      this.examples.get(statsUrl)
+        .subscribe(
+          rsp => {
+            // debugger;
+            // let result= (rsp as any).json(); 
+            console.log(`id=${data[i].id}, likes=${(rsp[0] as any).likes}`)} ,
+          err => { console.log(`err=${err.message}`)}
+      )
     }
 
     // and finally, transfer to it
@@ -151,6 +166,7 @@ export class QuerySelectComponent implements OnInit {
   aggregateResults(data) {
     let example = {}
 
+    example['id'] = data.id;
     example['name'] = data.name
     example['pos'] = data.pos
 

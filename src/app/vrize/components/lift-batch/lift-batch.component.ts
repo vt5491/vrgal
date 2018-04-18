@@ -42,6 +42,7 @@ export class LiftBatchComponent implements OnInit {
   }
 
   initLiftReqs() {
+    // debugger;
     this.liftReqsService.getIndex()
       .subscribe( data => {
         console.log(`LiftBatchService.getIndex data=${data}, data.length=${(data as any).length}`);

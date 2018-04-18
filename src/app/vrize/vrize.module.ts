@@ -16,6 +16,8 @@ import { LiftReqsService } from './services/lift-reqs.service';
 //components
 import { LiftComponent } from './components/lift/lift.component';
 import { LiftBatchComponent } from './components/lift-batch/lift-batch.component';
+// Note: this is public DataExampleComponent.  Vrize needs the admin verion.
+// import { DataExampleComponent } from '../shared/components/data-example/data-example.component';
 
 const vrizeRoutes:Routes = [
   { path: 'lift', component: LiftComponent, },

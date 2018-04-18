@@ -21,7 +21,9 @@ export class StatsService {
     let url = `${this.server}${route}`;
 
     const httpOptions = {
-
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
     }
     // Note: it appears the put request automatically "json-ifies" the object.
     // So if you json-ify it here, you get double-json (lots of escaped quotes)
@@ -32,7 +34,7 @@ export class StatsService {
     headers.append('Content-Type', 'application/json');
 
     // return this.http.put(url, statJson, headers)
-    return this.http.put(url, stat, headers)
+    return this.http.put(url, stat, httpOptions)
     // .pipe(
     //   // catchError(this.handleError('getHeroes', []))
     //   catchError(this.handleError('abc', []))

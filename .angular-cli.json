@@ -33,7 +33,9 @@
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
+        "prod": "environments/environment.prod.ts",
+        "sea": "environments/environment.sea.ts",
+        "val": "environments/environment.val.ts"
       }
     }
   ],
