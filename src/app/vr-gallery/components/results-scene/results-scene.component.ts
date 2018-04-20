@@ -238,7 +238,7 @@ export class ResultsSceneComponent implements OnInit {
       this.utils.getLiftedExample(exampleRoot).subscribe(
         res => {
           console.log(`result-scene ${Math.random()}: res=${res.substr(0,500)}`);
-          this.showSource(res);
+          this.showSource(exampleRoot, res);
         },
         err => {
           console.log(`result-scene: err=${err}`);
@@ -252,7 +252,7 @@ export class ResultsSceneComponent implements OnInit {
     })
   }
 
-  showSource(exampleText) {
+  showSource(exampleRoot, exampleText) {
     // debugger;
     var logEl = document.querySelector("a-log");
 
@@ -261,6 +261,12 @@ export class ResultsSceneComponent implements OnInit {
     let newVisibility = !logVisibility;
 
     logEl.setAttribute("visible", String(newVisibility));
+
+    // and set a data attribute to the exampleRoot (example name), so we can synchronize
+    // other artifacts (that also have 'exampleRoot' in their ids) when a
+    // click on the log is generated, for example.
+    // logEl.id = exampleRoot;
+    logEl.setAttribute('data-example-root', exampleRoot);
 
     // debugger;
     if (logEl.getAttribute("visible")) {
@@ -313,6 +319,31 @@ export class ResultsSceneComponent implements OnInit {
 
   }
 
+  srcViewClickHandler(evt: Event) {
+    // debugger;
+    console.log(`ResultsScene.srcViewClickHandler: entered`);
+
+    let logEl : any= evt.target;
+    let logVisibility = logEl.getAttribute("visible");
+
+    // Don't do anything at all if we're not visible
+    if (!logVisibility) {
+      return;
+    }
+
+    // Otherwise, make it invisible
+    logEl.setAttribute("visible", false);
+
+    // and de-grey the the "view source" button
+    // let exampleRoot = logEl.id;
+    let exampleRoot = logEl.getAttribute('data-example-root');
+    let viewSrcBtn = document.getElementById(`${exampleRoot}-viewSourceBtn`);
+
+    if (viewSrcBtn) {
+      viewSrcBtn.setAttribute('color', '#FFF');
+    }
+  }
+
   incStats(metric) {
     for(let i=0; i < this.exampleResults.length; i++) {
       this.incStat(this.exampleResults[i], metric);
@@ -363,5 +394,6 @@ export class ResultsSceneComponent implements OnInit {
   //   // let exampleRoot = 
   //   let exampleRoot = data['name'].replace(/\.html$/, '');
   // }
+
 
 }

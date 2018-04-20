@@ -19,9 +19,13 @@
   <!-- <a-link id="results-link" href="/results-scene" qeekMode="true" title="See Results"
     image="#cokeThumb" position="0 0 0" on="no-manual-click"></a-link> -->
 
-  <a-entity qosition="-3 0.5 -3" save-state>
-    <a-box id="sb-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
-    <a-text value="sandbox" position="-3.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
+  <a-entity qosition="-6 0.5 -3" save-state>
+    <a-box id="sb-query" position="-6 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
+    <a-text value="sandbox" position="-6.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
+  </a-entity>
+  <a-entity  save-state (click)="querySample($event)">
+    <a-box id="sample-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
+    <a-text value="Sample Gallery" position="-3.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
   </a-entity>
   <a-box id="all-query" position="0 0.5 -3" rotation="0 0 0" color="#4CC3C9" height="2" width="2"></a-box>
   <a-text value="All" position="0 -1.5 -3"></a-text>

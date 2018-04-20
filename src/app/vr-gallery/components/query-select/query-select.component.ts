@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';  // replaces previous Http service
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';  // replaces previous Http service
 import {ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -84,9 +84,46 @@ export class QuerySelectComponent implements OnInit {
     let exObservable_2 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/288.json`, new THREE.Vector3(0, 0 ,0))
     let exObservable_3 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/15.json`, new THREE.Vector3(6, 0 ,0))
 
-    exObservable_1.subscribe(this.aggregateResults.bind(this))
+    exObservable_1.subscribe(
+      rsp => { 
+        let data: any = rsp; 
+        data.pos = {}; 
+        data.pos.x=-4; 
+        data.pos.y = -8;
+        this.aggregateResults(data)
+      },
+      err => { console.log(`querySandbox: err=${err.message}`);
+      }
+    )
+    // exObservable_1.subscribe(this.processResults.bind(this))
     exObservable_2.subscribe(this.aggregateResults.bind(this))
     exObservable_3.subscribe(this.aggregateResults.bind(this))
+
+  }
+
+  querySample(evt: Event) {
+    console.log(`QuerySelectComponent.querySample: entered`);
+    // localhost:3000/examples/search.json?col=id&in[]=260&in[]=120
+    const ids = ['260', '120'];
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('col', 'id');
+    ids.forEach(id => {
+      httpParams = httpParams.append('in[]', id);
+    });
+    // const params = new HttpParams({
+    //   fromObject: {
+    //     col: 'id',
+    //     in: [260, 120],
+    //   }
+    // });
+    try {
+      this.examples.get(`${this.base.vrizeSvcUrl}/examples/search.json`, httpParams)
+        .subscribe(this.processResults.bind(this));
+    }
+    catch (e) {
+      console.log(`QuerySelectComponent.queryAll: e=${e}`);
+    }
+    
 
   }
 

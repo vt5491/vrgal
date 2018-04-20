@@ -30,12 +30,13 @@ export class ExamplesService {
       })
   }
 
-  get(route: string) {
+  get(route: string, params?: HttpParams) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         // 'Content-Type':  'text',
-      })
+      }),
+      params: params
     };
   
   // let url = `${this.server}${route}.json`;

@@ -131,10 +131,14 @@ AFRAME.registerSystem('system-utils', {
       let tgtId = e.target.id;
       let exampleRoot = tgtId.replace(/-link$/, '')
       // let el = document.querySelector('#img_0');
+      // debugger;
       let el = document.querySelector(`#${exampleRoot}-popup`);
-      // toggle visibility
-      let sceneEl = document.querySelector('a-scene');
-      sceneEl.systems['system-utils'].toggleVisibility(el);
+
+      if (el) {
+        // toggle visibility
+        let sceneEl = document.querySelector('a-scene');
+        sceneEl.systems['system-utils'].toggleVisibility(el);
+      }
       // let elVisibility = el.getAttribute("visible");
       // let newVisibility = !elVisibility;
       //
@@ -186,18 +190,23 @@ AFRAME.registerSystem('system-utils', {
   },
   createImgAsset: function (evt) {
     let src = evt.detail.src;
+    let defaultSrc = src.replace(/[^/]*$/, "webgl_mirror_thumb.png")
     let id = evt.detail.id;
 
     let assetsParentEl = document.querySelector('a-assets');
     let imgAssetEl = document.createElement('img');
 
     imgAssetEl.setAttribute('src', src);
+    // imgAssetEl.setAttribute('onerror', defaultSrc);
     imgAssetEl.id = id;
 
     assetsParentEl.appendChild(imgAssetEl);
   },
   createExamplePopupImg: function (evt) {
     let src = evt.detail.src;
+    // let defaultSrc = src.replace(/[^/]*$/, "webgl_mirror_thumb.png")
+    // let defaultSrc = "assets/img/thumbs/webgl_mirror_thumb.png";
+    let defaultSrc = "/assets/img/thumbs/webgl_mirror_thumb.png";
     let pos = evt.detail.pos;
     let width = evt.detail.width;
     let height = evt.detail.height;
@@ -214,6 +223,7 @@ AFRAME.registerSystem('system-utils', {
 
     // debugger;
     popupEl.setAttribute('src', src);
+    // popupEl.setAttribute('onerror', defaultSrc);
     popupEl.setAttribute('position', pos);
     popupEl.setAttribute('width', width);
     popupEl.setAttribute('height', height);
