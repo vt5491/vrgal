@@ -190,14 +190,24 @@ AFRAME.registerSystem('system-utils', {
   },
   createImgAsset: function (evt) {
     let src = evt.detail.src;
-    let defaultSrc = src.replace(/[^/]*$/, "webgl_mirror_thumb.png")
+    // let defaultSrc = src.replace(/[^/]*$/, "webgl_mirror_thumb.png")
+    // let onErrorSrc = `this.src='${defaultSrc}'`;
+    // let onErrorSrc = `console.log('onerror: hi2');this.src=#cokeThumb`;
     let id = evt.detail.id;
 
     let assetsParentEl = document.querySelector('a-assets');
     let imgAssetEl = document.createElement('img');
 
+    // imgAssetEl.addEventListener('error', e => {console.log('error mofo');this.src='#cokeThumb'});
+    // imgAssetEl.addEventListener('error', e => {console.log('error mofo');this.src='assets/img/coke-label.jpg'});
+    // imgAssetEl.addEventListener('error', function(e){console.log('error mofo');this.src='assets/img/coke-label.jpg'});
+    imgAssetEl.addEventListener('error', function(e){this.src='assets/img/coke-label.jpg'});
+    // imgAssetEl.addEventListener('error', function(e){this.src='#cokeThumb'});
+
     imgAssetEl.setAttribute('src', src);
     // imgAssetEl.setAttribute('onerror', defaultSrc);
+    // imgAssetEl.setAttribute('onerror', onErrorSrc);
+    // imgAssetEl.setAttribute('onprogress', onErrorSrc);
     imgAssetEl.id = id;
 
     assetsParentEl.appendChild(imgAssetEl);
@@ -206,7 +216,10 @@ AFRAME.registerSystem('system-utils', {
     let src = evt.detail.src;
     // let defaultSrc = src.replace(/[^/]*$/, "webgl_mirror_thumb.png")
     // let defaultSrc = "assets/img/thumbs/webgl_mirror_thumb.png";
-    let defaultSrc = "/assets/img/thumbs/webgl_mirror_thumb.png";
+    // let defaultSrc = "/assets/img/thumbs/webgl_mirror_thumb.png";
+    // let onErrorSrc = "this.src=#cokeThumb";
+    // let onErrorSrc = "this.onerror=null;console.log('hi from onerror');this.src='#cokeThumb'";
+    // let onErrorSrc = "this.src='/assets/img/thumbs/webgl_mirror_thumb.png'";
     let pos = evt.detail.pos;
     let width = evt.detail.width;
     let height = evt.detail.height;
@@ -223,7 +236,7 @@ AFRAME.registerSystem('system-utils', {
 
     // debugger;
     popupEl.setAttribute('src', src);
-    // popupEl.setAttribute('onerror', defaultSrc);
+    // popupEl.setAttribute('onerror', onErrorSrc);
     popupEl.setAttribute('position', pos);
     popupEl.setAttribute('width', width);
     popupEl.setAttribute('height', height);

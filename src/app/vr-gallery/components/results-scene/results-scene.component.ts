@@ -60,8 +60,8 @@ export class ResultsSceneComponent implements OnInit {
     document.querySelector('a-scene')
       .addEventListener('loaded', this.addResources.bind(this))
 
-    var el = document.querySelector("a-log");
-    el.setAttribute("visible", "false");
+    // var el = document.querySelector("a-log");
+    // el.setAttribute("visible", "false");
   }
 
   addResources() {
@@ -138,7 +138,8 @@ export class ResultsSceneComponent implements OnInit {
     let evtDetail = {}
     // debugger;
     let imgRoot = data['name'].replace(/\.html$/, '')
-    evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    // evtDetail['src'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+    evtDetail['src'] = `assets/img/thumbs/${imgRoot}-thumb.png`;
     evtDetail['id'] = `${imgRoot}-thumb`;
 
     let evt = new CustomEvent(`${appPrefix}_create_img_asset`, { detail: evtDetail });
@@ -174,7 +175,7 @@ export class ResultsSceneComponent implements OnInit {
     // the appearance of the overlay causes the cursor to think it's lost focus
     // Note: data.pos only supplies x and y coords.
     // debugger;
-    evtDetail['pos'] = {x: data.pos.x, y: data.pos.y + 5, z: 0.1};
+    evtDetail['pos'] = {x: data.pos.x, y: data.pos.y + 5, z: 0.5};
     // evtDetail['pos'] = {x: data.pos.x, y: data.pos.y + 5};
     evtDetail['width'] = 5;
     evtDetail['height'] = 5;
@@ -237,8 +238,14 @@ export class ResultsSceneComponent implements OnInit {
 
       this.utils.getLiftedExample(exampleRoot).subscribe(
         res => {
-          console.log(`result-scene ${Math.random()}: res=${res.substr(0,500)}`);
-          this.showSource(exampleRoot, res);
+          console.log(`result-scene : res=${res.substr(0,500)}`);
+          let btnPos = evt.detail.btnEl.object3D.position;
+          let logPos = btnPos.clone();
+          logPos.x += 7;
+          // move out in front a little to avoid interference with other screen artifacts.
+          logPos.z += 0.5;
+
+          this.showSource(exampleRoot, res, logPos);
         },
         err => {
           console.log(`result-scene: err=${err}`);
@@ -252,15 +259,37 @@ export class ResultsSceneComponent implements OnInit {
     })
   }
 
-  showSource(exampleRoot, exampleText) {
+  showSource(exampleRoot, exampleText, pos) {
     // debugger;
-    var logEl = document.querySelector("a-log");
+    // let logEl = document.getElementById('src-log');
+
+    // if (logEl) {
+    //   logEl.parentNode.removeChild(logEl);
+    //   return
+    // }
+    // let logEl = document.querySelector("a-log");
+    let logEl = document.getElementById("scr-log");
+    // logEl = document.createElement('a-log');
+    // logEl.id = "src-log";
+    // let sceneEl = document.querySelector('a-scene');
+    // sceneEl.appendChild(logEl);
+    if (logEl.getAttribute('visible')) {
+      this.hideSrcLog(logEl);
+      return;
+    }
+
+    // set position
+    logEl.setAttribute('position', `${pos.x} ${pos.y} ${pos.z}`);
+    logEl.setAttribute('text', 'align: left; baseline: center; wrapCount: 120');
+    logEl.setAttribute('geometry', 'primitive: plane; width: 12; height: 37')
+    logEl.setAttribute('visible', 'true');
 
     // toggle visibility
-    let logVisibility = logEl.getAttribute("visible");
-    let newVisibility = !logVisibility;
 
-    logEl.setAttribute("visible", String(newVisibility));
+    // let logVisibility = logEl.getAttribute("visible");
+    // let newVisibility = !logVisibility;
+
+    // logEl.setAttribute("visible", String(newVisibility));
 
     // and set a data attribute to the exampleRoot (example name), so we can synchronize
     // other artifacts (that also have 'exampleRoot' in their ids) when a
@@ -269,10 +298,12 @@ export class ResultsSceneComponent implements OnInit {
     logEl.setAttribute('data-example-root', exampleRoot);
 
     // debugger;
-    if (logEl.getAttribute("visible")) {
+    // if (logEl.getAttribute("visible")) {
       let sceneEl: any = document.querySelector('a-scene');
-      let logEl : any = document.querySelector('a-log');
+      // let logEl : any = document.querySelector('a-log');
+      // let logEl : any = document.getElementById('scr-log');
       let logSystem = sceneEl.systems['log'];
+      // debugger;
 
       // this just stretches w/o increasing the size
       // logEl.object3D.scale.y *= 1.5;
@@ -309,13 +340,13 @@ export class ResultsSceneComponent implements OnInit {
         console.log(`lineCnt=${lineCnt}`);
         // debugger;
         let logGeom = logEl.getAttribute('geometry');
-        logGeom.height = lineCnt / 5;
+        (logGeom as any).height = lineCnt / 5;
         logEl.setAttribute('geometry', logGeom);
         
       }
       console.log(`logSystem.loggers[0].logs.length-post=${logSystem.loggers[0].logs.length}`);
       // debugger;
-    }
+    // }
 
   }
 
@@ -324,6 +355,7 @@ export class ResultsSceneComponent implements OnInit {
     console.log(`ResultsScene.srcViewClickHandler: entered`);
 
     let logEl : any= evt.target;
+    // let sceneEl = document.querySelector('a-scene');
     let logVisibility = logEl.getAttribute("visible");
 
     // Don't do anything at all if we're not visible
@@ -332,7 +364,10 @@ export class ResultsSceneComponent implements OnInit {
     }
 
     // Otherwise, make it invisible
-    logEl.setAttribute("visible", false);
+    // logEl.setAttribute("visible", false);
+    this.hideSrcLog(logEl);
+    // sceneEl.remove(logEl);
+    // logEl.parentNode.removeChild(logEl);
 
     // and de-grey the the "view source" button
     // let exampleRoot = logEl.id;
@@ -342,6 +377,34 @@ export class ResultsSceneComponent implements OnInit {
     if (viewSrcBtn) {
       viewSrcBtn.setAttribute('color', '#FFF');
     }
+  }
+
+  hideSrcLog(logEl) {
+    // toggle visibility
+    // let logVisibility = logEl.getAttribute("visible");
+    // let newVisibility = !logVisibility;
+
+    // logEl.setAttribute("visible", String(newVisibility));
+
+    // and dock it at 0,0,0 and make it small so it doesn't mask other elements
+    logEl.setAttribute('position', '0 0 0');
+    // logEl.setAttribute('geometry', 'primitive: plane; width: 2; height: 2')
+    let logGeom = logEl.getAttribute('geometry');
+    logGeom.width = 0;
+    logGeom.height = 0;
+    logEl.setAttribute('geometry', logGeom);
+      // let sceneEl: any = document.querySelector('a-scene');
+      // let logSystem = sceneEl.systems['log'];
+
+      // if (logSystem.loggers[0] && logSystem.loggers[0].logs[0]) {
+      //   let lineCnt = logSystem.loggers[0].logs[0].split(/\r\n|\r|\n/).length
+      //   console.log(`lineCnt=${lineCnt}`);
+      //   // debugger;
+      //   let logGeom = logEl.getAttribute('geometry');
+      //   logGeom.height = lineCnt / 5;
+      //   logEl.setAttribute('geometry', logGeom);
+      // }
+    logEl.setAttribute("visible", "false");
   }
 
   incStats(metric) {
@@ -366,7 +429,7 @@ export class ResultsSceneComponent implements OnInit {
         rsp => {
           // debugger;
           // let result= (rsp as any).json(); 
-          console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
+          // console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
         },
         err => { console.log(`err=${err.message}`) }
       )
