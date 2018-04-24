@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';  // replaces previous Http service
+import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';  // replaces previous Http service
 import {ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -81,24 +81,50 @@ export class QuerySelectComponent implements OnInit {
   querySandbox() {
     // this.expectedResultCnt = 3
 
-    let exObservable_1 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/260.json`, new THREE.Vector3(-6, 0 ,0))
-    let exObservable_2 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/288.json`, new THREE.Vector3(0, 0 ,0))
-    let exObservable_3 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/15.json`, new THREE.Vector3(6, 0 ,0))
+    // let exObservable_1 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/260.json`, new THREE.Vector3(-6, 0 ,0))
+    // let exObservable_2 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/288.json`, new THREE.Vector3(0, 0 ,0))
+    // let exObservable_3 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/15.json`, new THREE.Vector3(6, 0 ,0))
 
-    exObservable_1.subscribe(
-      rsp => { 
-        let data: any = rsp; 
-        data.pos = {}; 
-        data.pos.x=-4; 
-        data.pos.y = -8;
-        this.aggregateResults(data)
-      },
-      err => { console.log(`querySandbox: err=${err.message}`);
-      }
-    )
-    // exObservable_1.subscribe(this.processResults.bind(this))
-    exObservable_2.subscribe(this.aggregateResults.bind(this))
-    exObservable_3.subscribe(this.aggregateResults.bind(this))
+    // exObservable_1.subscribe(
+    //   rsp => { 
+    //     let data: any = rsp; 
+    //     data.pos = {}; 
+    //     data.pos.x=-4; 
+    //     data.pos.y = -8;
+    //     this.aggregateResults(data)
+    //   },
+    //   err => { console.log(`querySandbox: err=${err.message}`);
+    //   }
+    // )
+    // // exObservable_1.subscribe(this.processResults.bind(this))
+    // exObservable_2.subscribe(this.aggregateResults.bind(this))
+    // exObservable_3.subscribe(this.aggregateResults.bind(this))
+
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('col', 'lift_failure_code');
+    let lf_codes = ['-2'];
+    lf_codes.forEach(lfc => {
+      httpParams = httpParams.append('in[]', lfc);
+    });
+
+    let headers = new HttpHeaders({
+      'Access-Control-Allow-Origin': 'http://localhost:4200'
+    })
+
+    // httpParams.headers
+    // let options = {};
+    // options['params'] = httpParams;
+    // options['headers'] = headers;
+    // httpParams['headers'] = headers;
+
+    try {
+      this.examples.get(`${this.base.vrizeSvcUrl}/examples/search.json`, httpParams)
+      // this.examples.get(`${this.base.vrizeSvcUrl}/examples/search.json`, options)
+        .subscribe(this.processResults.bind(this));
+    }
+    catch (e) {
+      console.log(`QuerySelectComponent.querySb: e=${e}`);
+    }
 
   }
 
