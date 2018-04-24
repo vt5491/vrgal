@@ -21,6 +21,7 @@ AFRAME.registerComponent('sticky-state', {
     let lastDollyPos = JSON.parse(sessionStorage.getItem(`${appPrefix}_lastDollyPos`));
 
     if (lastDollyPos) {
+      console.log(`sticky-state: lastDollyPos.z=${lastDollyPos.z}`);
       this.el.setAttribute('position', lastDollyPos);
     }
 

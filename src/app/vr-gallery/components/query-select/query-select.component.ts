@@ -30,7 +30,8 @@ import { debug } from 'util';
 export class QuerySelectComponent implements OnInit {
   name : string;
   category: string;
-  exampleResults : Object[] = []
+  // exampleResults : Object[] = []
+  exampleResults : Object = {};
   // expectedResultCnt : number
   // 'webgl_geometry_cube.html'
   // http://localhost:3000/examples/260
@@ -57,7 +58,7 @@ export class QuerySelectComponent implements OnInit {
   init() {
     console.log('QuerySelectComponent.ngOnInit: entered');
 
-    let exampleResults : Object[] = [];
+    // let exampleResults : Object[] = [];
     
     let scene: any = document.querySelector('a-scene');
     let sbBox: any = document.querySelector('#sb-query');
@@ -181,19 +182,19 @@ export class QuerySelectComponent implements OnInit {
         yPos -= 4;
       }
 
-      // and increment the stats
-      let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data[i].id}/stats.json`;
-      console.log(`processResults.statsUrl=${statsUrl}`);
+    //   // and increment the stats
+    //   let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data[i].id}/stats.json`;
+    //   console.log(`processResults.statsUrl=${statsUrl}`);
       
 
-      this.examples.get(statsUrl)
-        .subscribe(
-          rsp => {
-            // debugger;
-            // let result= (rsp as any).json(); 
-            console.log(`id=${data[i].id}, likes=${(rsp[0] as any).likes}`)} ,
-          err => { console.log(`err=${err.message}`)}
-      )
+    //   this.examples.get(statsUrl)
+    //     .subscribe(
+    //       rsp => {
+    //         // debugger;
+    //         // let result= (rsp as any).json(); 
+    //         console.log(`id=${data[i].id}, likes=${(rsp[0] as any).likes}`)} ,
+    //       err => { console.log(`err=${err.message}`)}
+    //   )
     }
 
     // and finally, transfer to it
@@ -207,7 +208,8 @@ export class QuerySelectComponent implements OnInit {
     example['name'] = data.name
     example['pos'] = data.pos
 
-    this.exampleResults.push(example)
+    // this.exampleResults.push(example)
+    this.exampleResults[data.id] = example
 
     // We have to use sessionStorage to transfer data among routes, because a
     // pure a-frame link is more of a pure DOM transfer and is kind of out reach

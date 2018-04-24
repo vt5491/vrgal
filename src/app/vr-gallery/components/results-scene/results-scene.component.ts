@@ -28,7 +28,8 @@ export class ResultsSceneComponent implements OnInit {
   // name : string;
   // category: string;
   // utils : UtilsService
-  exampleResults : Object[] = []
+  // exampleResults : Object[] = []
+  exampleResults : Object = {};
   sceneEl : Element;
   appPrefix : string;
   debugCounter: number = 0;
@@ -50,13 +51,14 @@ export class ResultsSceneComponent implements OnInit {
     
 
     this.exampleResults = JSON.parse(sessionStorage.getItem(`${this.base.appPrefix}_querySelectResults`))
-    console.log(`ResultScene.ctor: exampleResult-2=${this.exampleResults[0]}`);
+    // console.log(`ResultScene.ctor: exampleResult-2=${this.exampleResults[0]}`);
   }
 
   ngOnInit() {
     console.log('ResultComponent.ngOnInit: entered');
 
-    console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${this.exampleResults.length}`);
+    // console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${this.exampleResults.length}`);
+    console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${Object.keys(this.exampleResults).length}`);
     document.querySelector('a-scene')
       .addEventListener('loaded', this.addResources.bind(this))
 
@@ -77,11 +79,14 @@ export class ResultsSceneComponent implements OnInit {
   }
 
   addLinks() {
-    console.log(`ResultsScene.addLinks: this.exampleResults.length=${this.exampleResults.length}`);
+    // console.log(`ResultsScene.addLinks: this.exampleResults.length=${this.exampleResults.length}`);
     // debugger;
     
-    for(let i=0; i < this.exampleResults.length; i++) {
-      this.addLink(this.exampleResults[i], i);
+    // for(let i=0; i < this.exampleResults.length; i++) {
+    for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
+      // this.addLink(this.exampleResults[i], i);
+      let k = Object.keys(this.exampleResults)[i];
+      this.addLink(this.exampleResults[k], i);
     }
 
   }
@@ -124,8 +129,11 @@ export class ResultsSceneComponent implements OnInit {
 
   // add thumbs to the assets list
   addImgAssets() {
-    for (let i = 0; i < this.exampleResults.length; i++) {
-      this.addImgAsset(this.exampleResults[i], i);
+    // for (let i = 0; i < this.exampleResults.length; i++) {
+    for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
+      // this.addImgAsset(this.exampleResults[i], i);
+      let k = Object.keys(this.exampleResults)[i];
+      this.addImgAsset(this.exampleResults[k], i);
     }
   }
 
@@ -150,8 +158,11 @@ export class ResultsSceneComponent implements OnInit {
   }
 
   addExamplePopupImgs() {
-    for (let i = 0; i < this.exampleResults.length; i++) {
-      this.addExamplePopupImg(this.exampleResults[i], i);
+    // for (let i = 0; i < this.exampleResults.length; i++) {
+    for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
+      // this.addExamplePopupImg(this.exampleResults[i], i);
+      let k = Object.keys(this.exampleResults)[i];
+      this.addExamplePopupImg(this.exampleResults[k], i);
     }
   }
 
@@ -196,9 +207,12 @@ export class ResultsSceneComponent implements OnInit {
 
   // }
   addViewSourceBtns() {
-    for (let i = 0; i < this.exampleResults.length; i++) {
-      this.addViewSourceBtn(this.exampleResults[i], i);
+    // for (let i = 0; i < this.exampleResults.length; i++) {
+    for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
+      // this.addViewSourceBtn(this.exampleResults[i], i);
       // this.registerViewSourceListener(this.exampleResults[i], i);
+      let k = Object.keys(this.exampleResults)[i];
+      this.addViewSourceBtn(this.exampleResults[k], i);
     }
   }
 
@@ -408,31 +422,46 @@ export class ResultsSceneComponent implements OnInit {
   }
 
   incStats(metric) {
-    for(let i=0; i < this.exampleResults.length; i++) {
-      this.incStat(this.exampleResults[i], metric);
+    // for(let i=0; i < this.exampleResults.length; i++) {
+    for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
+      // this.incStat(this.exampleResults[i], metric);
+      let k = Object.keys(this.exampleResults)[i];
+
+      let example = this.exampleResults[k];
+      if (!example.tabulated) {
+        this.incStat(example, metric);
+
+        // and indicate in the session storage that we've already tabulated this
+        // example as far as the user session goes (e.g.don't keep incrementing
+        // stats everytime they return to this page for this session)
+        example.tabulated = true;
+      }
     }
 
-    let stat =  { 'impressions': null};
-    this.examples.put(`${this.base.vrizeSvcUrl}/examples/260/stats/increment.json`, stat)
-      .subscribe(
-        rsp => {console.log(`ResultsSceneComoponent.incStats: rsp.likes=${(rsp as any).impressions}`)},
-        err => {console.log(`ResultsSceneComoponent.incStats: err=${err.message}`)}
-      );
+    // and rewrite sessionStorage to indicate any 'tabulated' flag changes
+    sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
+
+    // let stat =  { 'impressions': null};
+    // this.examples.put(`${this.base.vrizeSvcUrl}/examples/260/stats/increment.json`, stat)
+    //   .subscribe(
+    //     rsp => {console.log(`ResultsSceneComoponent.incStats: rsp.likes=${(rsp as any).impressions}`)},
+    //     err => {console.log(`ResultsSceneComoponent.incStats: err=${err.message}`)}
+    //   );
   }
 
   incStat(data, metric) {
     let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data.id}/stats.json`;
     console.log(`incStat.statsUrl=${statsUrl}`);
 
-    this.examples.get(statsUrl)
-      .subscribe(
-        rsp => {
-          // debugger;
-          // let result= (rsp as any).json(); 
-          // console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
-        },
-        err => { console.log(`err=${err.message}`) }
-      )
+    // this.examples.get(statsUrl)
+    //   .subscribe(
+    //     rsp => {
+    //       // debugger;
+    //       // let result= (rsp as any).json(); 
+    //       // console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
+    //     },
+    //     err => { console.log(`err=${err.message}`) }
+    //   )
 
     // increment impressions stats
     let stat = { 'impressions': null };

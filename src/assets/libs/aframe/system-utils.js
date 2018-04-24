@@ -153,8 +153,10 @@ AFRAME.registerSystem('system-utils', {
       // debugger;
       let el = document.querySelector(`#${exampleRoot}-popup`);
       // toggle visibility
-      let sceneEl = document.querySelector('a-scene');
-      sceneEl.systems['system-utils'].toggleVisibility(el);
+      if (el) {
+        let sceneEl = document.querySelector('a-scene');
+        sceneEl.systems['system-utils'].toggleVisibility(el);
+      }
       // let elVisibility = el.getAttribute("visible");
       // let newVisibility = !elVisibility;
       //
