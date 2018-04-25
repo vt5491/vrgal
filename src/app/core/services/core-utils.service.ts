@@ -76,4 +76,8 @@ export class CoreUtilsService {
 
   }
 
+  escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
 }

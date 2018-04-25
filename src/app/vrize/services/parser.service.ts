@@ -49,6 +49,8 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
   // a doc.scripts[index].innerHTML or some such call.
   findMainScript(doc) : number {
     // debugger;
+    // console.log(`ParserService.findMainScript: entered`);
+    
     let scriptEls = doc.getElementsByTagName('script')
 
     // loop through all script elements and assume the one with the biggest 
@@ -57,10 +59,11 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
     let foundCand = false;
     let maxLen = 0;
 
+    // debugger;
     for (let i = 0; i < scriptEls.length; i++) {
       // don't consider shader scripts as they can be longer than the
       // 'main' script, and thus improperly tagged as the main script. 
-      if (scriptEls[i].type.match(/x-shader/)) {
+      if (scriptEls[i].type && scriptEls[i].type.match(/x-shader/)) {
         continue;
       }
       let scriptLen = scriptEls[i].innerHTML.length;
@@ -229,24 +232,31 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
   addVrButton(text: string, rendererName: string) {
     // extract the dom element we need to append to
     // let re = new RegExp(`([a-zA-z0-9_\.]+)\.appendChild\(\s*${rendererName}\.domElement\s*\)`, 'm');
-    let re = new RegExp(`([a-zA-z0-9_\.]+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    //vt-xlet re = new RegExp(`([a-zA-z0-9_\.]+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
     // let re = new RegExp('([a-zA-z0-9_\.]+)\.appendChild\(\s*' + rendererName + '\.domElement\s*\)', 'm');
     // let re = new RegExp('([a-zA-z0-9_\.]+)\.appendChild\(\s*' + rendererName + '\.domElement\s*\)', 'm');
     // let reStr = '([a-zA-z0-9_\.]+)\.appendChild\(\s*' + rendererName + '\.domElement\s*\)';
     // let reStr = 'appendChild(' + rendererName + ')';
     // let re = new RegExp( reStr, 'm');
+    //document.getElementById( "container" ).appendChild\
+    let re = new RegExp(`\s*(document\\..+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
 
     let m = text.match(re);
+    // debugger;
     let elName = m[1];
+
     // let m = text.match(/([a-zA-z0-9_\.]+)(\s*=\s*)(new THREE\.WebGLRenderer.*)/m);
     // let newText = text.replace(/.*new THREE\.WebGLRenderer.*/m, `$&\n${insertText}\n`);
     // pass the append element name and get actual variable-specific insert text
     let vrButtonLine = this.getVrButtonTemplate(elName, rendererName);
     let insertText = this.utils.jsCommentSandwich(vrButtonLine);
 
+    // if the elName is procedural (i.e not a simple variable name), then we need to escape
+    // special chars in order for it to work in the 're2' regex
+    let escapedElName = this.base.escapeRegExp(elName);
     // let newText = text.replace(/.*new THREE\.WebGLRenderer.*/m, `$&\n${insertText}\n`);
     // let re2 = new RegExp(`${elName}\.appendChild\(\s*${rendererName}\.domELement\s*\)`);
-    let re2 = new RegExp(`${elName}\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\);`, 'm');
+    let re2 = new RegExp(`${escapedElName}\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\);`, 'm');
     // let newText = text.replace(re2, 
     //   `$&\n${elName}\.appendChild\(WEBVR.createButton\(${rendererName}\)\);\n`);
     let newText = text.replace(re2, `$&\n${insertText}\n`);
@@ -331,50 +341,54 @@ function animate() {
 
   // Attempt to find the position the script sets the camera to.  We need
   // this so we can properly set the dolly's position later.
-  extractInitCameraPos(scriptText) : THREE.Vector3 {
+  extractInitCameraPos(scriptText): THREE.Vector3 {
     let extractedPos = new THREE.Vector3();
     let reMatch = []
 
-    // camera.position.set( 30, 30, 100 );
-    // if( scriptText.match(//)) {
-    if (reMatch = scriptText.match(/camera\.position\.set\(\s*(\d+)[,|\s]+(\d+)[,|\s]+(\d+)\s*\)/m) ) {
-    // if (reMatch == []) {
-      // console.log(`position.set detected,re1=${reMatch[1]}`);
+    if (reMatch = scriptText.match(/camera\.position\.set\(\s*(\d+)[,|\s]+(\d+)[,|\s]+(\d+)\s*\)/m)) {
       extractedPos.x = parseInt(reMatch[1]);
       extractedPos.y = parseInt(reMatch[2]);
       extractedPos.z = parseInt(reMatch[3]);
     }
-    else {
-      // console.log(`position.x detected`);
+    else { // console.log(`position.x detected`);
 
-    // look for 'camera.position.n' statements.
-    // Note: we don't specify 'g' (global search), so that the bracketing
-    // will work.  Unfortunately, this means we pull the first match.  Presumably
-    // if multiple dimensions are set, they won't be using this syntax.
-    let re= new RegExp(/camera\.position\.([xyz])\s*=\s*(\d+)/, 'm')
+      // look for 'camera.position.n' statements.
+      let re = new RegExp("camera\\.position\\.([xyz])\\s*=\\s*(\\d+)", 'gm')
 
-    reMatch = scriptText.match(re);
-    // debugger;
+      reMatch = scriptText.match(re);
 
-    if (reMatch && reMatch[1] && reMatch[2]) {
-      let numericPos = parseInt(reMatch[2]);
+      // debugger;
+      if (reMatch) {
+        // loop over each matched "position.[xyz]" line
+        for (let i = 0; i < reMatch.length; i++) {
+          // match again to extract the axis and value
+          let extract = reMatch[i].match(/.([xyz])\s*=\s*(\d+)/)
+          let numeric = parseInt(extract[2]);
 
-      switch(reMatch[1]) {
-        case 'x':
-          extractedPos.x = numericPos;
-          break;
-        case 'y':
-          extractedPos.y = numericPos;
-          break;
-        case 'z':
-          extractedPos.z = numericPos;
-          break;
+          switch (extract[1]) {
+            case 'x':
+              extractedPos.x = numeric;
+              break;
+            case 'y':
+              // extractedPos.y = numericPos;
+              extractedPos.y = numeric;
+              break;
+            case 'z':
+              // extractedPos.z = numericPos;
+              extractedPos.z = numeric;
+              break;
+          }
+        }
+
       }
     }
-    }
-
     return extractedPos;
   }
+
+        // if (reMatch && reMatch[1] && reMatch[2]) {
+        //   let numericPos = parseInt(reMatch[2]);
+
+          // switch (reMatch[1]) {
 
   // add a 'var dolly;' statement
   addDollyVar(scriptText: string) : string {
@@ -535,6 +549,21 @@ function animate() {
     `
 
     return template;
+  }
+
+  // Since we add a dolly and track the camera through this, we do not want the
+  // camera to be added directly to the scene.  This doesn't affect many
+  // scripts, as the camera is *not* typically added, but some scripts do do it
+  // (e.g 'webgl_shadowmap_pcss.html').
+  commentOutAddCameraToScene(text: string) :string {
+
+    let newText = '';
+    // debugger;
+
+    newText = text.replace(/[^\n]*scene.add\(\s*camera\s*\)[^\n]*/m, 
+      `${this.base.jsMarkupCommentOutBegin}\n//$&\n${this.base.jsMarkupCommentOutEnd}`);
+
+    return newText;
   }
 
 

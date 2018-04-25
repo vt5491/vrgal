@@ -108,7 +108,8 @@ export class QuerySelectComponent implements OnInit {
     });
 
     let headers = new HttpHeaders({
-      'Access-Control-Allow-Origin': 'http://localhost:4200'
+      // 'Access-Control-Allow-Origin': 'http://localhost:4200'
+      'Content-Type': 'application/json'
     })
 
     // httpParams.headers

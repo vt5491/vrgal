@@ -41,4 +41,8 @@ export class BaseService {
     return 44;
   }
 
+  escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
 }

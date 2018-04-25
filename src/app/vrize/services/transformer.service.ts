@@ -49,6 +49,7 @@ export class TransformerService {
     newText = this.parser.addDollyToScene(newText);
     newText = this.parser.addCameraToDolly(newText);
     newText = this.parser.alterCameraNearPlane(newText);
+    newText = this.parser.commentOutAddCameraToScene(newText);
 
     // add the 'vrdisplayactivate' handler (so vr-mode is transitive)
     // Note: this is only needed if you don't have a customized 'examples/js/vr/WebVR.js'.

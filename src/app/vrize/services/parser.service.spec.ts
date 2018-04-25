@@ -398,6 +398,16 @@ describe('ParserService', () => {
     // debugger;
   });
 
+  // as determined in testing 'webgl_shadowmesh.html'
+  it('addVrButton works on a procedurally specified containter', () => {
+    let testText = 'document.getElementById( "container" ).appendChild( renderer.domElement );';
+
+    let result = service.addVrButton(testText, "renderer");
+    console.log(`ut: addVrButton: result=${result}`);
+    // let newText = service.getVrButtonTemplate(appendEl, rendererName);
+    expect(result).toMatch(/getElementById\( "container" \)\.appendChild\(WEBVR\.createButton\(renderer\)\)/m);
+  });
+
   it('addVrAnimateFn works with a simple script', () => {
     let result = service.addVrAnimateFn(simpleScriptText);
     let vrizeRenderName = `${base.appTag}_render`;
@@ -477,6 +487,18 @@ camera.position.set( 30, 40, 100 );
     expect(extractedPos.x).toEqual(30);
     expect(extractedPos.y).toEqual(40);
     expect(extractedPos.z).toEqual(100);
+  })
+
+  it('extractInitCameraPos works on position.x and position.y', () => {
+    let testScript = `
+camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
+camera.position.y = 5;
+camera.position.z = 15;
+    `
+    let extractedPos = service.extractInitCameraPos(testScript);
+    expect(extractedPos.x).toEqual(0);
+    expect(extractedPos.y).toEqual(5);
+    expect(extractedPos.z).toEqual(15);
   })
 
   it('addDolly properly inserts its stub', () => {
@@ -580,6 +602,19 @@ camera.position.set( 30, 40, 100 );
     let pat2 = new RegExp(`camera = new THREE\.PerspectiveCamera.*NEAR / 10.0,`);
     expect(newScriptText).toMatch(pat2, 'm');
 
+  })
+
+  it('commentOutAddCameraToScene properly comments out scene.add(camera)', () => {
+    let testScript = `
+  camera.position.y = 5;
+  camera.position.z = 15;
+  scene.add( camera );
+    `
+    let newText = service.commentOutAddCameraToScene(testScript);
+    console.log(`newText=${newText}`)
+    // debugger;
+
+    expect(newText.match(/\/\/\s*scene.add\(\s*camera\s*\)/)).toBeTruthy();
   })
 
 });

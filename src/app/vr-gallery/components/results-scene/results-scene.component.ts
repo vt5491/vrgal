@@ -262,7 +262,7 @@ export class ResultsSceneComponent implements OnInit {
           this.showSource(exampleRoot, res, logPos);
         },
         err => {
-          console.log(`result-scene: err=${err}`);
+          console.log(`result-scene: err=${err.message}`);
         }
       );
       // let el = evt.target; 

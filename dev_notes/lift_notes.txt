@@ -1,0 +1,72 @@
+How to lift three.js examples:
+
+1) Select a candidate example in 2-d using the three.js web site (or running locally on port 8000
+using $PYSERVE).
+
+Some things to look for a good candidate:
+a) Make sure it uses WebGLRender as the renderer and not canvas.
+b) Make sure it only uses a PerspectiveCamera and no ortho cameras anywhere (otho cameras
+don't stereo-ize)
+
+2) I normally lift on my linux image.  Bring up all three servers (vrgal, vrgal-admin, and vrszsrv).
+
+3) cd to $VRGAL/data/examples
+
+4) Copy the candidate example (from three.js github repo)  to here.  Note: you may want to do 'ls | grep "blah"' to see if you've
+previously attempted the example:
+
+cp $GH/three.js/examples/webgl_shadowmap_pcss.html . 
+
+5) Set up table 'lift_reqs':
+
+a) to get the example id:
+select * from examples where name like '%pcss%';
+
+b) delete any prior lift_reqs:
+delete from lift_reqs where id<41;
+
+c) add to lift_reqs:
+insert into lift_reqs (example_id) values (181);
+
+
+6) in browser go to: http://localhost:4200/vrize/lift-batch
+
+Note: the 'write to tmp dir' is checked by default.  This is a good option if you're testing a lift.
+If you've previously lifted an example and are re-lifting it for some reason, you may want to uncheck
+this and write directly to $VRGAL/src/assets/threejs-env/examples and save yourelf a copy step later.
+
+press 'Batch Lift' button.
+
+7) from tmp dir, cp newly lifted file into to main Ng assets dir:
+
+cp vrize-webgl_shadowmap_pcss.html $VRGAL/src/assets/threejs-env/examples/
+
+8) set the lift_failure_code to -2, so that the sandbox query will pickup on it.
+
+update examples set lift_failure_code=-2 where id=181;
+
+9) Test it on the game pc.  Ok to have a 4200 vrgal on game-pc *and* in linux.
+
+use the sandbox query, becuase it will show all examples with a 'lift_failure_code' of -2.
+
+Note: you do not have to cycle ng server to get new examples.
+Note2: no, I think you do.
+
+
+10) if the lift fails or is partial, and you don't want to research why:
+
+a)  copy the (failed)
+lift from tmp to 'data/lift_fails' or 'data/lift_partials'.
+
+b) Add an entry into table 'lift_fails'
+
+c) Set the lift_score in examples e.g the percent you feel like it failed.
+
+d) set lifted=0 in examples.  The lift_batch sets this flag automatically.  It does not distinguish
+between sucessful and unsuccessful lifts.
+
+11) If the lift suceeds:
+
+a) Consider getting a screen shot (of the original threejs example. 
+b) set lift_score=100 in examples.
+
