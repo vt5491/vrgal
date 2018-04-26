@@ -71,6 +71,20 @@ describe('UtilsService', () => {
     // console.log(`result=${result}`);
 
   })
+
+  it('getLineNum returns proper line number', () => {
+    let testText = `
+abc
+def
+ghi
+xyz
+    `
+    let lineNum = service.getLineNum(testText, /def/);
+    expect(lineNum).toEqual(2);
+
+    lineNum = service.getLineNum(testText, /123/);
+    expect(lineNum).toEqual(null);
+  })
   // it('getFileText abc.html works', inject([UtilsService, HttpClient],
   //     (service: UtilsService, http: HttpClient) => {
   // // it('getFileText abc.html works', inject([UtilsService, HttpClient],

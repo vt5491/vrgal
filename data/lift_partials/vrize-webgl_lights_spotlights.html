@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Mon Apr 02 2018 23:25:39 GMT-0700 (PDT)--><head>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Wed Apr 25 2018 20:08:40 GMT-0700 (PDT)--><head>
 		<title>three.js webgl - lights - spot light</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -51,6 +51,11 @@
 
 		<script>if (!Detector.webgl) Detector.addGetWebGLMessage();
 
+//vrize add start
+var dolly;
+dolly = new THREE.Object3D();
+dolly.position.set(0, 0, 0);
+//vrize add end
 var renderer = new THREE.WebGLRenderer();
 //vrize add start
 renderer.vr.enabled = true;
@@ -62,10 +67,6 @@ renderer.setPixelRatio(window.devicePixelRatio);
 var camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1 / 10.0, 2000);
 //vrize add start
 dolly.add(camera);
-//vrize add end
-
-//vrize add start
-var dolly;
 //vrize add end
 
 
@@ -97,11 +98,6 @@ var spotLight3 = createSpotlight(0x7F00FF);
 var lightHelper1, lightHelper2, lightHelper3;
 
 function init() {
-    //vrize add start
-    dolly = new THREE.Object3D();
-    dolly.position.set(0, 0, 0);
-    //vrize add end
-
 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;

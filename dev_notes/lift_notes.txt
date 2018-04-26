@@ -7,6 +7,7 @@ Some things to look for a good candidate:
 a) Make sure it uses WebGLRender as the renderer and not canvas.
 b) Make sure it only uses a PerspectiveCamera and no ortho cameras anywhere (otho cameras
 don't stereo-ize)
+c) Make sure it has an init() method.
 
 2) I normally lift on my linux image.  Bring up all three servers (vrgal, vrgal-admin, and vrszsrv).
 
@@ -49,8 +50,13 @@ update examples set lift_failure_code=-2 where id=181;
 
 use the sandbox query, becuase it will show all examples with a 'lift_failure_code' of -2.
 
+Also, look at the script and see if you need any additional resources copied.
+
 Note: you do not have to cycle ng server to get new examples.
 Note2: no, I think you do.
+Yes, the consensus is that you need to cycle the server.  You do if you add a new file under
+/assets
+
 
 
 10) if the lift fails or is partial, and you don't want to research why:

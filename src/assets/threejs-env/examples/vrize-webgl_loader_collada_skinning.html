@@ -1,0 +1,195 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Wed Apr 25 2018 20:25:58 GMT-0700 (PDT)--><head>
+		<title>three.js webgl - collada - skinning</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+		<style>
+			body {
+				background:#777;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> collada loader - skinning
+			| Dancing Stormtrooper by <a href="https://sketchfab.com/strykerdoesgames" target="_blank" rel="noopener">StrykerDoesAnimation</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC Attribution</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+<!--vrize add start-->
+<script src="js/vr/WebVR.js"></script>
+<script src="js/vrize/vrize_kbd.js"></script>
+<script src="js/vrize/vrize_controller.js"></script>
+<script src="js/vr/VRController.js"></script>
+<!--vrize add end-->
+		<script src="js/loaders/ColladaLoader.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+//vrize add start
+var dolly;
+dolly = new THREE.Object3D();
+dolly.position.set(0, 0, 0);
+//vrize add end
+var container, stats, clock, controls;
+var camera, scene, renderer, mixer;
+
+init();
+animate();
+
+function init() {
+
+    container = document.getElementById('container');
+
+    //vrize alter				camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 1 / 10.0, 10000);
+    //vrize add start
+    dolly.add(camera);
+    //vrize add end
+
+    camera.position.set(15, 10, -15);
+
+    scene = new THREE.Scene();
+    //vrize add start
+    scene.add(dolly);
+    //vrize add end
+
+
+    clock = new THREE.Clock();
+
+    // collada
+
+    var loader = new THREE.ColladaLoader();
+    loader.load('./models/collada/stormtrooper/stormtrooper.dae', function(collada) {
+
+        var animations = collada.animations;
+        var avatar = collada.scene;
+
+        mixer = new THREE.AnimationMixer(avatar);
+        var action = mixer.clipAction(animations[0]).play();
+
+        scene.add(avatar);
+
+    });
+
+    //
+
+    var gridHelper = new THREE.GridHelper(10, 20);
+    scene.add(gridHelper);
+
+    //
+
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    scene.add(ambientLight);
+
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, -1);
+    scene.add(directionalLight);
+
+    //
+
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+    //vrize add start
+    renderer.vr.enabled = true;
+    //vrize add end
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    //vrize add start
+    container.appendChild(WEBVR.createButton(renderer));
+    //vrize add end
+
+
+    //
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 2, 0);
+    controls.update();
+
+    //
+
+    stats = new Stats();
+    container.appendChild(stats.dom);
+
+    //
+
+    window.addEventListener('resize', onWindowResize, false);
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+}
+
+//vrize alter start
+//function animate() {
+function vrize_render() {
+    //vrize alter end
+
+    //vrize comment out start
+    //				requestAnimationFrame( animate );
+    //vrize comment out end
+    //vrize add start
+    THREE.VRController.update();
+    //vrize add end
+
+    render();
+    stats.update();
+
+}
+
+function render() {
+
+    var delta = clock.getDelta();
+
+    if (mixer !== undefined) {
+
+        mixer.update(delta);
+
+    }
+
+    renderer.render(scene, camera);
+
+}
+
+//vrize add start
+
+function animate() {
+    renderer.animate(vrize_render);
+};
+
+//vrize add end</script>
+
+	
+
+</body></html>

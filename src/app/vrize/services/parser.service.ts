@@ -239,7 +239,10 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
     // let reStr = 'appendChild(' + rendererName + ')';
     // let re = new RegExp( reStr, 'm');
     //document.getElementById( "container" ).appendChild\
-    let re = new RegExp(`\s*(document\\..+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    // let re = new RegExp(`\s*(document\\..+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    // let re = new RegExp(`\\s*([\\w\\.\\s]+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    let re = new RegExp(`\\s*(.+)\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\)`, 'm');
+    // debugger;
 
     let m = text.match(re);
     // debugger;
@@ -253,7 +256,7 @@ extractCameraCreationLineRegEx = new RegExp(/^.*new THREE.PerspectiveCamera\([^\
 
     // if the elName is procedural (i.e not a simple variable name), then we need to escape
     // special chars in order for it to work in the 're2' regex
-    let escapedElName = this.base.escapeRegExp(elName);
+    let escapedElName = this.utils.escapeRegExp(elName);
     // let newText = text.replace(/.*new THREE\.WebGLRenderer.*/m, `$&\n${insertText}\n`);
     // let re2 = new RegExp(`${elName}\.appendChild\(\s*${rendererName}\.domELement\s*\)`);
     let re2 = new RegExp(`${escapedElName}\\.appendChild\\(\\s*${rendererName}\\.domElement\\s*\\);`, 'm');
@@ -385,10 +388,39 @@ function animate() {
     return extractedPos;
   }
 
-        // if (reMatch && reMatch[1] && reMatch[2]) {
-        //   let numericPos = parseInt(reMatch[2]);
 
-          // switch (reMatch[1]) {
+  // insert the entire dolly "stanza" (declaration and assignment) as early as
+  // possible in the script, since the dolly iteself is not dependent on any
+  // other variable, but several other things are dependent on the dolly being
+  // set up (adding the camera to the dolly, adding the dolly to the scene etc.)
+  // This method replaces 'addDollyVar' and 'addDolly' which inserts the dolly
+  // defintion in other more seeminginly "logical" places, but which cause
+  // problems in practice.
+  insertDolly(scriptText: string) : string {
+    // let newText : string = "";
+
+    let lines = scriptText.split('\n');
+    // location of first var statement will be our insertion point
+    let refLine = this.utils.getLineNum(scriptText, /var /);
+
+    let dollyLines = [];
+    let cameraPos = this.extractInitCameraPos(scriptText);
+
+    dollyLines.push(this.base.jsMarkupCommentBegin);
+    dollyLines.push("var dolly;");
+    dollyLines.push("dolly = new THREE.Object3D();");
+    dollyLines.push(`dolly.position.set(${cameraPos.x}, ${cameraPos.y}, ${cameraPos.z});`);
+    dollyLines.push(this.base.jsMarkupCommentEnd);
+
+    // and insert into original in a reverse fashion
+    lines.splice(refLine, 0, dollyLines[4]);
+    lines.splice(refLine, 0, dollyLines[3]);
+    lines.splice(refLine, 0, dollyLines[2]);
+    lines.splice(refLine, 0, dollyLines[1]);
+    lines.splice(refLine, 0, dollyLines[0]);
+
+    return lines.join('\n');
+  }
 
   // add a 'var dolly;' statement
   addDollyVar(scriptText: string) : string {

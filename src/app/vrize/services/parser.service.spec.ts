@@ -50,15 +50,6 @@ describe('ParserService', () => {
       // in here either, but it works anyway, so leave it in.
       providers: [HttpClient]
     })
-    // TestBed.configureTestingModule({
-    //   imports: [
-    //     HttpClientTestingModule
-    //   ],
-    //   // providers: [ParserService, HttpClient, HttpHandler, HttpClientTestingModule, HttpTestingController]
-    //   providers: [ParserService, HttpClient, HttpTestingController, BaseService, UtilsService]
-    // });
-    // let httpHandler = TestBed.get(HttpHandler);
-    // let httpHandler = Injector.(HttpHandler);
     let http = TestBed.get(HttpClient);
     // read 'webgl_geometry_cube.html' as a test for a non-vr-ized file.
     // let fn = '../../assets/test/examples/unix_style/webgl_geometry_cube.html';
@@ -408,6 +399,15 @@ describe('ParserService', () => {
     expect(result).toMatch(/getElementById\( "container" \)\.appendChild\(WEBVR\.createButton\(renderer\)\)/m);
   });
 
+  it('addVrButton works on a static var containter', () => {
+    let testText = '    container.appendChild( renderer.domElement );';
+
+    let result = service.addVrButton(testText, "renderer");
+    console.log(`ut: addVrButton: result=${result}`);
+    // let newText = service.getVrButtonTemplate(appendEl, rendererName);
+    expect(result).toMatch(/container\.appendChild\(WEBVR\.createButton\(renderer\)\)/m);
+  });
+
   it('addVrAnimateFn works with a simple script', () => {
     let result = service.addVrAnimateFn(simpleScriptText);
     let vrizeRenderName = `${base.appTag}_render`;
@@ -508,6 +508,25 @@ camera.position.z = 15;
     // expect(newScript).toMatch(/dolly\.position\.set\(0, 0, 400\)/, 'm');
     expect(newScript).toMatch(/dolly\.position\.set\(0, 0, 400\)/, 'm');
 
+  })
+
+  it('insertDolly inserts its stanza before first var statment', () => {
+    let newText = service.insertDolly(simpleScriptText);
+    console.log(`ut:newText=${newText}`);
+
+    // expect(newScript).toMatch()
+    // get the line number for the 'var=camera' line, which is the reference point
+    let lines = newText.split('\n');
+    console.log(`lines=${lines}`);
+    // for our verfication tests
+    let cameraDefLineNum = utils.getLineNum(newText, /var camera,/)
+
+    console.log(`insertDolly.ut: cameraDefLineNum=${cameraDefLineNum}, lines[blah]=${lines[cameraDefLineNum]}`);
+    expect(lines[cameraDefLineNum -5]).toMatch(base.jsMarkupCommentBegin);
+    expect(lines[cameraDefLineNum -4]).toMatch(/var dolly/);
+    expect(lines[cameraDefLineNum -3]).toMatch(new RegExp('dolly = new THREE.Object3D()'));
+    expect(lines[cameraDefLineNum -2]).toMatch(/dolly\.position\.set/);
+    expect(lines[cameraDefLineNum -1]).toMatch(base.jsMarkupCommentEnd);
   })
 
   it('addDollyToScene works', () => {

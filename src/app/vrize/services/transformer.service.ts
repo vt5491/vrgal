@@ -44,8 +44,9 @@ export class TransformerService {
     newText = this.parser.addVrAnimateFn(newText);
 
     // add dolly support
-    newText = this.parser.addDollyVar(newText);
-    newText = this.parser.addDolly(newText);
+    // newText = this.parser.addDollyVar(newText);
+    // newText = this.parser.addDolly(newText);
+    newText = this.parser.insertDolly(newText);
     newText = this.parser.addDollyToScene(newText);
     newText = this.parser.addCameraToDolly(newText);
     newText = this.parser.alterCameraNearPlane(newText);

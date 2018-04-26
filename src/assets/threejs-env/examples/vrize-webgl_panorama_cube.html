@@ -1,0 +1,186 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Wed Apr 25 2018 18:35:12 GMT-0700 (PDT)--><head>
+		<title>three.js webgl - panorama</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+		<style>
+			html, body {
+				background-color: #000;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js webgl</a> - cube panorama demo.
+		</div>
+
+		<script src="../build/three.js"></script>
+<!--vrize add start-->
+<script src="js/vr/WebVR.js"></script>
+<script src="js/vrize/vrize_kbd.js"></script>
+<script src="js/vrize/vrize_controller.js"></script>
+<script src="js/vr/VRController.js"></script>
+<!--vrize add end-->
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script>//vrize add start
+var dolly;
+dolly = new THREE.Object3D();
+dolly.position.set(0, 0, 0);
+//vrize add end
+var camera, controls;
+var renderer;
+var scene;
+
+init();
+animate();
+
+function init() {
+
+    var container = document.getElementById('container');
+
+    renderer = new THREE.WebGLRenderer();
+    //vrize add start
+    renderer.vr.enabled = true;
+    //vrize add end
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    //vrize add start
+    container.appendChild(WEBVR.createButton(renderer));
+    //vrize add end
+
+
+    scene = new THREE.Scene();
+    //vrize add start
+    scene.add(dolly);
+    //vrize add end
+
+
+    //vrize alter			camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 100 );
+    camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1 / 10.0, 100);
+    //vrize add start
+    dolly.add(camera);
+    //vrize add end
+
+    camera.position.z = 0.01;
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.rotateSpeed = -0.25;
+
+    var textures = getTexturesFromAtlasFile("textures/cube/sun_temple_stripe.jpg", 6);
+
+    var materials = [];
+
+    for (var i = 0; i < 6; i++) {
+
+        materials.push(new THREE.MeshBasicMaterial({
+            map: textures[i]
+        }));
+
+    }
+
+    var skyBox = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), materials);
+    skyBox.geometry.scale(1, 1, -1);
+    scene.add(skyBox);
+
+    window.addEventListener('resize', onWindowResize, false);
+
+}
+
+function getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
+
+    var textures = [];
+
+    for (var i = 0; i < tilesNum; i++) {
+
+        textures[i] = new THREE.Texture();
+
+    }
+
+    var imageObj = new Image();
+
+    imageObj.onload = function() {
+
+        var canvas, context;
+        var tileWidth = imageObj.height;
+
+        for (var i = 0; i < textures.length; i++) {
+
+            canvas = document.createElement('canvas');
+            context = canvas.getContext('2d');
+            canvas.height = tileWidth;
+            canvas.width = tileWidth;
+            context.drawImage(imageObj, tileWidth * i, 0, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth);
+            textures[i].image = canvas
+            textures[i].needsUpdate = true;
+
+        }
+
+    };
+
+    imageObj.src = atlasImgUrl;
+
+    return textures;
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+}
+
+//vrize alter start
+//function animate() {
+function vrize_render() {
+    //vrize alter end
+
+    //vrize comment out start
+    //			requestAnimationFrame( animate );
+    //vrize comment out end
+    //vrize add start
+    THREE.VRController.update();
+    //vrize add end
+
+    controls.update(); // required when damping is enabled
+
+    renderer.render(scene, camera);
+
+}
+
+//vrize add start
+
+function animate() {
+    renderer.animate(vrize_render);
+};
+
+//vrize add end</script>
+	
+
+</body></html>

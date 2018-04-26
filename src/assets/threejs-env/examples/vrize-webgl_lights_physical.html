@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Thu Mar 29 2018 21:31:57 GMT-0700 (PDT)--><head>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><!--vrize conversion performed on Wed Apr 25 2018 20:00:22 GMT-0700 (PDT)--><head>
 		<title>three.js webgl - lights - physical lights</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -52,6 +52,11 @@
 
 		<script>if (!Detector.webgl) Detector.addGetWebGLMessage();
 
+//vrize add start
+var dolly;
+dolly = new THREE.Object3D();
+dolly.position.set(0, 2, 4);
+//vrize add end
 var camera, scene, renderer,
     bulbLight, bulbMat, hemiLight,
     object, loader, stats;
@@ -99,11 +104,6 @@ init();
 animate();
 
 function init() {
-    //vrize add start
-    dolly = new THREE.Object3D();
-    dolly.position.set(0, 0, 4);
-    //vrize add end
-
 
     var container = document.getElementById('container');
 
@@ -264,10 +264,6 @@ function init() {
 
 
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    //vrize add start
-    var dolly;
-    //vrize add end
-
 
     window.addEventListener('resize', onWindowResize, false);
 

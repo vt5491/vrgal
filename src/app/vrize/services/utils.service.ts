@@ -108,5 +108,28 @@ export class UtilsService {
     // refNode.parentNode.insertAfter(newNode, refNode);
   }
 
+  escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  }
+
+  // Given a newlined terminated script return the line number that patten (pat)
+  // first appears on.  This is useful in unit testing when parsing returned
+  // results. Note: first line = line number 0, although keep in mind that
+  // leading "\n" will count as a line, so sometime the line number isn't 
+  // what you might expect.
+  getLineNum(text: string, pat: RegExp) : number {
+    let lines = text.split('\n');
+
+    let lineNum = null;
+
+    for(let i=0; i < lines.length; i++) {
+      if( lines[i].match(pat)) {
+        lineNum = i;
+        break
+      } 
+    }
+
+    return lineNum;
+  } 
 
 }

@@ -28,4 +28,5 @@ describe('BaseService', () => {
     expect(service.jsMarkupCommentBegin).toBeTruthy();
     expect(service.jsMarkupCommentEnd).toBeTruthy();
   });
+
 });
