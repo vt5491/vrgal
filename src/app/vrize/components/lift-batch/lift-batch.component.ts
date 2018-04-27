@@ -130,7 +130,9 @@ export class LiftBatchComponent implements OnInit {
       // // example.lifted = 0;
       // this.examples.setLifted(example);
 
-      example.lifted = true;
+      // example.lifted = true;
+      // example.lift_code = 10;
+      example.lift_code = this.examples.lift_successful;
       // example.lifted = false;
       // // example.lifted = 1;
       this.examples.setLifted(example);

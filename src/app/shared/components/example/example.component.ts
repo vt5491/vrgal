@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class ExampleComponent implements OnInit {
   id : number;
   name : string;
-  lifted: boolean;
+  // lifted: boolean;
+  lift_code: number;
 
   constructor() { }
 

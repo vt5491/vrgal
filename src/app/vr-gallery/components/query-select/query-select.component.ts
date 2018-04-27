@@ -37,15 +37,15 @@ export class QuerySelectComponent implements OnInit {
   // http://localhost:3000/examples/260
   // http://192.168.50.126:3000/examples/260
   constructor(
-    private http: HttpClient, 
-    private base: CoreBaseService, 
+    private http: HttpClient,
+    private base: CoreBaseService,
     private utils: CoreUtilsService,
     private router: Router,
     private examples: ExamplesService,
-  ) { 
+  ) {
     // super()
     console.log('QuerySelectComponent.ctor: entered');
-    //TODO: rename base.vrizeSvcUrl to somehting like 'db-server' or 
+    //TODO: rename base.vrizeSvcUrl to somehting like 'db-server' or
     // 'meta-data-server'
     console.log(`QuerySelectComponent.ctor: base.vrizeSvcUrl=${base.vrizeSvcUrl}`);
   }
@@ -59,7 +59,7 @@ export class QuerySelectComponent implements OnInit {
     console.log('QuerySelectComponent.ngOnInit: entered');
 
     // let exampleResults : Object[] = [];
-    
+
     let scene: any = document.querySelector('a-scene');
     let sbBox: any = document.querySelector('#sb-query');
     let allBox: any = document.querySelector('#all-query');
@@ -68,7 +68,7 @@ export class QuerySelectComponent implements OnInit {
     sbBox.addEventListener('click', () => {
       console.log(`querySelect.clickHandler: click genned`);
       console.log(`querySelect.clickHandler: doing api route`);
-      
+
       this.querySandbox()
     });
 
@@ -86,10 +86,10 @@ export class QuerySelectComponent implements OnInit {
     // let exObservable_3 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/15.json`, new THREE.Vector3(6, 0 ,0))
 
     // exObservable_1.subscribe(
-    //   rsp => { 
-    //     let data: any = rsp; 
-    //     data.pos = {}; 
-    //     data.pos.x=-4; 
+    //   rsp => {
+    //     let data: any = rsp;
+    //     data.pos = {};
+    //     data.pos.x=-4;
     //     data.pos.y = -8;
     //     this.aggregateResults(data)
     //   },
@@ -101,7 +101,8 @@ export class QuerySelectComponent implements OnInit {
     // exObservable_3.subscribe(this.aggregateResults.bind(this))
 
     let httpParams = new HttpParams();
-    httpParams = httpParams.append('col', 'lift_failure_code');
+    // httpParams = httpParams.append('col', 'lift_failure_code');
+    httpParams = httpParams.append('col', 'lift_code');
     let lf_codes = ['-2'];
     lf_codes.forEach(lfc => {
       httpParams = httpParams.append('in[]', lfc);
@@ -151,7 +152,7 @@ export class QuerySelectComponent implements OnInit {
     catch (e) {
       console.log(`QuerySelectComponent.queryAll: e=${e}`);
     }
-    
+
 
   }
 
@@ -199,7 +200,7 @@ export class QuerySelectComponent implements OnInit {
       data[i].pos = {}
       data[i].pos.x = xPos
       data[i].pos.y = yPos
-      
+
       this.aggregateResults(data[i])
 
       xPos += 4
@@ -212,13 +213,13 @@ export class QuerySelectComponent implements OnInit {
     //   // and increment the stats
     //   let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data[i].id}/stats.json`;
     //   console.log(`processResults.statsUrl=${statsUrl}`);
-      
+
 
     //   this.examples.get(statsUrl)
     //     .subscribe(
     //       rsp => {
     //         // debugger;
-    //         // let result= (rsp as any).json(); 
+    //         // let result= (rsp as any).json();
     //         console.log(`id=${data[i].id}, likes=${(rsp[0] as any).likes}`)} ,
     //       err => { console.log(`err=${err.message}`)}
     //   )
@@ -241,7 +242,7 @@ export class QuerySelectComponent implements OnInit {
     // We have to use sessionStorage to transfer data among routes, because a
     // pure a-frame link is more of a pure DOM transfer and is kind of out reach
     // of the NG environment, thus NG injects new services into the
-    // transferred-to component instead of the existing one. 
+    // transferred-to component instead of the existing one.
     sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
 
     // create dynamic link

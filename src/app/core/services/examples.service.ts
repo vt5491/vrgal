@@ -13,13 +13,16 @@ import { CoreBaseService } from './core-base.service';
 @Injectable()
 export class ExamplesService {
   server : URL;
+  lift_successful : number;
 
   constructor(
     private base : CoreBaseService,
     private http: HttpClient
-  ) { 
+  ) {
     // this.server = new URL('http://localhost:3000');
     this.server = new URL(this.base.vrizeSvcUrl);
+
+    this.lift_successful = 10;
   }
 
   getMetaData() {
@@ -38,10 +41,10 @@ export class ExamplesService {
       }),
       params: params
     };
-  
+
   // let url = `${this.server}${route}.json`;
   // console.log(`MetaDataExamples.get: url=${url}`);
-  
+
 
   // return this.http.get(url, httpOptions)
   return this.http.get(route, httpOptions)
@@ -53,18 +56,26 @@ export class ExamplesService {
     // var body = {'lifted': '1'};
     var body = new Object();
 
-    if (example.lifted == null) {
-      // body['lifted'] = 1;
-      body['lifted'] = true;
-    }
-    else {
-      // body['lifted'] = example.lifted ? 1 : 0;
-      body['lifted'] = example.lifted;
-    }
+    body['example'] = {};
+
+    // if (example.lifted == null) {
+    // if (example.lift_code == null) {
+    //   // body['lifted'] = 1;
+    //   body['lifted'] = true;
+    // }
+    // else {
+    //   // body['lifted'] = example.lifted ? 1 : 0;
+    //   // body['lifted'] = example.lifted;//orig
+    //   // body['lift_code'] = example.lift_code;
+    //   body['lift_code'] = 10;
+    // }
+    // body['example']['lift_code'] = 10;
+    // body['lift_code'] = example.lift_code;
+    body['example']['lift_code'] = example.lift_code;
     // body['lifted'] = false;
-    console.log(`setLifted: body[lifted]=${body['lifted']}`);
+    // console.log(`setLifted: body[lifted]=${body['lifted']}`);
     // body['lifted_at'] = "2018-03-16 22:00:00"
-    
+
 
     // let url = 'examples/${example.id}';
     // let url = `${this.server}examples/${example.id}.json`;
@@ -79,12 +90,12 @@ export class ExamplesService {
   //       headers: myheader),
   // })
   // .subscribe();
-    
+
   }
 
   put(route: string, body) {
     console.log(`Examples.service.post: route=${route}, body=${JSON.stringify(body)}`);
-    
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -106,7 +117,7 @@ export class ExamplesService {
   // single query and generate less overhead.
   getExampleIds(files : Array<string>) {
     console.log(`ExamplesService.getExampleIds: entered`);
-    
+
     let result = {};
 
     // let url = this.server.toString();
@@ -125,7 +136,7 @@ export class ExamplesService {
       }),
       params : params
     }
-    
+
     return this.http.get(url, httpOptions);
   }
 

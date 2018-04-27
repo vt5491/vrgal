@@ -186,7 +186,8 @@ export class LiftComponent implements OnInit {
       // // example.lifted = 0;
       // this.examples.setLifted(example);
 
-      example.lifted = true;
+      // example.lifted = true;
+      example.lift_code = 10;
       // example.lifted = false;
       // // example.lifted = 1;
       this.examples.setLifted(example);
