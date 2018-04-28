@@ -175,7 +175,13 @@ AFRAME.registerSystem('system-utils', {
     // Note: the 'false' makes it synchronous.  We have to do is synchronously
     // otherwise the 'onload' event is not driven becuase the example web page
     // has already assumed control, and the onload event handler is no longer there.
-    xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, false);
+    // xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, false);
+    // Note: I now have to set this to true otherwise I get error:
+    // Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user’s experience.^
+    // and then a network error and the link doens't work
+    // TODO: figure out a way to update stats asynchronously (?)
+    // maybe turn the onload into a service worker, not tied to client?
+    xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
       console.log(`onLoad: xhr.status=${xhr.status}`);

@@ -224,6 +224,22 @@ export class QuerySelectComponent implements OnInit {
     //       err => { console.log(`err=${err.message}`)}
     //   )
     }
+    // create dynamic link
+    // We can do an offical NG route with something like 'this.router.navigate',
+    // but that drops the a-frame vr-mode, and you can't carry vr mode into the
+    // next route (all "quantum" transfers require a user-gesture, thus the user
+    // *must* do a click to do a vr transfer).
+    let scene: any = document.querySelector('a-scene');
+
+    let evtDetail = {}
+    evtDetail['href'] = `vr-gallery/results-scene`
+    evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
+    evtDetail['title'] = "View Results";
+    let appPrefix = this.base.appPrefix
+    let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
+    evt.initEvent(`${appPrefix}_createlink`, true, true);
+    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+    scene.dispatchEvent(evt)
 
     // and finally, transfer to it
     // this.transferToResultsScene();
@@ -245,22 +261,6 @@ export class QuerySelectComponent implements OnInit {
     // transferred-to component instead of the existing one.
     sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
 
-    // create dynamic link
-    // We can do an offical NG route with something like 'this.router.navigate',
-    // but that drops the a-frame vr-mode, and you can't carry vr mode into the
-    // next route (all "quantum" transfers require a user-gesture, thus the user
-    // *must* do a click to do a vr transfer).
-    let scene: any = document.querySelector('a-scene');
-
-    let evtDetail = {}
-    evtDetail['href'] = `vr-gallery/results-scene`
-    evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
-    evtDetail['title'] = "View Results";
-    let appPrefix = this.base.appPrefix
-    let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
-    evt.initEvent(`${appPrefix}_createlink`, true, true);
-    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
-    scene.dispatchEvent(evt)
   }
 
   // Unfortunately, this does not invoke a user-gesture, thus if you transfer
