@@ -28,7 +28,8 @@
         "assets/libs/aframe/save-state.js",
         "assets/libs/aframe/system-base.js",
         "assets/libs/aframe/system-utils.js",
-        "assets/libs/grab-vt.js"
+        "assets/libs/grab-vt.js",
+        "assets/libs/aframe/hand-controls-vt.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
