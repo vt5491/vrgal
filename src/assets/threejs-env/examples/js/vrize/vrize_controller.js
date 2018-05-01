@@ -261,7 +261,7 @@ window.addEventListener( 'vr controller connected', function( event ){
   }
 
   function updateDollyPos () {
-    let tmpControllerPos = controller.position.clone();
+    // let tmpControllerPos = controller.position.clone();
     let yAxis = new THREE.Vector3(0,1,0);
     let deltaVec = new THREE.Vector3();
     deltaVec.x = (controller.position.x - firstControllerPos.x) * sf

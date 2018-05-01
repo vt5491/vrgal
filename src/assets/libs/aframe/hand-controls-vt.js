@@ -1,5 +1,5 @@
 /* global THREE */
-var registerComponent = require('../core/component').registerComponent;
+//vt var registerComponent = require('../core/component').registerComponent;
 
 // Found at https://github.com/aframevr/assets.
 var MODEL_URLS = {
@@ -44,11 +44,12 @@ EVENTS[ANIMATIONS.thumb] = 'thumb';
  *
  * @property {string} Hand mapping (`left`, `right`).
  */
-module.exports.Component = registerComponent('hand-controls-vt', {
+// module.exports.Component = registerComponent('hand-controls-vt', {
+AFRAME.registerComponent('hand-controls-vt', {
   schema: {default: 'left'},
 
   init: function () {
-    console.log(`hand-controls-vr.init: entered`);
+    console.log(`hand-controls-vt.init: entered`);
     var self = this;
     var el = this.el;
     // Current pose.
@@ -252,7 +253,8 @@ module.exports.Component = registerComponent('hand-controls-vt', {
     // Works well with Oculus Touch and Windows Motion Controls, but Vive needs tweaks.
     if (isGripActive) {
       if (isVive) {
-        gesture = ANIMATIONS.fist;
+        //vt gesture = ANIMATIONS.fist;
+        gesture = ANIMATIONS.point;
       } else
         if (isSurfaceActive || isABXYActive || isTrackpadActive) {
           gesture = isTriggerActive ? ANIMATIONS.fist : ANIMATIONS.point;
@@ -267,6 +269,7 @@ module.exports.Component = registerComponent('hand-controls-vt', {
       }
     }
 
+    // console.log(`hand-controls-vt.determineGesture: gesture=${gesture}`);
     return gesture;
   },
 
@@ -300,6 +303,7 @@ module.exports.Component = registerComponent('hand-controls-vt', {
 
     // Emit event for current gesture now active.
     eventName = getGestureEventName(gesture, true);
+    // console.log(`vt: hand-gesture-vt.emitGestureEvents: gesture=${gesture}, eventName=${eventName}`);
     if (eventName) { el.emit(eventName); }
   },
 
@@ -372,6 +376,12 @@ function getGestureEventName (gesture, active) {
   if (eventName === 'pointing' || eventName === 'pistol') {
     return eventName + (active ? 'start' : 'end');
   }
+  //vt add
+  // Point + Thumb
+  if ( gesture.match(/Point/) ) {
+    return 'point' + (active ? 'up' : 'down');
+  }
+  //vt end
   return;
 }
 

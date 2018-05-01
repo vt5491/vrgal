@@ -113,6 +113,7 @@ AFRAME.registerComponent('wasd-plus-controls', {
     //if (this.inVrState) {
     //console.log(`tick: this.inVrState=${this.data.inVrState}`);
     //console.log(`tick: this.inVrState 2=${el.getAttribute('wasd-controls').inVrState}`);
+    //Note: this section seems to overwrite any rotations doen by 'grab-vt'
     if (this.data.inVrState === true) {
     //if (el.getAttribute('wasd-controls').inVrState === 'true') {
       rotation = el.getAttribute('rotation');
