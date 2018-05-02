@@ -43,11 +43,23 @@ AFRAME.registerComponent('save-state', {
     let appPrefix = ( (base && base.data.appPrefix) || 'VRGAL');
 
     let dolly = scene.querySelector('#dolly');
+    let dollyObj = dolly.object3D;
 
     let dollyPos = dolly.getAttribute('position');
     sessionStorage.setItem(`${appPrefix}_lastDollyPos`, JSON.stringify(dollyPos));
 
-    let dollyRot = dolly.getAttribute('rotation');
+    // let dollyRot = dolly.getAttribute('rotation');
+    let dollyRot = {};
+    // let dollyRot = dollyObj.rotation;
+      // Note: Object3D rotation keys are physically stored as "_x, _y, _z", presumably
+      // so the 'order' property can override.  There are wrapper "x", "y", and "z" methods
+      // however.  Thus we need to set each "xyz" in lastDollyRot individually e.g
+      // mass assignment will assign keys of "_x" etc.
+    dollyRot.x = dollyObj.rotation.x;
+    dollyRot.y = dollyObj.rotation.y;
+    dollyRot.z = dollyObj.rotation.z;
+
+    console.log(`save-state.saveState: dollyRot.y=${dollyRot.y}`);
     sessionStorage.setItem(`${appPrefix}_lastDollyRot`, JSON.stringify(dollyRot));
   },
 });

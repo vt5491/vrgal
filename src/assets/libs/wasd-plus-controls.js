@@ -92,6 +92,7 @@ AFRAME.registerComponent('wasd-plus-controls', {
     this.attachVisibilityEventListeners();
 		//vt add
 		this.vtDeltaRot = new THREE.Euler();
+    this.yAxis = new THREE.Vector3(0,1,0);
     console.log(`WasdComponent.init: vrState=${this.vrState}`);
 		//vt end
   },
@@ -99,6 +100,7 @@ AFRAME.registerComponent('wasd-plus-controls', {
   tick: function (time, delta) {
     var data = this.data;
     var el = this.el;
+    var elObj = el.object3D;
     var movementVector;
     var position;
     var velocity = this.velocity;
@@ -115,15 +117,19 @@ AFRAME.registerComponent('wasd-plus-controls', {
     //console.log(`tick: this.inVrState 2=${el.getAttribute('wasd-controls').inVrState}`);
     //Note: this section seems to overwrite any rotations doen by 'grab-vt'
     if (this.data.inVrState === true) {
-    //if (el.getAttribute('wasd-controls').inVrState === 'true') {
-      rotation = el.getAttribute('rotation');
-      //console.log(`tick: now updating rotation`);``
+      //if (el.getAttribute('wasd-controls').inVrState === 'true') {
+      // rotation = el.getAttribute('rotation');
+      // //console.log(`tick: now updating rotation`);``
+      //
+      // el.setAttribute('rotation', {
+      //   x: rotation.x + this.vtDeltaRot.x,
+      //   y: rotation.y + this.vtDeltaRot.y,
+      //   z: rotation.z + this.vtDeltaRot.z
+      // });
 
-        el.setAttribute('rotation', {
-          x: rotation.x + this.vtDeltaRot.x,
-          y: rotation.y + this.vtDeltaRot.y,
-          z: rotation.z + this.vtDeltaRot.z
-        });
+      elObj.rotation.x += this.vtDeltaRot.x;
+      elObj.rotation.y += this.vtDeltaRot.y;
+      elObj.rotation.z += this.vtDeltaRot.z;
     }
     else {
         el.setAttribute('rotation', {
@@ -139,6 +145,13 @@ AFRAME.registerComponent('wasd-plus-controls', {
 
     // Get movement vector and translate position.
     movementVector = this.getMovementVector(delta);
+    //vt-x add
+    // adjust to rotation so "forward/backward" et al. changes accordingly to
+    // the rotation direction (e.g relative movement not absolute).
+    // No. we don't need to do this as 'getMovementVector' is supposed to take cameraEl
+    // of this already.
+    // movementVector.applyAxisAngle(this.yAxis, el.object3D.rotation.y);
+    //vt-x end
     position = el.getAttribute('position');
 		//vt add
 		// console.log(`aframeMaster: movementVector.x=${movementVector.x}`);
@@ -239,7 +252,8 @@ AFRAME.registerComponent('wasd-plus-controls', {
       // console.log(`aframeMaster: velocity[pnAxis]=${velocity[pnAxis]}`);
     }
     if (keys.KeyQ || keys.KeyE) {
-      var rotation = this.el.getAttribute('rotation');
+      //vt-x var rotation = this.el.getAttribute('rotation');
+      var rotation = this.el.object3D.rotation;
 
 			//if (keys.KeyQ) { this.vtDeltaRot.y +=  Math.PI / 180.0 * 5}
 			//if (keys.KeyE) { this.vtDeltaRot.y -=  Math.PI / 180.0 * 5}
@@ -264,7 +278,8 @@ getMovementVector: (function () {
   var rotationEuler = new THREE.Euler(0, 0, 0, 'YXZ');
 
   return function (delta) {
-    var rotation = this.el.getAttribute('rotation');
+    //vt-x var rotation = this.el.getAttribute('rotation');
+    var rotation = this.el.object3D.rotation;
     var velocity = this.velocity;
 
     //vt add

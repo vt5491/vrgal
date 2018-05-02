@@ -123,7 +123,7 @@ AFRAME.registerSystem('system-utils', {
   // the example looks like.
   // helper method
   addLinkHoverEvtListener: function(linkEl) {
-    console.log(`SU.addLinkHoverEvtListener: entered`);
+    // console.log(`SU.addLinkHoverEvtListener: entered`);
 
     linkEl.addEventListener('mouseenter', (e) => {
       console.log(`SU:mouseenter activated`);
@@ -301,7 +301,7 @@ AFRAME.registerSystem('system-utils', {
     sceneEl.systems['system-utils'].addViewSourceClickHandler(btnEl, exampleRoot);
   },
   addViewSourceHoverListener: function(linkEl) {
-    console.log(`SU.addViewSourceHoverListener: entered`);
+    // console.log(`SU.addViewSourceHoverListener: entered`);
 
     linkEl.addEventListener('mouseenter', (e) => {
       console.log(`SU.addViewSourceHoverListener:mouseenter activated`);

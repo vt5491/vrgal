@@ -143,6 +143,7 @@ AFRAME.registerComponent('grab', {
 
   tick: function () {
     let dollyEl = document.querySelector('#dolly');
+    let dollyObj = dollyEl.object3D;
     // // console.log(`dollyEl.rot.y pre=${dollyEl.getAttribute('rotation').y}`);
     // let tmpRot = dollyEl.getAttribute('rotation');
     // // let tmpRot = Object.assign({}, dollyEl.getAttribute('rotation'));
@@ -161,17 +162,18 @@ AFRAME.registerComponent('grab', {
       var rotation;
 
       this.updateDeltaRot();
+      let pullLeverage;
       // console.log(`grab-vt.tick: deltaRotation.y=${this.deltaRotation.y}`);
-      let pullLeverage = 0.75;
+      // pullLeverage = 0.75;
       // let pullLeverage = 30.0;
-      // let dollyObj = dollyEl.object3D;
-      rotation = dollyEl.getAttribute('rotation');
-      // rotation = cameraEl.getAttribute('rotation');
-      dollyEl.setAttribute('rotation', {
-        y: rotation.y - this.deltaRotation.y * pullLeverage
-        // y: this.deltaRotation.y * pullLeverage,
-      //   // z: rotation.z - this.deltaRotation.z * pullLeverage
-      });
+      // rotation = dollyEl.getAttribute('rotation');
+      // dollyEl.setAttribute('rotation', {
+      //   y: rotation.y - this.deltaRotation.y * pullLeverage
+      // });
+      let dollyObj = dollyEl.object3D;
+      // pullLeverage = 0.075;
+      pullLeverage = 0.05;
+      dollyObj.rotation.y -= this.deltaRotation.y * pullLeverage;
       // console.log(`grab-vt.tick: dollyEl.rotation.y=${dollyEl.getAttribute('rotation')}`);
       // cameraObj.rotation.y += this.deltaRotation.y * pullLeverage;
     }
@@ -273,6 +275,7 @@ AFRAME.registerComponent('grab', {
   //vt add
   updateDeltaRot: function () {
     var currentRotation = this.el.getAttribute('rotation');
+    // var currentRotation = this.el.object3D.rotation;
     if (Object.keys(this.previousRotation).length === 0) {
       // need to do a deep copy
       this.previousRotation = Object.assign({}, currentRotation);

@@ -10,6 +10,35 @@ function addAfCntrl(event) {
   console.log(`vrize_cntrl.addAfCntrl: entered, dolly=${dolly}`);
 }
 
+// var a; var f = function(devs){ a = devs}; navigator.getVRDisplays().then(f);
+var vrize_hmdType;
+
+// htc vive needs a 90 deg. rotation factor, so we need to determine if this is
+// an htc vive or not.  Unfortunately, there does not appear to be an official way
+// to do this, so we have to hack something up.  This was emprically determined
+// by comparing an HTC Vive 1, and an oculus rift v1.
+// see: https://stackoverflow.com/questions/38984951/how-to-detect-desktop-vs-mobile-vs-gearvr-vs-oculus-rift-vs-vive-in-a-frame
+function vrize_setHmdType() {
+  navigator.getVRDisplays().then((devs) => {
+    let dev = devs[0];
+
+    if (dev) {
+      if (dev.displayName.match(/Oculus/)) {
+        vrize_hmdType = "oculus_rift";
+      }
+      else if (
+        dev.displayName.match(/OpenVR/) &&
+        dev.stageParameters.sizeX &&
+        dev.stageParameters.sizeX > 1 ){
+          vrize_hmdType = "htc_vive";
+        }
+      console.log(`vrize_setHmdType: vrize_hmdType=${vrize_hmdType}`);
+    }
+  });
+}
+
+vrize_setHmdType();
+
 window.addEventListener( 'vr controller connected', function( event ){
   console.log(`vrize_controller.VRController now activated!`);
 
@@ -38,6 +67,10 @@ window.addEventListener( 'vr controller connected', function( event ){
 	//vt controller.head = window.camera
   //vt key!
 	controller.head = window.dolly
+  //vt-x add
+  // vive 90 rotation
+  // window.dolly.rotation.y -= Math.PI / 2.0;
+  //vt-x end
 
 	//  Right now your controller has no visual.
 	//  It’s just an empty THREE.Object3D.
@@ -267,7 +300,14 @@ window.addEventListener( 'vr controller connected', function( event ){
     deltaVec.x = (controller.position.x - firstControllerPos.x) * sf
     deltaVec.y = (controller.position.y - firstControllerPos.y) * sf
     deltaVec.z = (controller.position.z - firstControllerPos.z) * sf
-    deltaVec.applyAxisAngle(yAxis, dolly.rotation.y);
+    //vt-x deltaVec.applyAxisAngle(yAxis, dolly.rotation.y);
+    // console.log(`updateDollyPos: vrize_hmdType=${vrize_hmdType}`);
+    if(vrize_hmdType && vrize_hmdType === 'htc_vive') {
+      deltaVec.applyAxisAngle(yAxis, dolly.rotation.y - 1 * Math.PI/ 2.0);
+    }
+    else {
+      deltaVec.applyAxisAngle(yAxis, dolly.rotation.y);
+    }
     dolly.position.x = firstDollyPos.x - deltaVec.x;
     dolly.position.y = firstDollyPos.y - deltaVec.y;
     dolly.position.z = firstDollyPos.z - deltaVec.z;
@@ -293,4 +333,5 @@ window.addEventListener( 'vr controller connected', function( event ){
 
 		controller.parent.remove( controller )
 	})
+
 })
