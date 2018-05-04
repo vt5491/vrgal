@@ -36,7 +36,8 @@
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts",
         "sea": "environments/environment.sea.ts",
-        "val": "environments/environment.val.ts"
+        "val": "environments/environment.val.ts",
+        "ec2": "environments/environment.ec2.ts"
       }
     }
   ],
