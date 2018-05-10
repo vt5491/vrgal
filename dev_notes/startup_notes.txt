@@ -8,6 +8,8 @@ express server: 3002
 a). cd to $VRGAL and type 'ng serve --aot --environment=sea --host 0.0.0.0'.  This will start the main angular SPA on
 port 4200
 
+Note: use ec2 for when running on AWS.
+
 Note: don't use --aot, if doing admin e.g. lifts (get a compiler not loaded error for some reason).
 
 (black on white console)
@@ -19,6 +21,8 @@ nodemon servers/data-examples/index2.js
 
 This will be port 3002.  It's the data server that updates the files in the git repo
 
+Only need this if running in admin mode.
+
 c) Start the the rails server.  cd to $VRZSRV and run
 (green on black console):
 
@@ -26,15 +30,24 @@ rails s
 
 This will start on port 3000, and the server interfaces with the meta-data in the mysql server.
 
-d) startup mysql session:
+d) Startup the meta-data proxy server:
+i)cd to $VRGAL root
+ii) startup with node (or nodemon if developing) 
+node servers/meta-data-proxy/index.js
+
+Note: run on same server as the rails server
+
+do "netstat -atn | grep 1337" to verify.
+
+e) startup mysql session:
 (blue whale console)
 mysql -u root -p
 
-e) if you want to lift files via the admin tool some links are:
+f) if you want to lift files via the admin tool some links are:
 http://localhost:4200/vrize/lift
 http://localhost:4200/vrize/lift-batch
 
-f) Note: ip addresses of the servers are specified in :
+g) Note: ip addresses of the servers are specified in :
 
 $VRGAL/src/app/core/services/core-base.service.ts
 

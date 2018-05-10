@@ -60,10 +60,10 @@ export class QuerySelectComponent implements OnInit {
     let ho = {headers:{'Content-Type': 'text/html'}, responseType: 'text'};
     let ho2 = {responseType: 'text'};
     //this.http.get('http://infinitewheelie.org/services/meta_data/note.json')
-    this.http.get('http://infinitewheelie.org/servers/meta-data-proxy')
-    .subscribe(
-      data => { console.log(`QuerySelectComponent.init: iw data=${data}, a=${data["a"]}`); },
-      err => {console.log(`QuerySelectComponent.init: iw err=${err.message}`)})
+    // this.http.get('http://infinitewheelie.org/servers/meta-data-proxy')
+    // .subscribe(
+    //   data => { console.log(`QuerySelectComponent.init: iw data=${data}, a=${data["a"]}`); },
+    //   err => {console.log(`QuerySelectComponent.init: iw err=${err.message}`)})
 //      //this.http.get('http://127.0.0.1/services/meta_data/note.json')
 //      //this.http.get('http://127.0.0.1:3000',{responseType: 'text'})
 //      //this.http.get('http://127.0.0.1:80',{responseType: 'text'})
@@ -177,7 +177,7 @@ export class QuerySelectComponent implements OnInit {
   //TODO: Better handle the situation where the service is not running.  Right now, if the server
   // has no network connetection you get no html response, and an esoteric error message on the console.
   // header("Access-Control-Allow-Origin: *");
-  // header('Access-Control-Allow-Credentials: true'); 
+  // header('Access-Control-Allow-Credentials: true');
   queryAll() {
     // this.expectedResultCnt = 4
 
@@ -191,7 +191,7 @@ export class QuerySelectComponent implements OnInit {
     //this.examples.get("http://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
     // works when running https
     //this.examples.get("https://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
-    .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`); 
+    .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`);
     //debugger;
     });
     // this.examples.getMetaData();
