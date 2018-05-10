@@ -38,14 +38,17 @@ export class ExamplesService {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         // 'Content-Type':  'text',
+        // I think these only have an effect if they're in the response headers
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials' : 'true'
       }),
       params: params
     };
 
   // let url = `${this.server}${route}.json`;
   // console.log(`MetaDataExamples.get: url=${url}`);
-
-
+  console.log(`ExampleService.get: route=${route}`);
+  //debugger;
   // return this.http.get(url, httpOptions)
   return this.http.get(route, httpOptions)
   }

@@ -75,7 +75,8 @@ export class ResultsSceneComponent implements OnInit {
     this.addExamplePopupImgs();
     this.addViewSourceBtns();
     this.addViewSrcClickHandler();
-    this.incStats("impressions");
+    //TODO: add back incStats after you flesh out proxy meta-data server
+    //this.incStats("impressions");
   }
 
   addLinks() {
@@ -464,6 +465,7 @@ export class ResultsSceneComponent implements OnInit {
     //   )
 
     // increment impressions stats
+    /*
     let stat = { 'impressions': null };
     statsUrl = `${this.base.vrizeSvcUrl}/examples/${data.id}/stats/increment.json`;
     this.examples.put(statsUrl, stat)
@@ -472,6 +474,7 @@ export class ResultsSceneComponent implements OnInit {
         rsp => { console.log(`ResultsSceneComoponent.incStats: rsp.impressions=${(rsp as any).impressions}`) },
         err => { console.log(`ResultsSceneComoponent.incStats: err=${err.message}`) }
       );
+      */
   } 
   
 

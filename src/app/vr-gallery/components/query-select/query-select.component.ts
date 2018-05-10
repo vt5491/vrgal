@@ -57,6 +57,24 @@ export class QuerySelectComponent implements OnInit {
 
   init() {
     console.log('QuerySelectComponent.ngOnInit: entered');
+    let ho = {headers:{'Content-Type': 'text/html'}, responseType: 'text'};
+    let ho2 = {responseType: 'text'};
+    //this.http.get('http://infinitewheelie.org/services/meta_data/note.json')
+    this.http.get('http://infinitewheelie.org/servers/meta-data-proxy')
+    .subscribe(
+      data => { console.log(`QuerySelectComponent.init: iw data=${data}, a=${data["a"]}`); },
+      err => {console.log(`QuerySelectComponent.init: iw err=${err.message}`)})
+//      //this.http.get('http://127.0.0.1/services/meta_data/note.json')
+//      //this.http.get('http://127.0.0.1:3000',{responseType: 'text'})
+//      //this.http.get('http://127.0.0.1:80',{responseType: 'text'})
+//      //this.http.get('http:0.0.0.0',{responseType: 'text'})
+//      //this.http.get('http:',{responseType: 'text'})
+//      //this.http.get('',{responseType: 'text'}) //works weird..default string is infinitewheelie.org:80
+//      //this.http.get('http:localhost:3000', {responseType: 'text'}) //works..in a weird way
+//      this.http.get('http://localhost:3000', {responseType: 'text'})
+//    .subscribe(
+//      data => { console.log(`QuerySelectComponent.init: local data=${data.substring(0,500)}`); },
+//      err => {console.log(`QuerySelectComponent.init: local err=${err.message}`)})
 
     // let exampleResults : Object[] = [];
 
@@ -158,13 +176,25 @@ export class QuerySelectComponent implements OnInit {
 
   //TODO: Better handle the situation where the service is not running.  Right now, if the server
   // has no network connetection you get no html response, and an esoteric error message on the console.
+  // header("Access-Control-Allow-Origin: *");
+  // header('Access-Control-Allow-Credentials: true'); 
   queryAll() {
     // this.expectedResultCnt = 4
 
     // let exObservable = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`, new THREE.Vector3(-6, 0 ,0))
     try {
-      this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
-        .subscribe(this.processResults.bind(this));
+    //debugger;
+    this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
+    //this.examples.get("http://127.0.0.1:3000/examples/260.json")
+    //this.examples.get("http://infinitewheelie.org:3000/examples/260.json")
+    // works when running http
+    //this.examples.get("http://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
+    // works when running https
+    //this.examples.get("https://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
+    .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`); 
+    //debugger;
+    });
+    // this.examples.getMetaData();
     }
     catch (e) {
       console.log(`QuerySelectComponent.queryAll: e=${e}`);
