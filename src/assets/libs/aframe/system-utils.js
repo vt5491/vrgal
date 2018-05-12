@@ -126,7 +126,7 @@ AFRAME.registerSystem('system-utils', {
     // console.log(`SU.addLinkHoverEvtListener: entered`);
 
     linkEl.addEventListener('mouseenter', (e) => {
-      console.log(`SU:mouseenter activated`);
+      // console.log(`SU:mouseenter activated`);
       // debugger;
       let tgtId = e.target.id;
       let exampleRoot = tgtId.replace(/-link$/, '')
@@ -146,7 +146,7 @@ AFRAME.registerSystem('system-utils', {
     });
 
     linkEl.addEventListener('mouseleave', (e) => {
-      console.log(`SU:mouseleave activated`);
+      // console.log(`SU:mouseleave activated`);
       // let el = document.querySelector('#img_0');
       let tgtId = e.target.id;
       let exampleRoot = tgtId.replace(/-link/, '');

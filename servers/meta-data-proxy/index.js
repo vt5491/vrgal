@@ -32,10 +32,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var setCors = function(req, res, next) {
   console.log(`index2.js: now setting cors`);
   // Set CORS headers
+  // Since this is a proxy-server, and will be made publically avaialable (and
+  // therefore is presumably locked-down e.g. no deleting of records allowed,
+  // updates only under controlled circumstances etc), it's ok that it's
+  // accessible to everyone. And indeed it *needs* to be accessible by everyone.
+  // On the AWS side this is called via apache2 proxy_pass, so the origin would
+  // be localhost anyway.  On development,  we call it directly, but while port
+  // 1337 is open on development, it's not on ec2. Therefore, we probably could
+  // restrict remote origins to localhost and any ip networks used during
+  // development. But since the intent is to be widely accessible anyway this
+  // would just be overkill (?).
+  //
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type, responsetype, write-to-tmp');
+  //res.setHeader('Access-Control-Allow-Headers', 'content-type, responsetype, write-to-tmp');
+  res.setHeader('Access-Control-Allow-Headers',
+    'content-type, responsetype, write-to-tmp, access-control-allow-origin, access-control-allow-credentials');
 
   next();
 }
@@ -55,23 +68,13 @@ app.get("/examples/all_lifted.json", (req, resOuter, next) => {
       }
       else {
         //res.end(body)
-        console.log(`res.statusCode=${res.statusCode}, body=${body}`);
         console.log(`examples/all_lifted: got good status code`);
-        //console.log(`res=${res}`);
-        //console.log(util.inspect(res, {showHidden: false, depth: null}))
-        //res.end(body)
-        //req.end(body)
-        //res.send(data)
-        //res.send(body)
-        //res.body
-        //res.status(200).send(body);
-        //resOuter.type('json');
-        //resOuter.setHeader('responseType', 'text');
         resOuter.send(body);
       }
     });
 })
 
+/*
 app.get("/examples/abc.json", (req, res, next) => {
   res.type('json');
   res.setHeader('responseType', 'text');
@@ -136,6 +139,7 @@ app.get("examples/all_lifted_2", (req, resOuter, next) => {
 
   req.end();
 })
+*/
 
 //app.get("/examples/:example", (req, res, next) => {
 //  console.log(`route match, req.params['example:']=${req.params['example:']}`);

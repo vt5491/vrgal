@@ -44,10 +44,11 @@ describe('ParserService', () => {
     // TestBed.resetTestEnvironment();
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
-      // Note: we purposely do *not* provide an HttpHandler here.  If we do specify 'HttpHandler'
-      // then TestBed will provide a test HttpHandler for the HttpClient, and it doesn't have
-      // a 'handle' method, and the file read won't work.  We probably shouldn't have 'HttpClient'
-      // in here either, but it works anyway, so leave it in.
+      // Note: we purposely do *not* provide an HttpHandler here.  If we do
+      // specify 'HttpHandler' then TestBed will provide a test HttpHandler for
+      // the HttpClient, and it doesn't have a 'handle' method, and the file
+      // read won't work.  We probably shouldn't have 'HttpClient' in here
+      // either, but it works anyway, so leave it in.
       providers: [HttpClient]
     })
     let http = TestBed.get(HttpClient);

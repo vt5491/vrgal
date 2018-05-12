@@ -57,8 +57,8 @@ export class QuerySelectComponent implements OnInit {
 
   init() {
     console.log('QuerySelectComponent.ngOnInit: entered');
-    let ho = {headers:{'Content-Type': 'text/html'}, responseType: 'text'};
-    let ho2 = {responseType: 'text'};
+    // let ho = {headers:{'Content-Type': 'text/html'}, responseType: 'text'};
+    // let ho2 = {responseType: 'text'};
     //this.http.get('http://infinitewheelie.org/services/meta_data/note.json')
     // this.http.get('http://infinitewheelie.org/servers/meta-data-proxy')
     // .subscribe(
@@ -97,26 +97,6 @@ export class QuerySelectComponent implements OnInit {
   }
 
   querySandbox() {
-    // this.expectedResultCnt = 3
-
-    // let exObservable_1 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/260.json`, new THREE.Vector3(-6, 0 ,0))
-    // let exObservable_2 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/288.json`, new THREE.Vector3(0, 0 ,0))
-    // let exObservable_3 = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/15.json`, new THREE.Vector3(6, 0 ,0))
-
-    // exObservable_1.subscribe(
-    //   rsp => {
-    //     let data: any = rsp;
-    //     data.pos = {};
-    //     data.pos.x=-4;
-    //     data.pos.y = -8;
-    //     this.aggregateResults(data)
-    //   },
-    //   err => { console.log(`querySandbox: err=${err.message}`);
-    //   }
-    // )
-    // // exObservable_1.subscribe(this.processResults.bind(this))
-    // exObservable_2.subscribe(this.aggregateResults.bind(this))
-    // exObservable_3.subscribe(this.aggregateResults.bind(this))
 
     let httpParams = new HttpParams();
     // httpParams = httpParams.append('col', 'lift_failure_code');
@@ -170,20 +150,12 @@ export class QuerySelectComponent implements OnInit {
     catch (e) {
       console.log(`QuerySelectComponent.queryAll: e=${e}`);
     }
-
-
   }
 
   //TODO: Better handle the situation where the service is not running.  Right now, if the server
   // has no network connetection you get no html response, and an esoteric error message on the console.
-  // header("Access-Control-Allow-Origin: *");
-  // header('Access-Control-Allow-Credentials: true');
   queryAll() {
-    // this.expectedResultCnt = 4
-
-    // let exObservable = this.getExampleObservable(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`, new THREE.Vector3(-6, 0 ,0))
     try {
-    //debugger;
     this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
     //this.examples.get("http://127.0.0.1:3000/examples/260.json")
     //this.examples.get("http://infinitewheelie.org:3000/examples/260.json")
@@ -206,25 +178,35 @@ export class QuerySelectComponent implements OnInit {
   //TODO: use example service to do get.  Don't use this
   //no..ok
   // actually, I think I really *should* use 'examples.service.ts'
-  getExampleObservable(apiURL: string, pos: THREE.Vector3) {
-    try {
-      return this.http.get(apiURL)
-        .map(res => {
-          let result = res;
-          return result;
-        });
-    }
-    catch(e) {
-      console.log(`try-catch-1: e=${e}`);
-      // debugger;
-    }
-  }
+  // getExampleObservable(apiURL: string, pos: THREE.Vector3) {
+  //   try {
+  //     return this.http.get(apiURL)
+  //       .map(res => {
+  //         let result = res;
+  //         return result;
+  //       });
+  //   }
+  //   catch(e) {
+  //     console.log(`try-catch-1: e=${e}`);
+  //     // debugger;
+  //   }
+  // }
 
   // process a  many rowed result
   processResults(data) {
-    let xPos = -8;
-    let yPos = 10;
+    // let xPos = -8;
+    // let yPos = 10;
     // debugger;
+    let grid : any = this.utils.gridicize(data.length, 1.25);
+    // let grid : any = this.utils.gridicize(data.length, 1.5);
+    let rows = grid.rows;
+    let cols = grid.cols;
+    // separate a-frame links by 4 units
+    let elemWidth = 4;
+    let elemHeight = 4;
+    let leftPosX = -1 * (cols / 2) * elemWidth;
+    let xPos = leftPosX;
+    let yPos = 10;
 
     for(let i=0; i < data.length; i++) {
       data[i].pos = {}
@@ -233,11 +215,15 @@ export class QuerySelectComponent implements OnInit {
 
       this.aggregateResults(data[i])
 
-      xPos += 4
+      // xPos += 4
+      xPos += elemWidth;
 
-      if ((i + 1) % 5 == 0) {
-        xPos = -8;
-        yPos -= 4;
+      // if ((i + 1) % 5 == 0) {
+      if ((i + 1) % cols  == 0) {
+        // xPos = -8;
+        // yPos -= 4;
+        xPos = leftPosX;
+        yPos -= elemHeight;
       }
 
     //   // and increment the stats
