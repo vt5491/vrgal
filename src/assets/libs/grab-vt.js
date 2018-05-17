@@ -18,6 +18,8 @@ AFRAME.registerComponent('grab', {
     this.onHit = this.onHit.bind(this);
     this.onGripOpen = this.onGripOpen.bind(this);
     this.onGripClose = this.onGripClose.bind(this);
+    this.onThumbstickPress = this.onThumbstickPress.bind(this);
+    this.onMenuPressBegin = this.onMenuPressBegin.bind(this);
     //vt add
     this.onGripDown = this.onGripDown.bind(this);
     this.onGripUp = this.onGripUp.bind(this);
@@ -42,6 +44,10 @@ AFRAME.registerComponent('grab', {
     //el.addEventListener('gripdown', this.onGripDown, {once: true});
     el.addEventListener('gripdown', this.onGripDown);
     el.addEventListener('gripup', this.onGripUp);
+    // The following two entries  were in here for supermedium, but it turns
+    // out they provide it for you.  So, I will comment them out for now.
+    // el.addEventListener('thumbstick press began', this.onThumbstickPress);
+    // el.addEventListener('menu press began', this.onMenuPressBegin);
     // el.addEventListener('triggerdown', this.onTriggerDown);
     // el.addEventListener('triggerup', this.onTriggerClose);
     //vt end
@@ -105,7 +111,7 @@ AFRAME.registerComponent('grab', {
   },
 
   onGripDown: function (evt) {
-    // console.log(`now in onGripDown`);
+    console.log(`now in onGripDown`);
     this.gripping = true;
     // delete this.previousRotation;
     this.previousRotation = {};
@@ -128,6 +134,17 @@ AFRAME.registerComponent('grab', {
     this.pointing = false;
     // this.gripping = false;
     // delete this.previousPosition;
+  },
+
+  // oculus "go back to prior page"
+  onThumbstickPress: function (evt) {
+    window.history.back();
+  },
+
+  // vive "go back to prior page"
+  onMenuPressBegin: function (evt) {
+    console.log(`grab-vt: menu press began detected`);
+    window.history.back();
   },
   //vt end
 

@@ -22,7 +22,7 @@ While this can interesting for the casual user, it is also hoped this will be a 
 ### Motivation
 As a full-time professional software developer, and part-time amateur VR game programmer, one unfortunate fact of life I realized upon writing my first _real_ game is that _good enough_, is not _good enough_.  This is not necessarily true for "standard" apps where _good enough_ can be, well, _good enough_.  This is because a standard app has some utility even if it's not perfect, esp. if you're the only game in town.  
 
-But games are different.  Games are optional.  No one "has to" play your game.  They have to want to.  And people only have a limited time to play games.  And since there's plenty of competition (let's face it, every programmer and their brother wants to be a games programmer ), why should anyone play your stupid, non-polished, half-implemented game?  In short, the bar for acceptable in games in much higher than your standard workaday apps.
+But games are different.  Games are optional.  No one "has to" play your game.  They have to want to.  And people only have a limited time to play games.  And since there's plenty of competition (let's face it, every programmer and their brother wants to be a games programmer ), why should anyone play your stupid, non-polished, half-baked game?  In short, the bar for acceptable in games in much higher than your standard workaday apps.
 
 As a pure code-based programmer, probably the two best way to improve your game (literally and metaphorically) are by hiring a graphics artists (or learing yourself) to come up with more realistic meshes and other scene artifacts using a modeling tool such as Blender.  The other is to exploit some more advanced features of your graphics library, such as lighting and shaders. As a means toward this latter end, a good way to learn about the asthetics (rather than just the mechanics) of three.js is to browse and _study_ the three.js examples library.
 
@@ -30,7 +30,7 @@ Unfortunately, I found my motivation to browse the three.js examples  wane when 
 
 While this was an intersting result, I sure wasn't about to manually lift all the 300 or so available webgl-enabled examples. Instead, I created a simple [parser](https://github.com/vt5491/vrgal/blob/master/src/app/vrize/services/parser.service.ts) so I could atuomate the process, which will prove to be a necessary requirement since in practice, I've already had to lift each example several times as I add capabilities to the lift (such as adding controller support).  Note: the parser succeeds because almost all the examples are written in a very similar format, and the use almost identical naming convetions (for instance the cameral is almost always called *camera*, and the scene *scene*).  To parse and lift any aritrary examples (e.g. ones that are not in the examples library), would be a much more difficult task.
 
-So as of this writing, I've managed to lift about fifty examples with a sucess rate of about 67% (in short, I'm able to lift about 2 out of every 3 examples).
+So as of this writing, I've managed to lift about fifty examples with a success rate of about 67% (in short, I'm able to lift about 2 out of every 3 examples).
 
 I liken the examples library be like have a warehouse full of fine art paintings -- some of which are Picassos and Rembrandts, just sitting there waiting for someone to put them in a frame (the equivalent of VR-lifting) and hang them up somewhere.  That's what VRGAL is.
 

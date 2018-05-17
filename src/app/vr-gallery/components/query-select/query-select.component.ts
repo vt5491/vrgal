@@ -56,43 +56,24 @@ export class QuerySelectComponent implements OnInit {
   }
 
   init() {
-    console.log('QuerySelectComponent.ngOnInit: entered');
-    // let ho = {headers:{'Content-Type': 'text/html'}, responseType: 'text'};
-    // let ho2 = {responseType: 'text'};
-    //this.http.get('http://infinitewheelie.org/services/meta_data/note.json')
-    // this.http.get('http://infinitewheelie.org/servers/meta-data-proxy')
-    // .subscribe(
-    //   data => { console.log(`QuerySelectComponent.init: iw data=${data}, a=${data["a"]}`); },
-    //   err => {console.log(`QuerySelectComponent.init: iw err=${err.message}`)})
-//      //this.http.get('http://127.0.0.1/services/meta_data/note.json')
-//      //this.http.get('http://127.0.0.1:3000',{responseType: 'text'})
-//      //this.http.get('http://127.0.0.1:80',{responseType: 'text'})
-//      //this.http.get('http:0.0.0.0',{responseType: 'text'})
-//      //this.http.get('http:',{responseType: 'text'})
-//      //this.http.get('',{responseType: 'text'}) //works weird..default string is infinitewheelie.org:80
-//      //this.http.get('http:localhost:3000', {responseType: 'text'}) //works..in a weird way
-//      this.http.get('http://localhost:3000', {responseType: 'text'})
-//    .subscribe(
-//      data => { console.log(`QuerySelectComponent.init: local data=${data.substring(0,500)}`); },
-//      err => {console.log(`QuerySelectComponent.init: local err=${err.message}`)})
-
-    // let exampleResults : Object[] = [];
-
     let scene: any = document.querySelector('a-scene');
-    let sbBox: any = document.querySelector('#sb-query');
+    // let sbBox: any = document.querySelector('#sb-query');
     let allBox: any = document.querySelector('#all-query');
 
+    // sbBox.addEventListener('click', () => {
+    //   console.log(`querySelect.clickHandler: click genned`);
+    //   console.log(`querySelect.clickHandler: doing api route`);
+    //
+    //   this.querySandbox()
+    // });
 
-    sbBox.addEventListener('click', () => {
-      console.log(`querySelect.clickHandler: click genned`);
-      console.log(`querySelect.clickHandler: doing api route`);
+    // allBox.addEventListener('click', () => {
+    //   this.queryAll()
+    // });
 
-      this.querySandbox()
-    });
-
-    allBox.addEventListener('click', () => {
-      this.queryAll()
-    });
+    // make the controller help invisble
+    // let handHelpEl = document.querySelector("#hand-overview-chart");
+    // handHelpEl.setAttribute("visible","false");
 
   }
 
@@ -152,9 +133,12 @@ export class QuerySelectComponent implements OnInit {
     }
   }
 
+  queryCurated(evt: Event) {
+  }
+
   //TODO: Better handle the situation where the service is not running.  Right now, if the server
   // has no network connetection you get no html response, and an esoteric error message on the console.
-  queryAll() {
+  queryAll(evt: Event) {
     try {
     this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
     //this.examples.get("http://127.0.0.1:3000/examples/260.json")
@@ -174,23 +158,6 @@ export class QuerySelectComponent implements OnInit {
 
     // exObservable.subscribe(this.processResults.bind(this))
   }
-
-  //TODO: use example service to do get.  Don't use this
-  //no..ok
-  // actually, I think I really *should* use 'examples.service.ts'
-  // getExampleObservable(apiURL: string, pos: THREE.Vector3) {
-  //   try {
-  //     return this.http.get(apiURL)
-  //       .map(res => {
-  //         let result = res;
-  //         return result;
-  //       });
-  //   }
-  //   catch(e) {
-  //     console.log(`try-catch-1: e=${e}`);
-  //     // debugger;
-  //   }
-  // }
 
   // process a  many rowed result
   processResults(data) {
@@ -283,6 +250,19 @@ export class QuerySelectComponent implements OnInit {
   // with this you will lose the vr state.
   transferToResultsScene() {
     this.router.navigateByUrl('vr-gallery/results-scene');
+  }
+
+  onHelpHoverEnter(evt: Event) {
+    let handHelpEl = document.querySelector("#hand-overview-chart");
+    handHelpEl.setAttribute("visible","true");
+    // (evt.target as any).setAttribute("visible","true");
+    // debugger;
+  }
+
+  onHelpHoverExit(evt: Event) {
+    let handHelpEl = document.querySelector("#hand-overview-chart");
+    handHelpEl.setAttribute("visible","false");
+    // (evt.target as any).setAttribute("visible","true");
   }
 
 

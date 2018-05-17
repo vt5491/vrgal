@@ -2,35 +2,76 @@
   <a-assets>
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
+    <img id="handOverviewImg" src="assets/img/controls_overview.png">
+    <img id="vrgal-logo" src="assets/img/vrgal_logo_manual.png">
   </a-assets>
-  <!-- <a-log
-    position="10 4 -1"
-    geometry="primitive: plane; width: 12; height: 25"
-    text="align: left; baseline: center; wrapCount: 120"
-  ></a-log> -->
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
-    <!-- <a-entity oculus-touch-controls="hand: left" position="0 0 0"></a-entity> -->
     <a-entity hand-controls-vt="left" position="0 0 0" grab></a-entity>
-    <!-- <a-entity vive-controls="hand: left" position="0 0 0" grab></a-entity> -->
     <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
   </a-entity>
   <a-entity id="links" >
   </a-entity>
-  <!-- <a-link id="results-link" href="/results-scene" qeekMode="true" title="See Results"
-    image="#cokeThumb" position="0 0 0" on="no-manual-click"></a-link> -->
-
-  <a-entity qosition="-6 0.5 -3" save-state>
+  <!-- <a-image src="#vrgal-logo"
+    width="3.1" height="1"
+    position="0 2 0"
+    opacity="0.5"></a-image> -->
+  <a-text value="VRGAL:"
+    position="-1 4 0"
+    color="#ff0080"
+    height="22" width="22"
+    align="center"
+    >
+  </a-text>
+  <a-text value="Explore VR augmented examples from the three.js library"
+    position="-2.5 2.9 0"
+    color="#ffff00"
+    height="10" width="15"
+    wrap-count="60"
+    >
+  </a-text>
+  <!-- <a-entity qosition="-6 0.5 -3" save-state>
     <a-box id="sb-query" position="-6 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
     <a-text value="sandbox" position="-6.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
+  </a-entity> -->
+  <!-- <a-entity  save-state (click)="querySample($event)"> -->
+    <!-- <a-box id="sample-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box> -->
+    <a-circle id="sample-query"
+      (click)="querySample($event)"
+      position="-2 0.5 0"
+      rotation="0 0 0"
+      color="#4CC309" height="2" width="2"
+      material="side: double">
+    </a-circle>
+    <a-text value="Curated Sample Gallery\n(recommended)"
+      position="-2 -1.5 0" align="center" eight="8.2" idth="0.2"></a-text>
+  <!-- </a-entity> -->
+  <!-- <a-box id="all-query"
+    (click)="queryAll($event)"
+    position="0 0.5 -3" rotation="0 0 0"
+    color="#4CC3C9" height="2" width="2">
+  </a-box> -->
+  <a-circle id="all-query"
+    (click)="queryAll($event)"
+    position="2 0.5 0" rotation="0 0 0"
+    color="#4CC3C9" height="2" width="2"
+    material="side: double"
+    >
+  </a-circle>
+  <a-text value="Full Gallery" position="2 -1.5 0" align="center"></a-text>
+  <a-entity>
+    <a-circle
+      position="0 -4 0"
+      radius="0.25"
+      (mouseenter)="onHelpHoverEnter($event)"
+      (mouseleave)="onHelpHoverExit($event)"
+    >
+    </a-circle>
+    <a-image id="hand-overview-chart"
+      src="#handOverviewImg" position="3 -4 0"
+      width="8.8" height="4" visible="false">
+    </a-image>
+    <a-text value="Navigation Help" position="0 -5.5 0" align="center"></a-text>
   </a-entity>
-  <a-entity  save-state (click)="querySample($event)">
-    <a-box id="sample-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
-    <a-text value="Sample Gallery" position="-3.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
-  </a-entity>
-  <a-box id="all-query" position="0 0.5 -3" rotation="0 0 0" color="#4CC3C9" height="2" width="2"></a-box>
-  <a-text value="All" position="0 -1.5 -3"></a-text>
-  <!-- <a-sky color="#6EBAA7"></a-sky> -->
-  <!-- <a-sky color="#101010"></a-sky> -->
   <a-sky src="#sky" theta-length="330"></a-sky>
 </a-scene>
