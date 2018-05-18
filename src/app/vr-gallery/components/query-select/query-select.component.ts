@@ -134,6 +134,22 @@ export class QuerySelectComponent implements OnInit {
   }
 
   queryCurated(evt: Event) {
+    console.log(`QuerySelectComponent.queryCurated: entered`);
+    try {
+      this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_curated.json`)
+        .subscribe(
+          // (data => {this.processResults(data.examples)}).bind(this),
+          data => {this.processResults((data as any).examples, "queryCurated")},
+          err => {console.log(`err=${err.message}`);
+      });
+      // .subscribe(
+      //   data => {console.log(`data.length=${(data as any).length}`)},
+      //   err => {console.log(`err=${err.message}`)}
+      // )
+    }
+    catch (e) {
+      console.log(`QuerySelectComponent.queryCurated: e=${e}`);
+    }
   }
 
   //TODO: Better handle the situation where the service is not running.  Right now, if the server
@@ -147,9 +163,13 @@ export class QuerySelectComponent implements OnInit {
     //this.examples.get("http://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
     // works when running https
     //this.examples.get("https://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
-    .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`);
+    // .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`);
+    // });
+        .subscribe(
+          data => {this.processResults((data as any).examples, "queryAll")},
+          err => {console.log(`queryAll:err=${err.message}`);
+      });
     //debugger;
-    });
     // this.examples.getMetaData();
     }
     catch (e) {
@@ -160,7 +180,7 @@ export class QuerySelectComponent implements OnInit {
   }
 
   // process a  many rowed result
-  processResults(data) {
+  processResults(data, queryType) {
     // let xPos = -8;
     // let yPos = 10;
     // debugger;
@@ -213,10 +233,23 @@ export class QuerySelectComponent implements OnInit {
     // next route (all "quantum" transfers require a user-gesture, thus the user
     // *must* do a click to do a vr transfer).
     let scene: any = document.querySelector('a-scene');
+    let linkPosX = 0;
+
+    switch(queryType) {
+      case "queryAll": {
+        linkPosX = 2
+        break;
+      }
+      case "queryCurated": {
+        linkPosX = -2
+        break;
+      }
+    }
 
     let evtDetail = {}
     evtDetail['href'] = `vr-gallery/results-scene`
-    evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
+    // evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
+    evtDetail['pos'] = new THREE.Vector3(linkPosX, -4, 0)
     evtDetail['title'] = "View Results";
     let appPrefix = this.base.appPrefix
     let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });

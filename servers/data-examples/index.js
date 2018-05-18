@@ -1,6 +1,3 @@
-// content of index.js
-// const express = require('express');
-// const bodyParser = require('body-parser');
 var qs = require('querystring');
 const http = require('http')
 const util = require('util')
@@ -9,31 +6,16 @@ const port = 3001
 
 const requestHandler = (request, response) => {
   console.log(request.url)
-  // console.log(`index.js: inspect(request)=${util.inspect(request, false, 4)}`);
-  // console.log('request.body2 : %j', request.body);
   console.log(`requestHandler: request.method=${request.method}`);
   console.log(`requestHandler: request.headers=${JSON.stringify(request.headers)}`);
-  // for( let i=0; i < request.headers.keys.length; i++) {
-  //   console.log(`key=${re}`);
-  // }
-  // for (let keys)
   Object.keys(request.headers).forEach((k) => {
     console.log(`k=${k}, v=${request.headers[k]}`)
   })
-  //  console.log(`requestHandler: body=${body}`);
-  // console.log(`stringify Request=${JSON.stringify(request, null, 4)}`);
-  // console.log(`request=${request}`);
   // Set CORS headers
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Request-Method', '*');
   response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT');
   response.setHeader('Access-Control-Allow-Headers', '*');
-  // if ( request.method === 'OPTIONS' ) {
-  //   response.writeHead(200);
-  //   response.end();
-  //   return;
-  // }
-
 
   if(request.method === "PUT") {
     // response.end('put: Hello from Node.js Server!')

@@ -16,15 +16,15 @@
     width="3.1" height="1"
     position="0 2 0"
     opacity="0.5"></a-image> -->
-  <a-text value="VRGAL:"
-    position="-1 4 0"
+  <a-text value="VRGAL"
+    position="0 6 0"
     color="#ff0080"
     height="22" width="22"
     align="center"
     >
   </a-text>
   <a-text value="Explore VR augmented examples from the three.js library"
-    position="-2.5 2.9 0"
+    position="-5.5 4.9 0"
     color="#ffff00"
     height="10" width="15"
     wrap-count="60"
@@ -36,14 +36,14 @@
   </a-entity> -->
   <!-- <a-entity  save-state (click)="querySample($event)"> -->
     <!-- <a-box id="sample-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box> -->
-    <a-circle id="sample-query"
-      (click)="querySample($event)"
+    <a-circle id="curated-query"
+      (click)="queryCurated($event)"
       position="-2 0.5 0"
       rotation="0 0 0"
       color="#4CC309" height="2" width="2"
       material="side: double">
     </a-circle>
-    <a-text value="Curated Sample Gallery\n(recommended)"
+    <a-text value="Curated Gallery\n(recommended)"
       position="-2 -1.5 0" align="center" eight="8.2" idth="0.2"></a-text>
   <!-- </a-entity> -->
   <!-- <a-box id="all-query"
@@ -68,7 +68,7 @@
     >
     </a-circle>
     <a-image id="hand-overview-chart"
-      src="#handOverviewImg" position="3 -4 0"
+      src="#handOverviewImg" position="5 -4 0"
       width="8.8" height="4" visible="false">
     </a-image>
     <a-text value="Navigation Help" position="0 -5.5 0" align="center"></a-text>

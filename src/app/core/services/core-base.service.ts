@@ -10,7 +10,7 @@ export class CoreBaseService {
   // svale
   // vrizeSvcUrl = "http://192.168.50.158:3000"
   vrizeSvcUrl = environment.metaDataServiceUrl;
-  
+
   // generic.. ok as long as everything is running on the same host machine
   // actually, ok for the admin part, but vr-gallery/query-select needs a
   // remote server (server is not running on same ip as the SPA)
@@ -19,7 +19,7 @@ export class CoreBaseService {
   liftPrefix = "vrize-";
   examplesPath = 'assets/threejs-env/examples';
 
-  constructor() { 
+  constructor() {
     console.log(`CoreBaseService.ctor: vrizSvcUrl=${this.vrizeSvcUrl}`);
   }
 

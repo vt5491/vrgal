@@ -1,9 +1,9 @@
-This folder is not part of an angular proper.  This is where you should locate node servers that 
+This folder is not part of angular proper.  This is where you should locate node servers that 
 need to access the same data as 'threejs-vr-gallery'.  We also have a 'meta-data' server in the 
 form of a rail-app in repo 'vrize-service'.  This rails server does *not* need to access the
 data in this repo, so it can be separate.  
 
-In here we have the 'examples' service, which is used by the 'vrize' module of VRGAL to read and
+In here we have the 'data-examples' service, which is used by the 'vrize' module of VRGAL to read and
 lift the examples under 'assets/threejs-env/examples' and then write out new files to the 
 same directory.  Thus, this server needs to be tightly coupled to the angular2 client project and
 that's why it's included in this repo.
@@ -13,3 +13,22 @@ that's why it's included in this repo.
 can cause an "ENOSP" error (trying to monitor too many files):
 
 nodemon --watch servers servers/examples/index2.js
+
+# 2018-05-17
+3. We also have the meta-data-proxy server (express).  This was created due to the preliminary live
+deployment on amazon ec2.  We need to have a proxy server interface to the rails server.  The angular
+client has a service that used to directly access the rails server.  However, the rails server
+has the ability to update and delete records which is too powerful to directly expose the public.  Thus
+we need a proxy server to help isolate (but not completely eliminate) the public and private api.
+
+If you have anything running directly on the server (such as the meta-data-proxy server itselft),
+then it's ok for that to directly access the rails server (the meta-data-examples service) since
+it's presumably in a trusted environment.  But the for the public, it's recommended they come
+through a proxy server.  Yes, this does lead to the case where and ng5 service, is accessing
+a proxy service, which in turns access the meta-data examples service (rails), but in this case
+it's a good thing (the proxy pattern) and helps isolate our concerns.
+
+data-examples server: 3002
+meta-data-proxy server: 1337
+
+

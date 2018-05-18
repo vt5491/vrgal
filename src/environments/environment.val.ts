@@ -7,5 +7,6 @@ export const environment = {
   production: false,
   // the url for the rails meta-data service
   //metaDataServiceUrl : "http://192.168.50.158:3000"
+  // note: 50.158 is the vmware image running on the game pc
   metaDataServiceUrl : "http://192.168.50.158:1337"
 };
