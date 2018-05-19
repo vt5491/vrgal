@@ -199,6 +199,7 @@ export class QuerySelectComponent implements OnInit {
       data[i].pos = {}
       data[i].pos.x = xPos
       data[i].pos.y = yPos
+      data[i].pos.z = 0
 
       this.aggregateResults(data[i])
 
@@ -264,7 +265,11 @@ export class QuerySelectComponent implements OnInit {
   aggregateResults(data) {
     let example = {}
 
-    example['id'] = data.id;
+    // example['id'] = data.id;
+    // some merge queries in rails can have two ids (since the two tables each
+    // have an id), and the example table id is qualified as 'example_id', so
+    // get that if available, otherwise go with the default of 'id'.
+    example['id'] = data.example_id || data.id;
     example['name'] = data.name
     example['pos'] = data.pos
 
@@ -296,6 +301,12 @@ export class QuerySelectComponent implements OnInit {
     let handHelpEl = document.querySelector("#hand-overview-chart");
     handHelpEl.setAttribute("visible","false");
     // (evt.target as any).setAttribute("visible","true");
+  }
+
+  dummyClick(evt: Event) {
+    console.log(`QuerySelectComponent.dummyClick: entered`);
+    // setTimeout(function(){ (window as any).location = "https://www.yahoo.com"; }, 3000);
+    this.examples.incExampleStat(16, "clicks");
   }
 
 

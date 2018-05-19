@@ -30,6 +30,7 @@ AFRAME.registerSystem('system-utils', {
     window.addEventListener(appPrefixLc + '_' + 'create_img_asset', this.createImgAsset);
     window.addEventListener(appPrefixLc + '_' + 'create_popup_img', this.createExamplePopupImg);
     window.addEventListener(appPrefixLc + '_' + 'create_view_source_btn', this.createViewSourceBtn);
+    // window.addEventListener(appPrefixLc + '_' + 'add_link_hover', this.addLinkHoverEvtListener);
   },
   onVtTestEvt: function () {
     console.log(`system-utils.onVtTestEvt: now in vttestevt handler`);
@@ -49,7 +50,7 @@ AFRAME.registerSystem('system-utils', {
     linkEl.setAttribute('href', "assets/threejs-env/examples/vrize_webgl_geometry_cube.html");
     linkParentEl.appendChild(linkEl);
   },
-  // This is essential 'onAddExample' with a different name
+  // This is essentially 'onAddExample' with a different name
   // createLink: function (url, pos, title) {
   // We call createLink at the aframe level (as opposed to the ng2 level) because
   // a-frame is a little better fit for doing DOM maniuplation (true?).
@@ -57,6 +58,7 @@ AFRAME.registerSystem('system-utils', {
   // no..changed my mind again.  I might be doing it at the a-frame level
   // because it's a timing thing ..e.g you have to make sure you do this when a-frame
   // is ready for it (?)
+  // 2018-05-18 : Defunct and replaced by 'core-examples.IncExampleStat'
   createLink: function (evt) {
   // createLink: (evt) => {
     // console.log(`system-utils.createLink: url=${url}, pos=${pos}, title=${title}`)
@@ -119,6 +121,7 @@ AFRAME.registerSystem('system-utils', {
     })
   },
 
+  //defunct: moved to ng examples.service
   // add a 'mouseenter' listener so we can show a popup screen print of what
   // the example looks like.
   // helper method
@@ -139,10 +142,6 @@ AFRAME.registerSystem('system-utils', {
         let sceneEl = document.querySelector('a-scene');
         sceneEl.systems['system-utils'].toggleVisibility(el);
       }
-      // let elVisibility = el.getAttribute("visible");
-      // let newVisibility = !elVisibility;
-      //
-      // el.setAttribute("visible", String(newVisibility));
     });
 
     linkEl.addEventListener('mouseleave', (e) => {
@@ -157,10 +156,6 @@ AFRAME.registerSystem('system-utils', {
         let sceneEl = document.querySelector('a-scene');
         sceneEl.systems['system-utils'].toggleVisibility(el);
       }
-      // let elVisibility = el.getAttribute("visible");
-      // let newVisibility = !elVisibility;
-      //
-      // el.setAttribute("visible", String(newVisibility));
     })
   },
   inc_clicks: function (evt, info) {
@@ -171,16 +166,18 @@ AFRAME.registerSystem('system-utils', {
     let server = 'http://192.168.1.147:3000';
     xhr = new XMLHttpRequest();
 
-    // xhr.open('PUT', 'myservice/username?id=some-unique-id');
-    // Note: the 'false' makes it synchronous.  We have to do is synchronously
-    // otherwise the 'onload' event is not driven becuase the example web page
-    // has already assumed control, and the onload event handler is no longer there.
-    // xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, false);
-    // Note: I now have to set this to true otherwise I get error:
-    // Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user’s experience.^
-    // and then a network error and the link doens't work
-    // TODO: figure out a way to update stats asynchronously (?)
-    // maybe turn the onload into a service worker, not tied to client?
+    // xhr.open('PUT', 'myservice/username?id=some-unique-id'); Note: the
+    // 'false' makes it synchronous.  We have to do is synchronously otherwise
+    // the 'onload' event is not driven becuase the example web page has already
+    // assumed control, and the onload event handler is no longer there.
+    // xhr.open('PUT',
+    // `${server}/examples/${info.example_id}/stats/increment.json`, false);
+    // Note: I now have to set this to true otherwise I get error: Synchronous
+    // XMLHttpRequest on the main thread is deprecated because of its
+    // detrimental effects to the end user’s experience.^ and then a network
+    // error and the link doens't work TODO: figure out a way to update stats
+    // asynchronously (?) maybe turn the onload into a service worker, not tied
+    // to client?
     xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {

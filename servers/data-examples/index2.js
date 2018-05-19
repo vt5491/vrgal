@@ -31,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var setCors = function(req, res, next) {
   console.log(`index2.js: now setting cors`);
   // Set CORS headers
+  //TODO: I should set this to "localhost" or "127.0.0.1" since only the proxy
+  // server or admin servers (all running on the same machine) are permitted?
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT');

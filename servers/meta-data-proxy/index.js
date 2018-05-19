@@ -86,7 +86,28 @@ app.get("/examples/all_curated.json", (req, resOuter, next) => {
       }
       else {
         //res.end(body)
-        console.log(`examples/all_curated: got good status code`);
+        console.log(`examples/all_curated: got good status code,body.id=${body.id}, body.example_id=${body.example_id}`);
+        // console.log(`good. resOuter=${util.inspect(resOuter)}`);
+        resOuter.send(body);
+      }
+    });
+})
+
+app.put("/examples/:id/stats/increment.json", (req, resOuter, next) => {
+  let id = req.params.id;
+  let metric = req.query.metric;
+  console.log(`metaDataServer.1337: now in increment, id=${id}, query=${req.query}, metric=${metric}`);
+  console.log(`query=${util.inspect(req.query)}`);
+  request.put(`${metaDataServer}/examples/${id}/stats/increment.json?${metric}`,options,function(err,res,body){
+      if(err) {
+        console.log(`err=${err}`);
+      }
+      else if(res.statusCode !== 200 ) {
+        console.log(`examples/increment: got statusCode=${res.statusCode}`);
+      }
+      else {
+        //res.end(body)
+        console.log(`examples/increment: got good status code`);
         resOuter.send(body);
       }
     });

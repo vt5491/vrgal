@@ -16,6 +16,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { ExampleComponent } from '../../shared/components/example/example.component';
 import { CoreBaseService } from './core-base.service';
+import { CoreUtilsService } from './core-utils.service';
 
 @Injectable()
 export class ExamplesService {
@@ -24,7 +25,8 @@ export class ExamplesService {
 
   constructor(
     private base : CoreBaseService,
-    private http: HttpClient
+    private http: HttpClient,
+    private utils : CoreUtilsService,
   ) {
     // this.server = new URL('http://localhost:3000');
     this.server = new URL(this.base.vrizeSvcUrl);
@@ -61,46 +63,17 @@ export class ExamplesService {
   }
 
   setLifted(example: ExampleComponent) {
-    // const myheader = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-    // const body = new HttpParams().set('lifted', '1');
-    // var body = {'lifted': '1'};
     var body = new Object();
 
     body['example'] = {};
 
-    // if (example.lifted == null) {
-    // if (example.lift_code == null) {
-    //   // body['lifted'] = 1;
-    //   body['lifted'] = true;
-    // }
-    // else {
-    //   // body['lifted'] = example.lifted ? 1 : 0;
-    //   // body['lifted'] = example.lifted;//orig
-    //   // body['lift_code'] = example.lift_code;
-    //   body['lift_code'] = 10;
-    // }
-    // body['example']['lift_code'] = 10;
-    // body['lift_code'] = example.lift_code;
     body['example']['lift_code'] = example.lift_code;
-    // body['lifted'] = false;
-    // console.log(`setLifted: body[lifted]=${body['lifted']}`);
-    // body['lifted_at'] = "2018-03-16 22:00:00"
-
-
-    // let url = 'examples/${example.id}';
-    // let url = `${this.server}examples/${example.id}.json`;
     let url = `${this.server}examples/${example.id}.json`;
 
     this.put(url, body)
       .subscribe(rsp => {
         console.log(`Examples.service.setLifted: rsp=${rsp}`);
     });
-  //   http
-  //     .post('/api', body, {
-  //       headers: myheader),
-  // })
-  // .subscribe();
-
   }
 
   put(route: string, body) {
@@ -149,5 +122,60 @@ export class ExamplesService {
 
     return this.http.get(url, httpOptions);
   }
+
+  // Interface with the proxy server and  increment the stat for the given metric
+  // e.g. "impressions", "clicks"
+  incExampleStat(exampleId: number, metric: string) {
+  // xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, true);
+  // xhr.setRequestHeader('Content-Type', 'application/json');
+    // if (!(metric == "clicks") || (metric == "impressions") {
+    if (metric !== "clicks" && metric !== "impressions") {
+      console.log(`ExampleService.incExampleStat: invalid metric ${metric} specified`);
+      return;
+    }
+    let url = `${this.server}examples/${exampleId}/stats/increment.json?metric=${metric}`;
+    let body = new Object();
+
+    return this.put(url, body)
+      // .subscribe(rsp => {
+      //   console.log(`ExampleService.incExampleStat: incremented ${metric}`);
+      // })
+  }
+
+  // add a 'mouseenter' listener so we can show a popup screen print of what
+  // the example looks like.
+  // helper method
+  addLinkHoverEvtListener(linkEl) {
+    // console.log(`SU.addLinkHoverEvtListener: entered`);
+    let utils = this.utils
+
+    linkEl.addEventListener('mouseenter', (e) => {
+      let tgtId = e.target.id;
+      let exampleRoot = tgtId.replace(/-link$/, '')
+      let el = document.querySelector(`#${exampleRoot}-popup`);
+
+      if (el) {
+        // toggle visibility
+        let sceneEl = document.querySelector('a-scene');
+        // sceneEl.systems['system-utils'].toggleVisibility(el);
+        // this.utils.toggleVisibility(el);
+        utils.toggleVisibility(el);
+      }
+    });
+
+    linkEl.addEventListener('mouseleave', (e) => {
+      let tgtId = e.target.id;
+      let exampleRoot = tgtId.replace(/-link/, '');
+      let el = document.querySelector(`#${exampleRoot}-popup`);
+      // toggle visibility
+      if (el) {
+      let sceneEl = document.querySelector('a-scene');
+      // sceneEl.systems['system-utils'].toggleVisibility(el);
+      // this.utils.toggleVisibility(el);
+      utils.toggleVisibility(el);
+      }
+    })
+  };
+
 
 }

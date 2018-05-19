@@ -35,20 +35,20 @@ export class ResultsSceneComponent implements OnInit {
   debugCounter: number = 0;
 
   // constructor() { }
-  // constructor(private http: Http, private base: BaseService, private utils: UtilsService) { 
-  constructor( 
-    // private http: Http, 
+  // constructor(private http: Http, private base: BaseService, private utils: UtilsService) {
+  constructor(
+    // private http: Http,
     private base: CoreBaseService,
     private utils: CoreUtilsService,
     private renderer: Renderer2,
     private examples: ExamplesService,
-  ) { 
+  ) {
     // super()
     console.log(`ResultsSceneComponent.ctor: entered`);
     console.log(`ResultScene.ctor: dataStore=${this.utils.dataStore}`);
     console.log(`ResultsScene.ctor: this.utils.dataStore json=${JSON.stringify(this.utils.dataStore)}`);
     console.log(`ResultScene.ctor: query-select-results=${this.utils.dataStore['query-select-results']}`);
-    
+
 
     this.exampleResults = JSON.parse(sessionStorage.getItem(`${this.base.appPrefix}_querySelectResults`))
     // console.log(`ResultScene.ctor: exampleResult-2=${this.exampleResults[0]}`);
@@ -82,13 +82,62 @@ export class ResultsSceneComponent implements OnInit {
   addLinks() {
     // console.log(`ResultsScene.addLinks: this.exampleResults.length=${this.exampleResults.length}`);
     // debugger;
-    
+
     // for(let i=0; i < this.exampleResults.length; i++) {
     for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
       // this.addLink(this.exampleResults[i], i);
       let k = Object.keys(this.exampleResults)[i];
-      this.addLink(this.exampleResults[k], i);
+      // this.addLink(this.exampleResults[k], i);
+      this.addLink2(this.exampleResults[k], i);
     }
+
+  }
+
+  addLink2(data, index) {
+    console.log(`ResultsSceneComponent.addLink2: now creating link`);
+    let linkParentEl = document.querySelector('#links');
+    let linkEl = document.createElement('a-entity');
+
+    // linkEl.setAttribute('position', data.pos);
+    // link="href: https://www.google.com; on: no-click;"
+    let linkAttributes = "";
+    let href = `assets/threejs-env/examples/vrize-${data.name}`;
+    linkAttributes += `href: ${href};`;
+    linkAttributes += ` on: no-click;`
+    linkAttributes += ` title: ${data.name};`
+    let imgRoot = data['name'].replace(/\.html$/, '');
+    linkAttributes += ` image: ${imgRoot}-thumb;`;
+    linkEl.setAttribute('link', linkAttributes);
+    linkEl.setAttribute('position', `${data.pos.x} ${data.pos.y} ${data.pos.z}`);
+    // linkEl.setAttribute('title', data.name);
+    // linkEl.setAttribute('href', href);
+    // evtDetail['id'] = `${imgRoot}-link`;
+    linkEl.setAttribute('id', `${imgRoot}-link`);
+    // add in the rails example_id, so event handler can update stats
+    let example_id = data.id;
+    linkEl.setAttribute('example_id', example_id);
+    // evtDetail['image'] = `#${imgRoot}-thumb`;
+    // linkEl.setAttribute('image', `#${imgRoot}-thumb`);
+    // disable the system 'on' event handler
+    // linkEl.setAttribute('on', 'no-click');
+    // and define our own click handler (so we can increment stats before xferring)
+    linkEl.addEventListener('click', (evt) => {
+      // console.log(`now in user click handler`);
+      // note: we just use a closure to specify the example_id instead of reading
+      // the attribute since we have one event handler per link anyway.
+      this.examples.incExampleStat(example_id, "clicks")
+        .subscribe(rsp => {
+          console.log(`click: stats now updated`);
+        },
+        (err) => {console.log(`ResultsSceneComponent.clickHandler: err=${err}`)},
+        // the finally block.. transfer in all cases, even if stats *not* updated
+        () => { (window as any).location=href}
+      )
+    });
+    //
+    linkParentEl.appendChild(linkEl);
+
+    this.examples.addLinkHoverEvtListener(linkEl);
 
   }
 
@@ -266,7 +315,7 @@ export class ResultsSceneComponent implements OnInit {
           console.log(`result-scene: err=${err.message}`);
         }
       );
-      // let el = evt.target; 
+      // let el = evt.target;
       // // Add listeners
       // let global = this.renderer.listen(el, 'click', (evt) => {
       //   console.log(`Clicking for exampleRoot=${exampleRoot}`);
@@ -333,7 +382,7 @@ export class ResultsSceneComponent implements OnInit {
       // this.debugCounter++;
       // console.log(`debugCounter=${this.debugCounter}`);
       console.log(`logSystem.loggers[0].logs.length=${logSystem.loggers[0].logs.length}`);
-      
+
 
       // if (this.debugCounter >= 2) {
       //   debugger;
@@ -357,7 +406,7 @@ export class ResultsSceneComponent implements OnInit {
         let logGeom = logEl.getAttribute('geometry');
         (logGeom as any).height = lineCnt / 5;
         logEl.setAttribute('geometry', logGeom);
-        
+
       }
       console.log(`logSystem.loggers[0].logs.length-post=${logSystem.loggers[0].logs.length}`);
       // debugger;
@@ -458,7 +507,7 @@ export class ResultsSceneComponent implements OnInit {
     //   .subscribe(
     //     rsp => {
     //       // debugger;
-    //       // let result= (rsp as any).json(); 
+    //       // let result= (rsp as any).json();
     //       // console.log(`incStat->id=${data.id}, ${metric}=${(rsp[0] as any)[metric]}`)
     //     },
     //     err => { console.log(`err=${err.message}`) }
@@ -475,8 +524,8 @@ export class ResultsSceneComponent implements OnInit {
         err => { console.log(`ResultsSceneComoponent.incStats: err=${err.message}`) }
       );
       */
-  } 
-  
+  }
+
 
   // registerViewSourceListeners() {
   //   for (let i = 0; i < this.exampleResults.length; i++) {
@@ -486,7 +535,7 @@ export class ResultsSceneComponent implements OnInit {
 
   // registerViewSourceListener(data, index) {
   //   // let btn = document.querySelector('#vrize-webgl_lights_pointlights-view-source');
-  //   // let exampleRoot = 
+  //   // let exampleRoot =
   //   let exampleRoot = data['name'].replace(/\.html$/, '');
   // }
 

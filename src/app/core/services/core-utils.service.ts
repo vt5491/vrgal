@@ -112,4 +112,10 @@ export class CoreUtilsService {
     return result;
   }
 
+  toggleVisibility(el) {
+    let elVisibility = el.getAttribute("visible");
+    el.setAttribute("visible", String(!elVisibility));
+  };
+
+
 }
