@@ -58,7 +58,6 @@ AFRAME.registerSystem('system-utils', {
   // no..changed my mind again.  I might be doing it at the a-frame level
   // because it's a timing thing ..e.g you have to make sure you do this when a-frame
   // is ready for it (?)
-  // 2018-05-18 : Defunct and replaced by 'core-examples.IncExampleStat'
   createLink: function (evt) {
   // createLink: (evt) => {
     // console.log(`system-utils.createLink: url=${url}, pos=${pos}, title=${title}`)
@@ -264,6 +263,7 @@ AFRAME.registerSystem('system-utils', {
     let pos = evt.detail.pos;
     let exampleRoot = evt.detail.exampleRoot;
     let id = evt.detail.id;
+    let exampleId = evt.detail.exampleId;
 
     let linkParentEl = document.querySelector('#view-source-btns');
     let btnEl = document.createElement('a-circle');
@@ -295,7 +295,7 @@ AFRAME.registerSystem('system-utils', {
     //   'vrgal_view_source_btn_added',
     // { detail: {'exampleRoot': exampleRoot} }));
     //
-    sceneEl.systems['system-utils'].addViewSourceClickHandler(btnEl, exampleRoot);
+    sceneEl.systems['system-utils'].addViewSourceClickHandler(btnEl, exampleRoot, exampleId);
   },
   addViewSourceHoverListener: function(linkEl) {
     // console.log(`SU.addViewSourceHoverListener: entered`);
@@ -334,7 +334,7 @@ AFRAME.registerSystem('system-utils', {
       // el.setAttribute("visible", String(newVisibility));
     })
   },
-  addViewSourceClickHandler: function(el, exampleRoot) {
+  addViewSourceClickHandler: function(el, exampleRoot, exampleId) {
     console.log(`addViewSourceClickHandler: entered`);
     el.addEventListener('click', (evt) => {
       // console.log(`system-utils: click for exampleRoot=${evt.detail.exampleRoot}`);
@@ -346,6 +346,7 @@ AFRAME.registerSystem('system-utils', {
         { detail: {
           'exampleRoot': exampleRoot,
           'btnEl' : el,
+          'exampleId': exampleId,
         }
         }));
       /*

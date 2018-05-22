@@ -1,3 +1,5 @@
+// This is used by the VRGAL admin services.  The proxy server communicates
+// directly with the rails server, not with this.
 const express = require('express');
 const app = express();
 const fs = require('fs');

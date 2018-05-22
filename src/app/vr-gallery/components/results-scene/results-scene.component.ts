@@ -106,7 +106,8 @@ export class ResultsSceneComponent implements OnInit {
     linkAttributes += ` on: no-click;`
     linkAttributes += ` title: ${data.name};`
     let imgRoot = data['name'].replace(/\.html$/, '');
-    linkAttributes += ` image: ${imgRoot}-thumb;`;
+    linkAttributes += ` image: #${imgRoot}-thumb;`;
+    linkAttributes += ` peekMode: "true";`
     linkEl.setAttribute('link', linkAttributes);
     linkEl.setAttribute('position', `${data.pos.x} ${data.pos.y} ${data.pos.z}`);
     // linkEl.setAttribute('title', data.name);
@@ -139,7 +140,20 @@ export class ResultsSceneComponent implements OnInit {
 
     this.examples.addLinkHoverEvtListener(linkEl);
 
+    // increments impressions stats
+    // impressions stats are updated at query level since every refresh of
+    // the results scene would drive the impressions count.
+    // this.incImpressions(example_id);
   }
+
+  incImpressions(example_id) {
+    this.examples.incExampleStat(example_id, "impressions")
+      .subscribe(rsp => {
+        console.log(`impressions: stats now updated`);
+      },
+      (err) => {console.log(`ResultsSceneComponent.incImpressions: err=${err}`)},
+  )
+}
 
   addLink(data, index) {
     console.log(`resultsSceneComponent.addLink: http result=${data}`);
@@ -256,6 +270,13 @@ export class ResultsSceneComponent implements OnInit {
   // addLinkHoverEvtListener() {
 
   // }
+  // Note: with view Source we ping-pong between ng and a-frame quite a bit. The
+  // initial driver is here in ng, but we drive an event the creates the  actual
+  // buton on the a-frame side.  Then, after the button has been clicked,
+  // a-frame kicks off a 'vrgal_view_source_btn_clicked' event, which is
+  // responded to here back on ng.  If I had to do it all over again, I would
+  // just do it all on ng, but unfortunately there's quite a bit of code
+  // (including hover) on the a-frame side, so I resort to ping-ponging.
   addViewSourceBtns() {
     // for (let i = 0; i < this.exampleResults.length; i++) {
     for(let i=0; i < Object.keys(this.exampleResults).length; i++) {
@@ -264,6 +285,14 @@ export class ResultsSceneComponent implements OnInit {
       let k = Object.keys(this.exampleResults)[i];
       this.addViewSourceBtn(this.exampleResults[k], i);
     }
+    // vrgal_view_source_btn_clicked
+    // add a listener for after the click has been handled on the a-frame side
+    // so we can update stats.  We want to do it on the ng side because we
+    // have the meta-server defined in the ng environment file.
+    // document.querySelector('#view-source-btns')
+    //   .addEventListener('vrgal_view_source_btn_clicked', evt => {
+    //     console.log(`ResultComponent.vrgal_view_source_btn_clicked event handler: exampleRoot=${(evt as any).detail.exampleRoot}`)
+    // })
   }
 
   addViewSourceBtn(data, index) {
@@ -274,6 +303,7 @@ export class ResultsSceneComponent implements OnInit {
     evtDetail['pos'] = { x: data.pos.x + 1.5, y: data.pos.y -1, z: 0.1};
     evtDetail['exampleRoot'] = exampleRoot;
     evtDetail['id'] = `${exampleRoot}-viewSourceBtn`;
+    evtDetail['exampleId'] = data.id;
 
     let evt = new CustomEvent(`${this.appPrefix}_create_view_source_btn`, { detail: evtDetail });
     evt.initEvent(`${this.appPrefix}_create_view_source_btn`, true, true);
@@ -286,6 +316,7 @@ export class ResultsSceneComponent implements OnInit {
   addViewSrcClickHandler() {
     // and register a click handler
     // TODO: change to this.appPrefix instead of 'vrgal'
+    // let examples = this.examples;
     this.sceneEl.addEventListener('vrgal_view_source_btn_clicked', (evt : CustomEvent) => {
       // debugger;
       // grey out the color, so we know it's selected
@@ -297,12 +328,12 @@ export class ResultsSceneComponent implements OnInit {
         evt.detail.btnEl.setAttribute('color', '#FFF');
       }
       // evt.target.setAttribute()
-      console.log(`---->view source button added: exampleRoot=${evt.detail.exampleRoot}`);
+      // console.log(`---->view source button added: exampleRoot=${evt.detail.exampleRoot}`);
       let exampleRoot = evt.detail.exampleRoot;
 
       this.utils.getLiftedExample(exampleRoot).subscribe(
         res => {
-          console.log(`result-scene : res=${res.substr(0,500)}`);
+          // console.log(`result-scene : res=${res.substr(0,500)}`);
           let btnPos = evt.detail.btnEl.object3D.position;
           let logPos = btnPos.clone();
           logPos.x += 7;
@@ -320,6 +351,13 @@ export class ResultsSceneComponent implements OnInit {
       // let global = this.renderer.listen(el, 'click', (evt) => {
       //   console.log(`Clicking for exampleRoot=${exampleRoot}`);
       // })
+      // and increment code_view stats
+      this.examples.incExampleStat(evt.detail.exampleId, "code_views")
+        .subscribe(rsp => {
+          console.log(`code_views: stats now updated`);
+        },
+        (err) => {console.log(`ResultsSceneComponent.addViewSrcClickHandler: err=${err.message}`)},
+      )
     })
   }
 

@@ -129,7 +129,7 @@ export class ExamplesService {
   // xhr.open('PUT', `${server}/examples/${info.example_id}/stats/increment.json`, true);
   // xhr.setRequestHeader('Content-Type', 'application/json');
     // if (!(metric == "clicks") || (metric == "impressions") {
-    if (metric !== "clicks" && metric !== "impressions") {
+    if (metric !== "clicks" && metric !== "impressions" && metric !== "code_views") {
       console.log(`ExampleService.incExampleStat: invalid metric ${metric} specified`);
       return;
     }
