@@ -117,5 +117,15 @@ export class CoreUtilsService {
     el.setAttribute("visible", String(!elVisibility));
   };
 
+  toggleSound(el) {
+    // debugger;
+    if (el.components.sound.isPlaying) {
+      el.components.sound.pauseSound();
+    }
+    else {
+      el.components.sound.playSound();
+    }
+  }
+
 
 }

@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^5.2.9",
     "@angular/router": "^5.2.9",
     "aframe": "^0.7.1",
+    "aframe-gui": "^0.1.5",
     "core-js": "^2.5.4",
     "hoek": "^4.2.1",
     "rxjs": "^5.5.8",

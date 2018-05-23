@@ -62,9 +62,9 @@ AFRAME.registerComponent('sticky-state', {
     // rotation is.  Thus we have to set rotation to our saved state upon
     // component initialization.
     this.el.addEventListener('componentinitialized', (evt) => {
-      console.log(`sticky-state.componentinitialized: event handler driven`);
-      console.log(`sticky-state.componentinitialized: currentTarget.rotation.y=${evt.currentTarget.object3D.rotation.y}`);
-      console.log(`sticky-state.componentinitialized: lastDollyRot.y=${lastDollyRot.y}`);
+      // console.log(`sticky-state.componentinitialized: event handler driven`);
+      // console.log(`sticky-state.componentinitialized: currentTarget.rotation.y=${evt.currentTarget.object3D.rotation.y}`);
+      // console.log(`sticky-state.componentinitialized: lastDollyRot.y=${lastDollyRot.y}`);
       // debugger;
       if (lastDollyRot) {
         evt.currentTarget.object3D.rotation.x = lastDollyRot.x;

@@ -577,5 +577,8 @@ export class ResultsSceneComponent implements OnInit {
   //   let exampleRoot = data['name'].replace(/\.html$/, '');
   // }
 
+  toggleBgMusic(evt: Event) {
+    this.utils.toggleSound(document.querySelector('#bg-music'));
+  }
 
 }

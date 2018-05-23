@@ -19,6 +19,7 @@ import * as THREE from "three";
 // declare var AFRAME: any;
 import {Router} from '@angular/router';
 import { debug } from 'util';
+declare var dat: any;
 
 @Component({
   selector: 'app-query-select',
@@ -57,6 +58,8 @@ export class QuerySelectComponent implements OnInit {
 
   init() {
     let scene: any = document.querySelector('a-scene');
+    // let sceneObj  = (scene as AFRAME.AEntity).object3D;
+    let sceneObj  = scene.object3D;
     // let sbBox: any = document.querySelector('#sb-query');
     let allBox: any = document.querySelector('#all-query');
 
@@ -74,6 +77,15 @@ export class QuerySelectComponent implements OnInit {
     // make the controller help invisble
     // let handHelpEl = document.querySelector("#hand-overview-chart");
     // handHelpEl.setAttribute("visible","false");
+    // debugger;
+    // let gui = dat.GUIVR.create('Customization Panel');
+    // let sky = (document.querySelector('a-sky') as any);
+    // gui.position.set(-1.4, -2.5, 0);
+    // gui.scale.set(3, 3, 3);
+    // let dummyObj = {};
+    // gui.add(dummyObj, 'waveHeight')
+    // sceneObj.add( gui );
+    // sky.object3D.setObject3D('gui', gui );
   }
 
   // If the user clicks anywhere on the scene (that is not an element) clear
@@ -434,8 +446,12 @@ export class QuerySelectComponent implements OnInit {
   dummyClick(evt: Event) {
     console.log(`QuerySelectComponent.dummyClick: entered`);
     // setTimeout(function(){ (window as any).location = "https://www.yahoo.com"; }, 3000);
-    this.examples.incExampleStat(16, "clicks");
+    // this.examples.incExampleStat(16, "clicks");
   }
+
+ toggleBgMusic(evt: Event) {
+   this.utils.toggleSound(document.querySelector('#bg-music'));
+ }
 
 
 }
