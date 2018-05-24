@@ -4,7 +4,13 @@
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
     <img id="handOverviewImg" src="assets/img/controls_overview.png">
     <img id="vrgal-logo" src="assets/img/vrgal_logo_manual.png">
-    <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love.mp3" preload="auto"></audio>
+    <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love.mp3" preload="auto"></audio> -->
+    <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" preload="auto"></audio> -->
+    <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.mp3" preload="auto"></audio> -->
+    <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
+    <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
+    <!-- works -->
+    <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" response-type="arraybuffer"></a-asset-item>
   </a-assets>
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
@@ -69,10 +75,10 @@
     >
     </a-circle>
     <a-image id="hand-overview-chart"
-      src="#handOverviewImg" position="5 -4 0"
+      src="#handOverviewImg" position="5 -4 0.2"
       width="8.8" height="4" visible="false">
     </a-image>
-    <a-text value="Navigation Help" position="0 -5.5 0" align="center"></a-text>
+    <a-text value="Navigation Help" position="0 -5.5 0.2" align="center"></a-text>
     <!-- <a-link position="4 -5.5 0" href="https://www.google.com"
       on="never"
       (click)="dummyClick($event)"

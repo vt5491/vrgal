@@ -9,4 +9,5 @@ export const environment = {
   //metaDataServiceUrl : "http://192.168.50.158:3000"
   // note: 50.158 is the vmware image running on the game pc
   metaDataServiceUrl : "http://192.168.50.158:1337"
+  //metaDataServiceUrl : "https://192.168.50.158:1337"
 };

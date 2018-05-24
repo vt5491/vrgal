@@ -12,6 +12,9 @@ Note: use ec2 for when running on AWS.
 
 Note: don't use --aot, if doing admin e.g. lifts (get a compiler not loaded error for some reason).
 
+Note: to start as https:
+ng serve --aot --environment=val --host 0.0.0.0 --ssl 1 --ssl-key ~/vtstuff/certs/localhost.key --ssl-cert ~/vtstuff/certs/localhost.crt
+
 (black on white console)
 
 b) Start the express server.  cd to $VRGAL and run from the root directory:
