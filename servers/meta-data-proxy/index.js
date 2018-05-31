@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
 const fs = require('fs');
 const http = require("http");
 const https = require("https");
@@ -23,9 +24,16 @@ var options = {
 };
 
 var metaDataServer = "http://localhost:3000";
+// var metaDataServer = "https://localhost:3000";
 
 console.log('meta-data-proxy: entered');
-app.listen(port, () => console.log(`Example app listening on port ${port}`))
+https.createServer({
+    key: fs.readFileSync('servers/meta-data-proxy/certs/localhost.key'),
+    cert: fs.readFileSync('servers/meta-data-proxy/certs/localhost.crt')
+  }, app).listen(port);
+console.log(`https listening on port ${port}`);
+// the following line is how to start in http mode.
+// app.listen(port, () => console.log(`Example app listening on port ${port}`))
 
 // Parsers for POST data
 app.use(bodyParser.json());
@@ -55,7 +63,8 @@ var setCors = function(req, res, next) {
   next();
 }
 
-app.use(setCors);
+// app.use(setCors);
+app.use(cors());
 
 
 // use this
@@ -111,4 +120,22 @@ app.put("/examples/:id/stats/increment.json", (req, resOuter, next) => {
         resOuter.send(body);
       }
     });
+})
+
+app.get("/dummy/abc.json", (req, resOuter, next) => {
+  resOuter.send('{"abc": "7"}');
+  // request.get(`${metaDataServer}/examples/by_tag.json?tag=mini-gal`,options,function(err,res,body){
+  //     if(err) {
+  //       console.log(`err=${err}`);
+  //     }
+  //     else if(res.statusCode !== 200 ) {
+  //       console.log(`examples/all_curated: got statusCode=${res.statusCode}`);
+  //     }
+  //     else {
+  //       //res.end(body)
+  //       console.log(`examples/all_curated: got good status code,body.id=${body.id}, body.example_id=${body.example_id}`);
+  //       // console.log(`good. resOuter=${util.inspect(resOuter)}`);
+  //       resOuter.send(body);
+  //     }
+  //   });
 })

@@ -1,4 +1,4 @@
-<a-scene id="query-select-scene" >
+<a-scene id="query-select-scene" ttats>
   <a-assets>
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
@@ -6,11 +6,11 @@
     <img id="vrgal-logo" src="assets/img/vrgal_logo_manual.png">
     <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love.mp3" preload="auto"></audio> -->
     <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" preload="auto"></audio> -->
-    <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.mp3" preload="auto"></audio> -->
+    <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.mp3" qreload="auto"></audio>
     <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
     <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
     <!-- works -->
-    <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" response-type="arraybuffer"></a-asset-item>
+    <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
   </a-assets>
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
@@ -30,7 +30,7 @@
     align="center"
     >
   </a-text>
-  <a-text value="Explore VR augmented examples from the three.js library"
+  <a-text value="Explore VR Lifted Examples From the three.js Library"
     position="-5.5 4.9 0"
     color="#ffff00"
     height="10" width="15"
@@ -105,16 +105,28 @@
   <!-- <a-datgui>
   </a-datgui> -->
   <a-gui-radio
-    position="4 -5.5 0"
-    width="2.5" height="0.75"
+    id = "bg-music-radio"
     (click)="toggleBgMusic($event)"
-    value="toggle sound"
+    position="4 -5.5 0"
+    width="3.0" height="0.75"
+    value="Toggle Sound"
     font-family="Arial"
     margin="0 0 0.05 0"
-    checked="false"
+    checked="true"
 >
+    <!-- (click)="toggleBgMusic($event)" -->
 </a-gui-radio>
-<a-gui-toggle
+<!-- <a-gui-radio
+    id = "bg-music-radio2"
+    position="6 -5.5 0"
+    width="2.5" height="0.75"
+    value="toggle sound 2"
+    font-family="Arial"
+    margin="0 0 0.05 0"
+    checked="true"
+>
+</a-gui-radio>  -->
+<!-- <a-gui-toggle
   id="bg-music-toggle"
   position="-4 -5.5 0"
   width="4.5" height="0.75"
@@ -124,8 +136,8 @@
   margin="0 0 0.05 0"
   checked="true"
 >
-</a-gui-toggle>
+</a-gui-toggle> -->
 <!-- <a-entity id="bg-music" sound="src: #bg-music-chill; autoplay: true"></a-entity> -->
 <a-sound id="bg-music" autoplay="true" loop="true" src="#bg-music-chill"></a-sound>
-  <a-sky src="#sky" theta-length="330"></a-sky>
+<a-sky src="#sky" theta-length="330"></a-sky>
 </a-scene>

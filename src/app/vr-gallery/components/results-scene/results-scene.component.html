@@ -8,8 +8,8 @@
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
     <!-- <img src="assets/img/thumbs/webgl_morphtargets_horse_thumb.png"
       id="webgl_morphtargets_horse-thumb"> -->
-    <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" preload="auto"></audio> -->
-    <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" response-type="arraybuffer"></a-asset-item>
+    <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" qreload="auto"></audio>
+    <!-- <a-asset-item id="bg-music-chill" src="assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg" response-type="arraybuffer"></a-asset-item> -->
   </a-assets>
   <a-log
     position="0 0 0"
@@ -41,15 +41,16 @@
     image="#cokeThumb" position="0 4 0" peekMode="true"></a-link>
   <!-- <a-box position="-1 0.5 -3" rotation="0 60 0" color="#C4C309" height="2" width="2"></a-box> -->
   <a-gui-radio
+    id= "bg-music-radio"
     position="4 4 0"
-    width="2.5" height="0.75"
+    width="3.0" height="0.75"
     (click)="toggleBgMusic($event)"
-    value="toggle sound"
+    value="Toggle Sound"
     font-family="Arial"
     margin="0 0 0.05 0"
     checked="false"
->
-</a-gui-radio>
+  >
+  </a-gui-radio>
   <a-sound id="bg-music" autoplay="true" loop="true" src="#bg-music-chill"></a-sound>
   <a-sky src="#sky" theta-length="330"></a-sky>
-</a-scene>
+<!-- </a-scene> -->

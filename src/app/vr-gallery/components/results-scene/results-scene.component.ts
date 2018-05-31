@@ -68,6 +68,7 @@ export class ResultsSceneComponent implements OnInit {
 
   addResources() {
     this.sceneEl = document.querySelector('a-scene');
+    this.utils.bgSoundInit(this.sceneEl, document.getElementById('bg-music-radio'));
     this.appPrefix = this.base.appPrefix
 
     this.addLinks();

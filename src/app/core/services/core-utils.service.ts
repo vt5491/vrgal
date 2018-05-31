@@ -16,6 +16,7 @@ export class CoreUtilsService {
     private base: CoreBaseService,
     private http: HttpClient,
   ) {
+    console.log(`CoreUtilsService.ctor: entered`);
     this.dataStore = {}
   }
 
@@ -125,6 +126,56 @@ export class CoreUtilsService {
     else {
       el.components.sound.playSound();
     }
+  }
+
+  // Try to handle a standard background setup such that we can define it one
+  // place and not have to implement it at the component level.
+  // The ctrlEl is the gui widget used to control the background music.
+  bgSoundInit(sceneEl: Element, guiEl: Element) {
+    sceneEl.addEventListener('sound-loaded', (evt) => {
+      console.log(`CoreUtils.bgSoundInit: sound has been loaded`);
+      this.toggleRadio(guiEl.id);
+    })
+
+  }
+
+  // This is a complete hack to deal with limitations of 'aframe-gui'.
+  // 'aframe-gui' does not honor the 'checked' attribute, so we have to manually
+  // eject  an 'emit(radioAction)' upon sound loading.  This was all empirically
+  // determined, and is really not a general solution.
+  toggleRadio(animationId) {
+    // get all 'a-animations'
+    // note: a-radio has four animations, and a-toggle has two, with no official
+    // way to distinguish between them.
+    let animations = document.getElementsByTagName('a-animation');
+    // debugger;
+
+    // the third parent up for 'gui-radio' has the element id the animation
+    // belongs to.  We use this  to determine if we have the right element
+    // do {
+    // }
+    // while (condition);
+    // let animationIdx = 0;
+    // while (animations[animationIdx].parentElement.parentElement.parentElement.id !== animationId)
+    // {
+    //   animationIdx++;
+    // }
+    let foundAnimation = false;
+    let i;
+    for( i=0; i < animations.length; i++) {
+      if (animations[i].parentElement.parentElement.parentElement.id === animationId)
+      {
+        foundAnimation = true;
+        break;
+      }
+    }
+
+    if (foundAnimation) {
+      // simulate a physical click by kicking off the gui-radio's first 'a-animation'
+      (animations[i] as any).emit('radioAnimation');
+    }
+
+
   }
 
 

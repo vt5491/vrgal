@@ -33,6 +33,7 @@ export class QuerySelectComponent implements OnInit {
   category: string;
   // exampleResults : Object[] = []
   exampleResults : Object = {};
+  sceneEl : Element;
   // expectedResultCnt : number
   // 'webgl_geometry_cube.html'
   // http://localhost:3000/examples/260
@@ -58,11 +59,13 @@ export class QuerySelectComponent implements OnInit {
 
   init() {
     let scene: any = document.querySelector('a-scene');
+    this.sceneEl = scene;
     // let sceneObj  = (scene as AFRAME.AEntity).object3D;
     let sceneObj  = scene.object3D;
     // let sbBox: any = document.querySelector('#sb-query');
     let allBox: any = document.querySelector('#all-query');
 
+    this.utils.bgSoundInit(this.sceneEl, document.getElementById('bg-music-radio'));
     // sbBox.addEventListener('click', () => {
     //   console.log(`querySelect.clickHandler: click genned`);
     //   console.log(`querySelect.clickHandler: doing api route`);
@@ -165,6 +168,7 @@ export class QuerySelectComponent implements OnInit {
 
   queryCurated(evt: Event) {
     console.log(`QuerySelectComponent.queryCurated: entered`);
+    // this.queryDummy();
     if (Object.keys(this.exampleResults).length > 0) {
       this.resetState();
     }
@@ -217,6 +221,14 @@ export class QuerySelectComponent implements OnInit {
 
       // exObservable.subscribe(this.processResults.bind(this))
     }
+  }
+
+  // query 'dummy/abc' for debugging purposes
+  queryDummy() {
+    this.http.get(`${this.base.vrizeSvcUrl}/dummy/abc.json`)
+      .subscribe(rsp => {
+        console.log(`queryDummy: rsp=${rsp}, abc=${rsp["abc"]}`)
+      })
   }
 
   // process a  many rowed result
