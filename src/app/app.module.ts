@@ -4,6 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 // import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+
+// redux
+import { rootReducer, IAppState, INITIAL_STATE } from './store/store';
+import { CounterActions } from './store/app.actions';
 
 // user modules
 import { AppComponent } from './app.component';
@@ -46,11 +51,22 @@ const appRoutes:Routes = [
     VrGalleryModule,
     // VrizeModule,
     SharedModule,
+    NgReduxModule,
   ],
   providers: [
     CoreDataExampleService,
+    CounterActions,
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(ngRedux: NgRedux<IAppState>) {
+    // Tell @angular-redux/store about our rootReducer and our initial state.
+    // It will use this to create a redux store for us and wire up all the
+    // events.
+    ngRedux.configureStore(
+    rootReducer,
+    INITIAL_STATE);
+  }
+}

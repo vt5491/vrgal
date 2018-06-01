@@ -1,7 +1,7 @@
-import { Component, OnInit,  Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import {Router} from '@angular/router';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-// import {HttpModule, Http, Response} from '@angular/http';
 import {ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -9,11 +9,12 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/do';
-// import { BaseService } from '../../services/base.service';
-// import { UtilsService } from '../../services/utils.service';
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { ExamplesService } from '../../../core/services/examples.service';
+import { NgRedux } from '@angular-redux/store';
+import { CounterActions } from '../../../store/app.actions';
+import {IAppState} from "../../../store/store";
 // import { StatsService } from '../../../core/services/stats.service';
 import * as THREE from "three";
 // import { BaseComponent} from '../base/base.component'
@@ -25,25 +26,22 @@ import * as THREE from "three";
 })
 // export class ResultsSceneComponent extends BaseComponent implements OnInit {
 export class ResultsSceneComponent implements OnInit {
-  // name : string;
-  // category: string;
-  // utils : UtilsService
-  // exampleResults : Object[] = []
   exampleResults : Object = {};
   sceneEl : Element;
   appPrefix : string;
   debugCounter: number = 0;
+  count: number;
+  stateSubscription;
 
-  // constructor() { }
-  // constructor(private http: Http, private base: BaseService, private utils: UtilsService) {
   constructor(
-    // private http: Http,
     private base: CoreBaseService,
     private utils: CoreUtilsService,
+    private router: Router,
     private renderer: Renderer2,
     private examples: ExamplesService,
+    private ngRedux: NgRedux<IAppState>,
+    private actions: CounterActions,
   ) {
-    // super()
     console.log(`ResultsSceneComponent.ctor: entered`);
     console.log(`ResultScene.ctor: dataStore=${this.utils.dataStore}`);
     console.log(`ResultsScene.ctor: this.utils.dataStore json=${JSON.stringify(this.utils.dataStore)}`);
@@ -51,11 +49,13 @@ export class ResultsSceneComponent implements OnInit {
 
 
     this.exampleResults = JSON.parse(sessionStorage.getItem(`${this.base.appPrefix}_querySelectResults`))
-    // console.log(`ResultScene.ctor: exampleResult-2=${this.exampleResults[0]}`);
+    this.stateSubscription = ngRedux.select<number>('count')
+      .subscribe(newCount => this.count = newCount);
   }
 
   ngOnInit() {
     console.log('ResultComponent.ngOnInit: entered');
+    console.log(`ResultsSelectComponent.ngOnInit: count=${this.count}`)
 
     // console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${this.exampleResults.length}`);
     console.log(`ResultsScene.ngOnInit: this.exampleResults.length=${Object.keys(this.exampleResults).length}`);
@@ -64,6 +64,10 @@ export class ResultsSceneComponent implements OnInit {
 
     // var el = document.querySelector("a-log");
     // el.setAttribute("visible", "false");
+  }
+
+  ngOnDestroy() {
+    this.stateSubscription.unsubscribe();
   }
 
   addResources() {
@@ -111,15 +115,10 @@ export class ResultsSceneComponent implements OnInit {
     linkAttributes += ` peekMode: "true";`
     linkEl.setAttribute('link', linkAttributes);
     linkEl.setAttribute('position', `${data.pos.x} ${data.pos.y} ${data.pos.z}`);
-    // linkEl.setAttribute('title', data.name);
-    // linkEl.setAttribute('href', href);
-    // evtDetail['id'] = `${imgRoot}-link`;
     linkEl.setAttribute('id', `${imgRoot}-link`);
     // add in the rails example_id, so event handler can update stats
     let example_id = data.id;
     linkEl.setAttribute('example_id', example_id);
-    // evtDetail['image'] = `#${imgRoot}-thumb`;
-    // linkEl.setAttribute('image', `#${imgRoot}-thumb`);
     // disable the system 'on' event handler
     // linkEl.setAttribute('on', 'no-click');
     // and define our own click handler (so we can increment stats before xferring)
@@ -581,5 +580,17 @@ export class ResultsSceneComponent implements OnInit {
   toggleBgMusic(evt: Event) {
     this.utils.toggleSound(document.querySelector('#bg-music'));
   }
+
+  xferToQueryScene(evt: Event) {
+    // console.log(`xferToSceneB: now navigating to scene-b`);
+    // this.router.navigate(['/scene-b', { } ]);
+    // this.router.navigate([(evt.target as any).previousSibling.getAttribute('link').href, {}])
+    // debugger;
+    this.ngRedux.dispatch(this.actions.increment());
+
+    this.router.navigate([(evt.target as any).getAttribute('link').href, {}])
+
+  }
+
 
 }

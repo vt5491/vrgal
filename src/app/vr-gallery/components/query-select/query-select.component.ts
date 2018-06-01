@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';  // replaces previous Http service
 import {ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -12,6 +13,9 @@ import 'rxjs/add/operator/do';
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { ExamplesService } from '../../../core/services/examples.service';
+import { NgRedux } from '@angular-redux/store';
+import { CounterActions } from '../../../store/app.actions';
+import {IAppState} from "../../../store/store";
 // import THREE from "THREE";
 // declare var THREE: any;
 import * as THREE from "three";
@@ -31,64 +35,45 @@ declare var dat: any;
 export class QuerySelectComponent implements OnInit {
   name : string;
   category: string;
-  // exampleResults : Object[] = []
   exampleResults : Object = {};
   sceneEl : Element;
-  // expectedResultCnt : number
-  // 'webgl_geometry_cube.html'
-  // http://localhost:3000/examples/260
-  // http://192.168.50.126:3000/examples/260
+  count: number;
+  stateSubscription;
+
   constructor(
     private http: HttpClient,
     private base: CoreBaseService,
     private utils: CoreUtilsService,
     private router: Router,
     private examples: ExamplesService,
+    private ngRedux: NgRedux<IAppState>,
+    private actions: CounterActions,
   ) {
-    // super()
     console.log('QuerySelectComponent.ctor: entered');
     //TODO: rename base.vrizeSvcUrl to somehting like 'db-server' or
     // 'meta-data-server'
     console.log(`QuerySelectComponent.ctor: base.vrizeSvcUrl=${base.vrizeSvcUrl}`);
+    this.stateSubscription = ngRedux.select<number>('count')
+      .subscribe(newCount => this.count = newCount);
   }
 
   ngOnInit() {
+    console.log(`QuerySelectComponent.ngOnInit: count=${this.count}`)
     document.querySelector('a-scene')
       .addEventListener('loaded', this.init.bind(this))
+  }
+
+  ngOnDestroy() {
+    this.stateSubscription.unsubscribe();
   }
 
   init() {
     let scene: any = document.querySelector('a-scene');
     this.sceneEl = scene;
-    // let sceneObj  = (scene as AFRAME.AEntity).object3D;
     let sceneObj  = scene.object3D;
-    // let sbBox: any = document.querySelector('#sb-query');
     let allBox: any = document.querySelector('#all-query');
 
     this.utils.bgSoundInit(this.sceneEl, document.getElementById('bg-music-radio'));
-    // sbBox.addEventListener('click', () => {
-    //   console.log(`querySelect.clickHandler: click genned`);
-    //   console.log(`querySelect.clickHandler: doing api route`);
-    //
-    //   this.querySandbox()
-    // });
-
-    // allBox.addEventListener('click', () => {
-    //   this.queryAll()
-    // });
-
-    // make the controller help invisble
-    // let handHelpEl = document.querySelector("#hand-overview-chart");
-    // handHelpEl.setAttribute("visible","false");
-    // debugger;
-    // let gui = dat.GUIVR.create('Customization Panel');
-    // let sky = (document.querySelector('a-sky') as any);
-    // gui.position.set(-1.4, -2.5, 0);
-    // gui.scale.set(3, 3, 3);
-    // let dummyObj = {};
-    // gui.add(dummyObj, 'waveHeight')
-    // sceneObj.add( gui );
-    // sky.object3D.setObject3D('gui', gui );
   }
 
   // If the user clicks anywhere on the scene (that is not an element) clear
@@ -111,9 +96,7 @@ export class QuerySelectComponent implements OnInit {
   }
 
   querySandbox() {
-
     let httpParams = new HttpParams();
-    // httpParams = httpParams.append('col', 'lift_failure_code');
     httpParams = httpParams.append('col', 'lift_code');
     let lf_codes = ['-2'];
     lf_codes.forEach(lfc => {
@@ -124,12 +107,6 @@ export class QuerySelectComponent implements OnInit {
       // 'Access-Control-Allow-Origin': 'http://localhost:4200'
       'Content-Type': 'application/json'
     })
-
-    // httpParams.headers
-    // let options = {};
-    // options['params'] = httpParams;
-    // options['headers'] = headers;
-    // httpParams['headers'] = headers;
 
     try {
       this.examples.get(`${this.base.vrizeSvcUrl}/examples/search.json`, httpParams)
@@ -151,12 +128,6 @@ export class QuerySelectComponent implements OnInit {
     ids.forEach(id => {
       httpParams = httpParams.append('in[]', id);
     });
-    // const params = new HttpParams({
-    //   fromObject: {
-    //     col: 'id',
-    //     in: [260, 120],
-    //   }
-    // });
     try {
       this.examples.get(`${this.base.vrizeSvcUrl}/examples/search.json`, httpParams)
         .subscribe(this.processResults.bind(this));
@@ -176,14 +147,9 @@ export class QuerySelectComponent implements OnInit {
       try {
         this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_curated.json`)
         .subscribe(
-          // (data => {this.processResults(data.examples)}).bind(this),
           data => {this.processResults((data as any).examples, "queryCurated")},
           err => {console.log(`err=${err.message}`);
         });
-        // .subscribe(
-        //   data => {console.log(`data.length=${(data as any).length}`)},
-        //   err => {console.log(`err=${err.message}`)}
-        // )
       }
       catch (e) {
         console.log(`QuerySelectComponent.queryCurated: e=${e}`);
@@ -200,26 +166,14 @@ export class QuerySelectComponent implements OnInit {
     else {
       try {
       this.examples.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
-      //this.examples.get("http://127.0.0.1:3000/examples/260.json")
-      //this.examples.get("http://infinitewheelie.org:3000/examples/260.json")
-      // works when running http
-      //this.examples.get("http://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
-      // works when running https
-      //this.examples.get("https://infinitewheelie.org/servers/meta-data-proxy/examples/all_lifted.json")
-      // .subscribe(this.processResults.bind(this), err => {console.log(`err=${err.message}`);
-      // });
           .subscribe(
             data => {this.processResults((data as any).examples, "queryAll")},
             err => {console.log(`queryAll:err=${err.message}`);
         });
-      //debugger;
-      // this.examples.getMetaData();
       }
       catch (e) {
         console.log(`QuerySelectComponent.queryAll: e=${e}`);
       }
-
-      // exObservable.subscribe(this.processResults.bind(this))
     }
   }
 
@@ -233,11 +187,7 @@ export class QuerySelectComponent implements OnInit {
 
   // process a  many rowed result
   processResults(data, queryType) {
-    // let xPos = -8;
-    // let yPos = 10;
-    // debugger;
     let grid : any = this.utils.gridicize(data.length, 1.25);
-    // let grid : any = this.utils.gridicize(data.length, 1.5);
     let rows = grid.rows;
     let cols = grid.cols;
     // separate a-frame links by 4 units
@@ -255,37 +205,12 @@ export class QuerySelectComponent implements OnInit {
 
       this.aggregateResults(data[i])
 
-      // xPos += 4
       xPos += elemWidth;
 
-      // if ((i + 1) % 5 == 0) {
       if ((i + 1) % cols  == 0) {
-        // xPos = -8;
-        // yPos -= 4;
         xPos = leftPosX;
         yPos -= elemHeight;
       }
-
-    //   // and increment the stats
-    //   let statsUrl = `${this.base.vrizeSvcUrl}/examples/${data[i].id}/stats.json`;
-    //   console.log(`processResults.statsUrl=${statsUrl}`);
-
-
-    //   this.examples.get(statsUrl)
-    //     .subscribe(
-    //       rsp => {
-    //         // debugger;
-    //         // let result= (rsp as any).json();
-    //         console.log(`id=${data[i].id}, likes=${(rsp[0] as any).likes}`)} ,
-    //       err => { console.log(`err=${err.message}`)}
-    //   )
-    // console.log(`QuerySelectComponent.processResults: data.example_id=${data[i].example_id}`)
-    // this.examples.incExampleStat(data[i].example_id, "impressions")
-    //   .subscribe(rsp => {
-    //     console.log(`impressions: stats now updated`);
-    //   },
-    //   (err) => {console.log(`QuerySelectComponent.incImpressions: err=${err}`)},
-    // )
     }
     // push the final exampleResults onto sessionStorage
     sessionStorage.setItem(`${this.base.appPrefix}_querySelectResults`, JSON.stringify(this.exampleResults));
@@ -308,18 +233,6 @@ export class QuerySelectComponent implements OnInit {
       }
     }
 
-    /*
-    let evtDetail = {}
-    evtDetail['href'] = `vr-gallery/results-scene`
-    // evtDetail['pos'] = new THREE.Vector3(0, -2, 0)
-    evtDetail['pos'] = new THREE.Vector3(linkPosX, -4, 0)
-    evtDetail['title'] = "View Results";
-    let appPrefix = this.base.appPrefix
-    let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
-    evt.initEvent(`${appPrefix}_createlink`, true, true);
-    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
-    scene.dispatchEvent(evt)
-    */
     this.addResultsLink(new THREE.Vector3(linkPosX, -4, 0));
 
     // and finally, transfer to it
@@ -365,48 +278,16 @@ export class QuerySelectComponent implements OnInit {
     linkAttributes += `href: ${href};`;
     linkAttributes += ` on: no-click;`
     linkAttributes += ` title: View Results;`;
-    // let imgRoot = data['name'].replace(/\.html$/, '');
-    // linkAttributes += ` image: #${imgRoot}-thumb;`;
     linkAttributes += ` peekMode: "true";`
     linkEl.setAttribute('link', linkAttributes);
     linkEl.setAttribute('position', `${linkPos.x} ${linkPos.y} ${linkPos.z}`);
-    // linkEl.setAttribute('id', `${imgRoot}-link`);
-    // add in the rails example_id, so event handler can update stats
-    // let example_id = data.id;
-    // linkEl.setAttribute('example_id', example_id);
-    // evtDetail['image'] = `#${imgRoot}-thumb`;
-    // linkEl.setAttribute('image', `#${imgRoot}-thumb`);
-    // disable the system 'on' event handler
-    // linkEl.setAttribute('on', 'no-click');
-    // and define our own click handler (so we can increment stats before xferring)
-    /*
-    function sequenceSubscriber(observer) {
-      // synchronously deliver 1, 2, and 3, then complete
-      // observer.next(1);
-      // observer.next(2);
-      // observer.next(3);
-      // observer.complete();
-      let keys = Object.keys(this.exampleResults);
-      for (let i=0; i < keys.length; i++) {
-        let example = this.exampleResults[keys[i]];
-        this.examples.incExampleStat(example.id, "impressions")
-          .subscribe(rsp => {
-            console.log(`click: stats now updated`);
-          },
-          (err) => {console.log(`ResultsSceneComponent.addResultsLink: err=${err.message}`)},
-          // the finally block.. transfer in all cases, even if stats *not* updated
-          () => { (window as any).location= href}
-        )
-      }
 
-      // unsubscribe function doesn't need to do anything in this
-      // because values are delivered synchronously
-      return {unsubscribe() {}};
-    }
-    const sequence = new Observable(sequenceSubscriber);
-    */
+    let that = this;
     linkEl.addEventListener('click', (evt) => {
       console.log(`addResultsLink: now in user click handler`);
+      console.log(`addResultsLink: now incrementing count`);
+      // debugger;
+      that.ngRedux.dispatch(that.actions.increment());
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.
       // increment impressions only on the click event, in case they change their
@@ -422,7 +303,10 @@ export class QuerySelectComponent implements OnInit {
 
             // transfer to the results page after all examples have been updated.
             if (statUpdateCnt == keys.length) {
-              (window as any).location= href
+              // (window as any).location= href
+              // debugger;
+              // that.router.navigate([(evt.target as any).previousSibling.getAttribute('link').href, {}])
+              that.router.navigate([(evt.target as any).getAttribute('link').href, {}])
             }
           },
         (err) => {console.log(`ResultsSceneComponent.addResultsLink: err=${err.message}`)},

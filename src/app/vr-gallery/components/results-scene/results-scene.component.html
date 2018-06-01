@@ -37,8 +37,13 @@
   </a-entity>
   <a-entity id="view-source-btns" position="0 -10 0" >
   </a-entity>
-  <a-link href="vr-gallery/query-select" title="Return to Query Scene"
-    image="#cokeThumb" position="0 4 0" peekMode="true"></a-link>
+  <!-- <a-link href="vr-gallery/query-select" title="Return to Query Scene"
+    image="#cokeThumb" position="0 4 0" peekMode="true"></a-link> -->
+    <a-entity
+      link="href: vr-gallery/query-select; on: no-click;"
+      (click)="xferToQueryScene($event)"
+      position="0 4 0"
+    ></a-entity>
   <!-- <a-box position="-1 0.5 -3" rotation="0 60 0" color="#C4C309" height="2" width="2"></a-box> -->
   <a-gui-radio
     id= "bg-music-radio"
