@@ -288,6 +288,7 @@ export class QuerySelectComponent implements OnInit {
       console.log(`addResultsLink: now incrementing count`);
       // debugger;
       that.ngRedux.dispatch(that.actions.increment());
+      // that.ngRedux.
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.
       // increment impressions only on the click event, in case they change their
@@ -341,8 +342,27 @@ export class QuerySelectComponent implements OnInit {
 
   dummyClick(evt: Event) {
     console.log(`QuerySelectComponent.dummyClick: entered`);
+    this.utils.saveAppState(this.ngRedux);
     // setTimeout(function(){ (window as any).location = "https://www.yahoo.com"; }, 3000);
     // this.examples.incExampleStat(16, "clicks");
+    // (window as any).location = "https://192.168.50.158:4200/assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html";
+    // this.router.navigate(["https://192.168.50.158:4200/assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html", {}])
+    // try {
+    //   console.log(`now xferring to horise`);
+    //   this.utils.saveAppState(this.ngRedux);
+    //   (window as any).location = "https://192.168.50.158:4200/assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html";
+    //   // this.router.navigate(["assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html", {}])
+    //   // this.router.navigateByUrl("https://192.168.50.158:4200/assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html")
+    //   // this.router.navigateByUrl("/assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html")
+    //   // this.router.navigateByUrl("assets/threejs-env/examples/vrize-webgl_morphtargets_horse.html")
+    // }
+    // catch(error) {
+    //   console.log(`dummyClick: error=${error}`);
+    // }
+  }
+
+  dummyClick2(evt: Event) {
+    this.utils.restoreAppState(this.ngRedux, this.actions);
   }
 
  toggleBgMusic(evt: Event) {

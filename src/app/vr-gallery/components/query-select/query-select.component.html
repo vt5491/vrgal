@@ -41,8 +41,12 @@
     <a-box id="sb-query" position="-6 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
     <a-text value="sandbox" position="-6.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
   </a-entity> -->
-  <!-- <a-entity  save-state (click)="querySample($event)"> -->
-    <!-- <a-box id="sample-query" position="-3 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box> -->
+  <a-entity (click)="dummyClick($event)">
+    <a-box id="dummy-click" position="-3 4.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
+  </a-entity>
+  <a-entity (click)="dummyClick2($event)">
+    <a-box id="dummy-click-2" position="3 4.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
+  </a-entity>
     <a-circle id="curated-query"
       (click)="queryCurated($event)"
       position="-2 0.5 0"
@@ -52,7 +56,6 @@
     </a-circle>
     <a-text value="Curated Gallery\n(recommended)"
       position="-2 -1.5 0" align="center" eight="8.2" idth="0.2"></a-text>
-  <!-- </a-entity> -->
   <!-- <a-box id="all-query"
     (click)="queryAll($event)"
     position="0 0.5 -3" rotation="0 0 0"

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { CoreBaseService } from './core-base.service';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
+import { NgRedux } from '@angular-redux/store';
+import {IAppState} from "../../store/store";
 
 
 import * as THREE from "three";
@@ -174,8 +176,53 @@ export class CoreUtilsService {
       // simulate a physical click by kicking off the gui-radio's first 'a-animation'
       (animations[i] as any).emit('radioAnimation');
     }
+  }
 
+  // save ng-redux state on session storage
+  // This is hopefully just a temporary solution until I can figure out
+  // 'redux-persist' and how it integrates into 'ng-redux'
+  saveAppState(store : NgRedux<IAppState>){
+    // debugger;
+    // sessionStorage.setItem
+    let keys = Object.keys(store.getState());
 
+    let storageKey = `${this.base.appPrefix}-appState`;
+    let storageObj = {};
+
+    for (let i=0; i < keys.length; i++) {
+
+      // storageObj[keys[i]] = store.select(keys[i]);
+      let key = keys[i];
+      store.select(key)
+        .subscribe(
+          val => {
+            storageObj[key] = val;
+            console.log(`val=${val}, storageObj=%o`, storageObj);
+
+            // Once we've done all keys, persist to sessionStorage.
+            if (Object.keys(storageObj).length === keys.length) {
+              var copy = Object.assign({}, storageObj);
+              // sessionStorage.setItem(storageKey, JSON.stringify(copy))
+              sessionStorage.setItem(storageKey, JSON.stringify({count: 20}));
+            }
+          },
+          error => console.log("Error: ", error),
+          () => { console.log(`saveAppState: now in finally`);  }
+        )
+    }
+  }
+
+  restoreAppState(store : NgRedux<IAppState>, actionObj) {
+    let storageKey = `${this.base.appPrefix}-appState`;
+    let storageObj = JSON.parse(sessionStorage.getItem(storageKey));
+
+    let keys = Object.keys(storageObj);
+
+    for (let i=0; i < keys.length; i++) {
+      // debugger;
+      store.dispatch(actionObj.set( storageObj[keys[i]]))
+      // store.dispatch(actionObj.set(15))
+    }
   }
 
 
