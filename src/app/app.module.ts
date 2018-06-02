@@ -4,7 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 // import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { environment } from '../environments/environment';
+import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
 
 // redux
 import { rootReducer, IAppState, INITIAL_STATE } from './store/store';
@@ -61,12 +62,22 @@ const appRoutes:Routes = [
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {
-  constructor(ngRedux: NgRedux<IAppState>) {
+  constructor(
+    private ngRedux: NgRedux<IAppState>,
+    private devTools: DevToolsExtension
+  ) {
+    let enhancers = [];
+
+    if (!environment.production && devTools.isEnabled()) {
+      enhancers = [ ...enhancers, devTools.enhancer() ];
+    }
     // Tell @angular-redux/store about our rootReducer and our initial state.
     // It will use this to create a redux store for us and wire up all the
     // events.
     ngRedux.configureStore(
-    rootReducer,
-    INITIAL_STATE);
+      rootReducer,
+      INITIAL_STATE,
+      [],
+      enhancers );
   }
 }

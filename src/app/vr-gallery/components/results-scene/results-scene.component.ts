@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {ReactiveFormsModule, FormControl, FormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/do';
+import { filter } from 'rxjs/operators'
+
+// import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/debounceTime';
+// import 'rxjs/add/operator/distinctUntilChanged';
+// import 'rxjs/add/operator/switchMap';
+// import 'rxjs/add/operator/do';
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { ExamplesService } from '../../../core/services/examples.service';
@@ -32,11 +34,13 @@ export class ResultsSceneComponent implements OnInit {
   debugCounter: number = 0;
   count: number;
   stateSubscription;
+  ngRouted: string;
 
   constructor(
     private base: CoreBaseService,
     private utils: CoreUtilsService,
     private router: Router,
+    private route: ActivatedRoute,
     private renderer: Renderer2,
     private examples: ExamplesService,
     private ngRedux: NgRedux<IAppState>,
@@ -51,6 +55,25 @@ export class ResultsSceneComponent implements OnInit {
     this.exampleResults = JSON.parse(sessionStorage.getItem(`${this.base.appPrefix}_querySelectResults`))
     this.stateSubscription = ngRedux.select<number>('count')
       .subscribe(newCount => this.count = newCount);
+
+    // debugger;
+    if (this.route.snapshot.params && this.route.snapshot.params['ngRouted']) {
+      this.ngRouted = this.route.snapshot.params['ngRouted'];
+    }
+
+      // this.route.queryParams.subscribe(params => {
+      //   debugger;
+      //   this.ngRoutedParam = params['ngRouted'];
+      //   console.log(`resultsSceneComponent.ctor: ngRoutedParam=${this.ngRoutedParam}`);
+      // });
+      // this.router.events
+      // .filter(event => event instanceof NavigationStart)
+      // .subscribe((event:NavigationStart) => {
+      //   // You only receive NavigationStart events
+      // });
+      this.route.url.subscribe(url =>{
+        console.log(`ResultsSceneComponent.ctor: route.url=${url}`);
+      });
   }
 
   ngOnInit() {
@@ -62,8 +85,24 @@ export class ResultsSceneComponent implements OnInit {
     document.querySelector('a-scene')
       .addEventListener('loaded', this.addResources.bind(this))
 
-    // var el = document.querySelector("a-log");
-    // el.setAttribute("visible", "false");
+    // restore any prior appState
+    if (sessionStorage.getItem(`${this.base.appPrefix}-ngRouted`) !== "1"){
+
+      let storageKey = `${this.base.appPrefix}-appState`;
+
+        // debugger;
+      console.log(`resultsSceneComponent.ngOnInit: ngRouted=${this.ngRouted}, referrer=${document.referrer}`);
+      if (sessionStorage.getItem(storageKey)) {
+        console.log(`ResultScene.ngOnInit: restoring prior appState`);
+        this.utils.restoreAppState(this.ngRedux, this.actions);
+      }
+      // var el = document.querySelector("a-log");
+      // el.setAttribute("visible", "false");
+    }
+
+    //default back to non-angular routed.
+    sessionStorage.setItem(`${this.base.appPrefix}-ngRouted`, "0");
+
   }
 
   ngOnDestroy() {
@@ -123,6 +162,8 @@ export class ResultsSceneComponent implements OnInit {
     // linkEl.setAttribute('on', 'no-click');
     // and define our own click handler (so we can increment stats before xferring)
     linkEl.addEventListener('click', (evt) => {
+      // save the appStore
+      this.utils.saveAppState(this.ngRedux);
       // console.log(`now in user click handler`);
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.

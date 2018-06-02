@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CoreBaseService } from './core-base.service';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/map';
+import { takeWhile, takeUntil, first } from 'rxjs/operators'
 import { NgRedux } from '@angular-redux/store';
 import {IAppState} from "../../store/store";
 
@@ -193,28 +194,61 @@ export class CoreUtilsService {
 
       // storageObj[keys[i]] = store.select(keys[i]);
       let key = keys[i];
-      store.select(key)
-        .subscribe(
-          val => {
+      // let keyDone = false;
+      let saveAppStateObservable = store.select(key).pipe(first());
+      // let saveAppStateObservable = takeUntil(store.select(key));
+      // let saveAppStateObservable = store.select(key).pipe(takeUntil(keyDone));
+      // const myObserver = {
+      //   next: x => console.log('Observer got a next value: ' + x),
+      //   error: err => console.error('Observer got an error: ' + err),
+      //   complete: () => console.log('Observer got a complete notification'),
+      // };
+      let saveKeySubscription;
+      let saveAppStateObserver = {
+        next: val => {
             storageObj[key] = val;
-            console.log(`val=${val}, storageObj=%o`, storageObj);
+            console.log(`saveAppState: val=${val}, storageObj=%o`, storageObj);
 
             // Once we've done all keys, persist to sessionStorage.
             if (Object.keys(storageObj).length === keys.length) {
-              var copy = Object.assign({}, storageObj);
-              // sessionStorage.setItem(storageKey, JSON.stringify(copy))
-              sessionStorage.setItem(storageKey, JSON.stringify({count: 20}));
+              sessionStorage.setItem(storageKey, JSON.stringify(storageObj))
+              // sessionStorage.setItem(storageKey, JSON.stringify({count: 20}));
+              // saveKeySubscription.unsubscribe();
             }
+            // keyDone = true;
           },
-          error => console.log("Error: ", error),
-          () => { console.log(`saveAppState: now in finally`);  }
-        )
-    }
+        error: err => console.log(`saveAppState err=${err}`),
+        complete: () => console.log(`saveAppState: completed`)
+      };
+        saveKeySubscription = saveAppStateObservable
+          .subscribe(saveAppStateObserver)
+      }
+
+      // let saveAppStateSub = store.select(key)
+        // .subscribe(
+        //   val => {
+        //     storageObj[key] = val;
+        //     console.log(`saveAppState: val=${val}, storageObj=%o`, storageObj);
+        //
+        //     // Once we've done all keys, persist to sessionStorage.
+        //     if (Object.keys(storageObj).length === keys.length) {
+        //       // var copy = Object.assign({}, storageObj);
+        //       // sessionStorage.setItem(storageKey, JSON.stringify(copy))
+        //       sessionStorage.setItem(storageKey, JSON.stringify(storageObj))
+        //       // sessionStorage.setItem(storageKey, JSON.stringify({count: 20}));
+        //     }
+        //   },
+        //   error => console.log("Error: ", error),
+        //   // complete() {console.log(`done`)}
+        //   // () => { console.log(`saveAppState: now in finally`);  }
+        // )
+    // }
   }
 
   restoreAppState(store : NgRedux<IAppState>, actionObj) {
     let storageKey = `${this.base.appPrefix}-appState`;
     let storageObj = JSON.parse(sessionStorage.getItem(storageKey));
+    console.log(`Utils.restoreAppState: storageObj[count]=${storageObj.count}`)
 
     let keys = Object.keys(storageObj);
 

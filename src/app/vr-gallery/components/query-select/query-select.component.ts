@@ -16,6 +16,7 @@ import { ExamplesService } from '../../../core/services/examples.service';
 import { NgRedux } from '@angular-redux/store';
 import { CounterActions } from '../../../store/app.actions';
 import {IAppState} from "../../../store/store";
+import { select } from '@angular-redux/store';
 // import THREE from "THREE";
 // declare var THREE: any;
 import * as THREE from "three";
@@ -38,6 +39,16 @@ export class QuerySelectComponent implements OnInit {
   exampleResults : Object = {};
   sceneEl : Element;
   count: number;
+  @select() count2$;
+  count2 : number;
+  // @select('count').subscribe(newCount => this.count_vt= newCount)
+  // @select('count') subscribe(newCount => this.count_vt= newCount)
+  // @select('count') count$;
+  // @select(state => state.count) count_vt;
+  // @select(state => {this.count_vt = state.count});
+  // my_f = (val) => {this.count_vt = val};
+  // @select(state => state.count) my_f;
+  // @select(newCount => )
   stateSubscription;
 
   constructor(
@@ -55,10 +66,14 @@ export class QuerySelectComponent implements OnInit {
     console.log(`QuerySelectComponent.ctor: base.vrizeSvcUrl=${base.vrizeSvcUrl}`);
     this.stateSubscription = ngRedux.select<number>('count')
       .subscribe(newCount => this.count = newCount);
+
+    this.count2$.subscribe(newCount => this.count2 = newCount);
+
   }
 
   ngOnInit() {
     console.log(`QuerySelectComponent.ngOnInit: count=${this.count}`)
+    console.log(`QuerySelectComponent.ngOnInit: count2=${this.count2}`)
     document.querySelector('a-scene')
       .addEventListener('loaded', this.init.bind(this))
   }
@@ -275,6 +290,7 @@ export class QuerySelectComponent implements OnInit {
 
     let linkAttributes = "";
     let href = `vr-gallery/results-scene`;
+    // let href = `vr-gallery/results-scene?ng_routed=1`;
     linkAttributes += `href: ${href};`;
     linkAttributes += ` on: no-click;`
     linkAttributes += ` title: View Results;`;
@@ -307,7 +323,13 @@ export class QuerySelectComponent implements OnInit {
               // (window as any).location= href
               // debugger;
               // that.router.navigate([(evt.target as any).previousSibling.getAttribute('link').href, {}])
-              that.router.navigate([(evt.target as any).getAttribute('link').href, {}])
+              // that.router.navigate([(evt.target as any).getAttribute('link').href, {}])
+              // indicate we came from angular
+              sessionStorage.setItem(`${this.base.appPrefix}-ngRouted`, "1");
+              that.router.navigate([
+                (evt.target as any).getAttribute('link').href,
+                // {queryParams: { ng-routed: '1' }}])
+                { ngRouted: '1' }])
             }
           },
         (err) => {console.log(`ResultsSceneComponent.addResultsLink: err=${err.message}`)},
@@ -363,6 +385,11 @@ export class QuerySelectComponent implements OnInit {
 
   dummyClick2(evt: Event) {
     this.utils.restoreAppState(this.ngRedux, this.actions);
+  }
+
+  dummyClick3(evt: Event) {
+    this.ngRedux.dispatch(this.actions.increment());
+    console.log(`QuerySelectComponent.dummyClick3: count=${this.count}, count2=${this.count2}`)
   }
 
  toggleBgMusic(evt: Event) {
