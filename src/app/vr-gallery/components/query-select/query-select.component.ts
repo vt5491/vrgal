@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';  // replaces previous Http service
@@ -24,6 +24,7 @@ import * as THREE from "three";
 // declare var AFRAME: any;
 import {Router} from '@angular/router';
 import { debug } from 'util';
+import { ConfigPanelComponent } from '../../../vr-gallery/components/config-panel/config-panel.component';
 declare var dat: any;
 
 @Component({
@@ -50,6 +51,7 @@ export class QuerySelectComponent implements OnInit {
   // @select(state => state.count) my_f;
   // @select(newCount => )
   stateSubscription;
+  configPanel: ConfigPanelComponent;
 
   constructor(
     private http: HttpClient,
@@ -59,6 +61,9 @@ export class QuerySelectComponent implements OnInit {
     private examples: ExamplesService,
     private ngRedux: NgRedux<IAppState>,
     private actions: CounterActions,
+    private renderer: Renderer2,
+    // injecting ConfigPanelComponent does not work for some reason
+    // private configPanel: ConfigPanelComponent,
   ) {
     console.log('QuerySelectComponent.ctor: entered');
     //TODO: rename base.vrizeSvcUrl to somehting like 'db-server' or
@@ -68,6 +73,15 @@ export class QuerySelectComponent implements OnInit {
       .subscribe(newCount => this.count = newCount);
 
     this.count2$.subscribe(newCount => this.count2 = newCount);
+    let globalngDoCheck = this.renderer.listen('document', 'ngDoCheck', (evt) => {
+      console.log(`QuerySelectComponent.ctor: ngDoCheck triggered`);
+    })
+    console.log(`QuerySelectComponent.ctor now setting up ngAfterViewInit listener`)
+    let globalAfterViewInit = this.renderer.listen('document', 'ngAfterViewInit', (evt) => {
+      console.log(`QuerySelectComponent.ctor: ngAfterViewInit triggered`);
+    })
+
+    this.configPanel = new ConfigPanelComponent(this.utils, this.renderer);
 
   }
 
@@ -76,13 +90,85 @@ export class QuerySelectComponent implements OnInit {
     console.log(`QuerySelectComponent.ngOnInit: count2=${this.count2}`)
     document.querySelector('a-scene')
       .addEventListener('loaded', this.init.bind(this))
+
+    let hookEl = document.querySelector('#config-panel-hook');
+    let newEl = this.configPanel.createEl();
+    // hookEl.appendChild(newEl);
+    this.renderer.appendChild(hookEl, newEl)
   }
 
   ngOnDestroy() {
     this.stateSubscription.unsubscribe();
   }
 
+  // ngOnChanges() {
+  //   console.log(`QuerySelectComponent.ngOnchanges: entered`)
+  // }
+  //
+  // ngDoCheck() {
+  //   console.log(`QuerySelectComponent.ngDoCheck: entered`)
+  // }
+
+  ngAfterViewInit() {
+    console.log(`QuerySelectComponent.ngAfterViewInit: entered`)
+    // let vrgalConfigEl = document.querySelector('#vrgal-config');
+    let vrgalConfigEl = document.querySelector('vrgal-config');
+
+    console.log(`QuerySelectComponent.ngAfterViewInit: vrgalConfigEl=${vrgalConfigEl}`);
+    // document.querySelector('a-scene')
+    //   .addEventListener('loaded', this.init.bind(this))
+    if( vrgalConfigEl) {
+      setTimeout(
+        () => {
+          console.log(`QuerySelectComponent.ngAfterViewInit: now replacing vrgalConfigEl after delay`);
+          // debugger;
+          // let vrgalConfigParentEl = vrgalConfigEl.parentElement;
+          // // vrgalConfigParent.replaceChild(vrgalConfigEl, vrgalConfigEl);
+          // let removedEl = vrgalConfigParentEl.removeChild(vrgalConfigEl);
+          //
+          // // and re-insert so we trigger a-frame to add to the scene
+          // // vrgalConfigParent.appendChild(removedEl);
+          // vrgalConfigParentEl.appendChild(vrgalConfigEl);
+
+          // manually re-insert a test element
+          let linkParentEl = document.querySelector('#links');
+          let linkEl = document.createElement('a-entity');
+          let linkAttributes = "";
+          let href = `vr-gallery/results-scene`;
+          // let href = `vr-gallery/results-scene?ng_routed=1`;
+          linkAttributes += `href: ${href};`;
+          linkAttributes += ` on: no-click;`
+          linkAttributes += ` title: View Results;`;
+          linkAttributes += ` peekMode: "true";`
+          linkEl.setAttribute('link', linkAttributes);
+          linkEl.setAttribute('position', `${4} ${-5.5} ${0}`);
+
+          linkParentEl.appendChild(linkEl);
+
+          let vrgalConfigEl = document.querySelector('vrgal-config');
+          // let vrgalConfigEl = document.getElementById('vrgal-config');
+          let clone = vrgalConfigEl.cloneNode( true);
+          // clone.setAttribute('position', "1 1 0");
+          // linkParentEl.appendChild(vrgalConfigEl);
+          linkParentEl.appendChild(clone);
+          // let guiEl = document.createElement('a-gui-radio');
+          let guiEl = document.createElement('a-entity');
+          let guiAttr = " title: togo";
+          guiEl.setAttribute('link', guiAttr);
+          guiEl.setAttribute('id', 'man-gui');
+          // guiEl.setAttribute("width", "3");
+          // guiEl.setAttribute("height", "0.75");
+          // guiEl.setAttribute("value", "togo");
+
+          linkParentEl.appendChild(guiEl);
+
+        }, 3000
+      );
+    }
+  }
+
   init() {
+    console.log(`QuerySelectComponent.init: entered`)
     let scene: any = document.querySelector('a-scene');
     this.sceneEl = scene;
     let sceneObj  = scene.object3D;
@@ -392,9 +478,9 @@ export class QuerySelectComponent implements OnInit {
     console.log(`QuerySelectComponent.dummyClick3: count=${this.count}, count2=${this.count2}`)
   }
 
- toggleBgMusic(evt: Event) {
-   this.utils.toggleSound(document.querySelector('#bg-music'));
- }
+ // toggleBgMusic(evt: Event) {
+ //   this.utils.toggleSound(document.querySelector('#bg-music'));
+ // }
 
 
 }

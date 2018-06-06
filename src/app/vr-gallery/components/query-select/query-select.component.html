@@ -3,7 +3,7 @@
     <img id="cokeThumb" src="assets/img/coke-label.jpg">
     <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
     <img id="handOverviewImg" src="assets/img/controls_overview.png">
-    <img id="vrgal-logo" src="assets/img/vrgal_logo_manual.png">
+    <!-- <img id="vrgal-logo" src="assets/img/vrgal_logo_manual.png"> -->
     <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love.mp3" preload="auto"></audio> -->
     <!-- <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg" preload="auto"></audio> -->
     <audio id="bg-music-chill" src="assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.mp3" qreload="auto"></audio>
@@ -41,7 +41,7 @@
     <a-box id="sb-query" position="-6 0.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
     <a-text value="sandbox" position="-6.5 -1.5 -3" eight="8.2" idth="0.2"></a-text>
   </a-entity> -->
-  <a-entity (click)="dummyClick($event)">
+  <!-- <a-entity (click)="dummyClick($event)">
     <a-box id="dummy-click" position="-3 4.5 -3" rotation="0 0 0" color="#4CC309" height="2" width="2"></a-box>
   </a-entity>
   <a-entity (click)="dummyClick2($event)">
@@ -49,7 +49,7 @@
   </a-entity>
   <a-entity (click)="dummyClick3($event)">
     <a-circle id="dummy-click-3" position="0 4.5 -3" radius="1" rotation="0 0 0" color="#4CC309" ></a-circle>
-  </a-entity>
+  </a-entity> -->
     <a-circle id="curated-query"
       (click)="queryCurated($event)"
       position="-2 0.5 0"
@@ -95,6 +95,10 @@
       position="4 -5.5 0"
     ></a-entity> -->
   </a-entity>
+  <a-entity id="config-panel-hook"></a-entity>
+  <!-- <vrgal-config
+    position="4 -5.5. 0"
+  ></vrgal-config> -->
     <!-- <a-datgui name="settings" position="0 2 -1"> -->
       <!-- <a-gui-slider id="scaleControl" name="scale" step="0.01" min="0.01" max="4"></a-gui-slider>
       <a-gui-dropdown name="options">
@@ -110,7 +114,7 @@
 </a-datgui> -->
   <!-- <a-datgui>
   </a-datgui> -->
-  <a-gui-radio
+  <!-- <a-gui-radio
     id = "bg-music-radio"
     (click)="toggleBgMusic($event)"
     position="4 -5.5 0"
@@ -120,8 +124,7 @@
     margin="0 0 0.05 0"
     checked="true"
 >
-    <!-- (click)="toggleBgMusic($event)" -->
-</a-gui-radio>
+</a-gui-radio> -->
 <!-- <a-gui-radio
     id = "bg-music-radio2"
     position="6 -5.5 0"
