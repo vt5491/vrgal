@@ -75111,6 +75111,7 @@ module.exports.AScene = registerElement('a-scene', {
         window.addEventListener('vrdisplaypresentchange', this.onVRPresentChangeBound);
 
         // bind functions
+//vt
         this.enterVRBound = function () { self.enterVR(); };
         this.exitVRBound = function () { self.exitVR(); };
         this.exitVRTrueBound = function () { self.exitVR(true); };
@@ -75118,8 +75119,12 @@ module.exports.AScene = registerElement('a-scene', {
         this.pointerUnrestrictedBound = function () { self.pointerUnrestricted(); };
 
         // Enter VR on `vrdisplayactivate` (e.g. putting on Rift headset).
-        window.addEventListener('vrdisplayactivate', this.enterVRBound);
-
+        //vtwindow.addEventListener('vrdisplayactivate', this.enterVRBound);
+        //vt add
+        window.addEventListener('vrdisplayactivate', (evt) => {
+         //debugger;
+         this.enterVRBound()});
+        //vt end
         // Exit VR on `vrdisplaydeactivate` (e.g. taking off Rift headset).
         window.addEventListener('vrdisplaydeactivate', this.exitVRBound);
 
@@ -75357,6 +75362,9 @@ module.exports.AScene = registerElement('a-scene', {
      */
     onVRPresentChange: {
       value: function (evt) {
+        //vt add
+        //debugger;
+        //vt end
         // Polyfill places display inside the detail property
         var display = evt.display || evt.detail.display;
         // Entering VR.

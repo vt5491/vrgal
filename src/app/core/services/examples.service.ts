@@ -77,7 +77,7 @@ export class ExamplesService {
   }
 
   put(route: string, body) {
-    console.log(`Examples.service.post: route=${route}, body=${JSON.stringify(body)}`);
+    // console.log(`Examples.service.post: route=${route}, body=${JSON.stringify(body)}`);
 
     const httpOptions = {
       headers: new HttpHeaders({

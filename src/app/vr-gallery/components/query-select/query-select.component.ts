@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, Output, EventEmitter} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';  // replaces previous Http service
@@ -52,6 +52,7 @@ export class QuerySelectComponent implements OnInit {
   // @select(newCount => )
   stateSubscription;
   configPanel: ConfigPanelComponent;
+  // @Output() vrdisplayactivate: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -69,6 +70,14 @@ export class QuerySelectComponent implements OnInit {
     //TODO: rename base.vrizeSvcUrl to somehting like 'db-server' or
     // 'meta-data-server'
     console.log(`QuerySelectComponent.ctor: base.vrizeSvcUrl=${base.vrizeSvcUrl}`);
+    // restore vr mode if that's whence we came.
+    // let event = new Event('vrdisplayactivate');
+    // console.log(`QuerySelectComponent.ctor: emitting vrdisplayactivate method 1`);
+    // document.querySelector('app-root').dispatchEvent(event);
+
+    // console.log(`QuerySelectComponent.ctor: emitting vrdisplayactivate method 2`);
+    // this.vrdisplayactivate.emit(null);
+
     this.stateSubscription = ngRedux.select<number>('count')
       .subscribe(newCount => this.count = newCount);
 
@@ -401,7 +410,7 @@ export class QuerySelectComponent implements OnInit {
         let example = this.exampleResults[keys[i]];
         this.examples.incExampleStat(example.id, "impressions")
           .subscribe(rsp => {
-            console.log(`click: stats now updated, statUpdateCnt=${statUpdateCnt}`);
+            // console.log(`click: stats now updated, statUpdateCnt=${statUpdateCnt}`);
             statUpdateCnt++;
 
             // transfer to the results page after all examples have been updated.
@@ -412,10 +421,13 @@ export class QuerySelectComponent implements OnInit {
               // that.router.navigate([(evt.target as any).getAttribute('link').href, {}])
               // indicate we came from angular
               sessionStorage.setItem(`${this.base.appPrefix}-ngRouted`, "1");
-              that.router.navigate([
-                (evt.target as any).getAttribute('link').href,
-                // {queryParams: { ng-routed: '1' }}])
-                { ngRouted: '1' }])
+              // use this if using angular router to xfer
+              // that.router.navigate([
+              //   (evt.target as any).getAttribute('link').href,
+              //   // {queryParams: { ng-routed: '1' }}])
+              //   { ngRouted: '1' }])
+              // use this if using the browser to xfer
+              (window as any).location= href
             }
           },
         (err) => {console.log(`ResultsSceneComponent.addResultsLink: err=${err.message}`)},
