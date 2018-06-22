@@ -134,9 +134,12 @@ export class ResultsSceneComponent implements OnInit {
       //   // let evt = new CustomEvent("vrdisplayactivate", {detail: {display : displays[0]}})
       //   let evt = new (window as any).VRDisplayEvent('vrdisplayactivate', {display : displays[0]});
       //   // let evt = new (window as any).VRDisplayEvent('vrdisplaypresentchange', {display : displays[0]});
-      //   evt.detail = {display: displays[0]};
-      //   window.dispatchEvent(evt);
-      //   // (document.querySelector('a-scene') as any).enterVR();
+      //   // evt.detail = {display: displays[0]};
+      //   // window.dispatchEvent(evt);
+      //   (document.querySelector('a-scene') as any).enterVR(false);
+      //   // the following two go into vr upon refresh..so getting kind of close.
+      //   // let canvas = document.querySelector('canvas');
+      //   // displays[0].requestPresent([{source: canvas}])
       //   // document.querySelector('a-scene').dispatchEvent(evt);
       // },
       // (err) => {console.log(`ResultsSceneComponent.addResources: getVRDisplays got error ${err}`)}

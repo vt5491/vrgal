@@ -45,7 +45,11 @@
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 import 'core-js/es7/reflect';
 
-
+//import 'aframe'; <- alternate way to load aframe
+import '../node_modules/aframe/dist/aframe-master';
+import 'aframe-gui';
+import '../init_scripts/register-ng-primitives';
+import '../init_scripts/aframe-log-component.js';
 /**
  * Required to support Web Animations `@angular/platform-browser/animations`.
  * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation

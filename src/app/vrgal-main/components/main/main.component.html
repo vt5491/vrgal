@@ -1,0 +1,24 @@
+<a-scene id="vrgal-main-scene" ttats>
+  <a-assets>
+    <img id="sky" src="assets/img/CGSkies_0284_free.jpg">
+  </a-assets>
+  <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
+    <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
+    <a-entity hand-controls-vt="left" position="0 0 0" grab></a-entity>
+    <a-entity laser-controls="hand: right" position="0 0 0"></a-entity>
+  </a-entity>
+  <a-circle
+    position="-2 3 -5"
+    color="#a3ff6e"
+    (click)="toggleSubScenes($event)"
+  ></a-circle>
+  <!-- <a-circle color="#4cc309"></a-circle> -->
+  <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box> -->
+  <!-- <div id="header"> -->
+  <app-header></app-header>
+  <!-- </div> -->
+  <app-query-sub></app-query-sub>
+  <app-result-sub></app-result-sub>
+  <app-config-panel></app-config-panel>
+  <a-sky src="#sky" theta-length="330"></a-sky>
+</a-scene>

@@ -8,6 +8,8 @@ import { CoreUtilsService } from './services/core-utils.service';
 import { ExamplesService } from './services/examples.service';
 import { StatsService } from './services/stats.service';
 
+import { ConfigActions } from '../store/app.actions';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +20,7 @@ import { StatsService } from './services/stats.service';
     CoreUtilsService,
     ExamplesService,
     StatsService,
+    ConfigActions,
   ],
   declarations: []
 })
