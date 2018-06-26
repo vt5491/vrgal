@@ -12,10 +12,11 @@ import {IAppState} from "../../../store/store";
 export class MainComponent implements OnInit {
 
   constructor(
-    // private ngRedux: NgRedux<IAppState>,
-    private ngRedux: NgRedux<any>,
+    private ngRedux: NgRedux<IAppState>,
+    // private ngRedux: NgRedux<any>,
     private actions: CounterActions,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     document.querySelector('a-scene')

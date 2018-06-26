@@ -63,9 +63,9 @@ const appRoutes:Routes = [
 })
 export class AppModule {
   constructor(
-    // private ngRedux: NgRedux<IAppState>,
+    private ngRedux: NgRedux<IAppState>,
     // private ngRedux: NgRedux<ICountState>,
-    private ngRedux: NgRedux<any>,
+    // private ngRedux: NgRedux<any>,
     private devTools: DevToolsExtension
   ) {
     let enhancers = [];

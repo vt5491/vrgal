@@ -9,5 +9,11 @@ AFRAME.registerPrimitive('app-main', { mappings: {} });
 AFRAME.registerPrimitive('app-query-sub', { mappings: {} });
 AFRAME.registerPrimitive('app-result-sub', { mappings: {} });
 AFRAME.registerPrimitive('app-config-panel', { mappings: {} });
+//AFRAME.registerPrimitive('app-config-panel', { 
+//  defaultComponents: {
+//    'gui-radio': { }
+//  }, 
+//  mappings: {'checked': 'gui-radio.checked',} 
+//});
 AFRAME.registerPrimitive('app-help-panel', { mappings: {} });
 AFRAME.registerPrimitive('app-header', { mappings: {} });

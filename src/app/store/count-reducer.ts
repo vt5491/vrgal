@@ -5,6 +5,12 @@ export interface ICountState {
   count2: number;
   // bgMusicOn: boolean;
 }
+
+export const COUNT_STATE_INITIAL: ICountState = {
+  count: 0,
+  count2: 0,
+}
+
 export class CountReducer {
 // export default function countReducer(lastState: ICountState, action) {
 // let countReducer = function (lastState: ICountState, action) {

@@ -3,17 +3,27 @@ import { CounterActions } from './app.actions';
 import { ConfigActions } from './app.actions';
 import { CountReducer } from './count-reducer';
 import { ConfigReducer } from './config-reducer';
+import { IConfigState, CONFIG_STATE_INITIAL } from './config-reducer';
+import { ICountState, COUNT_STATE_INITIAL } from './count-reducer';
 
 export interface IAppState {
-  count: number;
-  count2: number;
+  // count: number;
+  // count2: number;
   // bgMusicOn: boolean;
+  cr1: ICountState;
+  config: IConfigState;
 }
 
+// export const INITIAL_STATE: IAppState = {
+//   count: 0,
+//   count2: 0,
+// };
 export const INITIAL_STATE: IAppState = {
-  count: 0,
-  count2: 0,
-};
+  // COUNT_STATE_INITIAL,
+  // CONFIG_STATE_INITIAL;
+  cr1: COUNT_STATE_INITIAL,
+  config: CONFIG_STATE_INITIAL
+}
 //
 // export function rootReducer(lastState: IAppState, action: Action): IAppState {
 //   // console.log(`rootReducer: action.value=${(action as any).value}`);

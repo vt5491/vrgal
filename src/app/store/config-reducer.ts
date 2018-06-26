@@ -6,6 +6,11 @@ export interface IConfigState {
   bgMusicOn: boolean;
 }
 
+export const CONFIG_STATE_INITIAL: IConfigState = {
+  bgMusicOn: true,
+}
+
+
 export class ConfigReducer {
 
  public reducer(lastState: IConfigState = {bgMusicOn: true}, action) {

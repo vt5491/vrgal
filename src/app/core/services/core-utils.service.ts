@@ -122,7 +122,7 @@ export class CoreUtilsService {
   };
 
   toggleSound(el) {
-    // debugger;
+    debugger;
     if (el.components.sound.isPlaying) {
       el.components.sound.pauseSound();
     }
