@@ -260,4 +260,24 @@ export class CoreUtilsService {
   }
 
 
+  toggleSubScenes() {
+    console.log(`CoreUtils.toggleSubScenes: entered`);
+    let queryScene = document.querySelector('app-query-sub');
+    let resultScene = document.querySelector('app-result-sub');
+
+    let querySceneVisible : any= queryScene.getAttribute('visible');
+    let resultSceneVisible : any= resultScene.getAttribute('visible');
+
+    queryScene.setAttribute('visible', querySceneVisible ? 'false' : 'true');
+    resultScene.setAttribute('visible', resultSceneVisible ? 'false' : 'true');
+
+    // this.ngRedux.dispatch(this.actions.increment());
+    // let state=this.ngRedux.getState();
+    // // debugger;
+    // console.log(`MainComponent.toggleSubScenes: state.cr1.count=${state.cr1.count}, state.cr1.count2=${state.cr1.count2}`)
+    // console.log(`MainComponent.toggleSubScenes: state.config.bgMusicOn=${state.config.bgMusicOn}`)
+
+  }
+
+
 }

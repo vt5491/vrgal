@@ -177,5 +177,13 @@ export class ExamplesService {
     })
   };
 
+  queryCurated() {
+    return this.get(`${this.base.vrizeSvcUrl}/examples/all_curated.json`)
+    // .subscribe(
+    //   data => {this.processResults((data as any).examples, "queryCurated")},
+    //   err => {console.log(`err=${err.message}`);
+    // });
+
+  }
 
 }

@@ -31,7 +31,8 @@
               "src/assets/libs/aframe/system-base.js",
               "src/assets/libs/aframe/system-utils.js",
               "src/assets/libs/grab-vt.js",
-              "src/assets/libs/aframe/hand-controls-vt.js"
+              "src/assets/libs/aframe/hand-controls-vt.js",
+              "src/assets/libs/aframe-master.js",
             ]
           },
           "configurations": {
@@ -108,7 +109,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
+            "karmaConfig": "src/karma.conf.vt.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [

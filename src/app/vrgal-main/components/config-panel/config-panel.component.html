@@ -5,6 +5,7 @@ a-gui-radio form. Generate a 'radioAnimation' event from you code to manually se
   (click)="toggleBgMusicState($event)"
   on="click"
   width="3.0" height="0.75"
+  position = "0 -3 0"
   value="Toggle Sound"
   font-family="Arial"
   margin="0 0 0.05 0"
@@ -12,34 +13,3 @@ a-gui-radio form. Generate a 'radioAnimation' event from you code to manually se
   checked="false"
 >
 </a-gui-radio>
-<!-- <a-entity gui-radio="checked: false; text: abc">
-</a-entity> -->
-<!-- this gets around the checked=true limitation, but no text -->
-<!-- <a-entity
-  gui-radio="checked: false; value: label radio; text: new gui; active: true; width: 3.0; height: 0.75; font-family: Arial; margin: 0 0 0.05 0"
-  gui-item="type: radio"
-  gui-interactable=""
-  id="bg-music-radio-2"
-  value="hello"
-  text="def"
-  width="3.0" height="0.75"
-  position="0 4 0"
-  (click)="toggleBgMusic($event)"
->
-</a-entity>
-<a-gui-toggle
-	width="2.5" height="0.75"
-	onclick="testToggleAction"
-	value="label toggle"
-	font-family="Arial"
-	margin="0 0 0.05 0"
-  position="0 6 0"
-  checked="true"
->
-</a-gui-toggle>
-<a-entity
-  gui-toggle="checked: true"
-  gui-item="type: toggle"
-  position="0 8 0"
-  >
-</a-entity> -->

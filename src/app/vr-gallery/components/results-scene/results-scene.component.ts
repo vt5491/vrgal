@@ -115,46 +115,7 @@ export class ResultsSceneComponent implements OnInit {
   }
 
   addResources() {
-    // setTimeout(() => {
-    //   (navigator as any).getVRDisplays().then((displays) => {
-    //     // debugger;
-    //     console.log(`addResource: now dispatching vrdisplayactivate`)
-    //     // let evt = new CustomEvent("vrdisplayactivate", {detail: {display : displays[0]}})
-    //     let evt = new (window as any).VRDisplayEvent('vrdisplayactivate', {display : displays[0]});
-    //     evt.detail = {display: displays[0]};
-    //     window.dispatchEvent(evt);
-    //     // document.querySelector('a-scene').dispatchEvent(evt);
-    //   },
-    //   (err) => {console.log(`ResultsSceneComponent.addResources: getVRDisplays got error ${err}`)}
-    //   )
-    // }, 10);
-      // (navigator as any).getVRDisplays().then((displays) => {
-      //   // debugger;
-      //   console.log(`addResource: now dispatching vrdisplayactivate`)
-      //   // let evt = new CustomEvent("vrdisplayactivate", {detail: {display : displays[0]}})
-      //   let evt = new (window as any).VRDisplayEvent('vrdisplayactivate', {display : displays[0]});
-      //   // let evt = new (window as any).VRDisplayEvent('vrdisplaypresentchange', {display : displays[0]});
-      //   // evt.detail = {display: displays[0]};
-      //   // window.dispatchEvent(evt);
-      //   (document.querySelector('a-scene') as any).enterVR(false);
-      //   // the following two go into vr upon refresh..so getting kind of close.
-      //   // let canvas = document.querySelector('canvas');
-      //   // displays[0].requestPresent([{source: canvas}])
-      //   // document.querySelector('a-scene').dispatchEvent(evt);
-      // },
-      // (err) => {console.log(`ResultsSceneComponent.addResources: getVRDisplays got error ${err}`)}
-      // )
-
     this.sceneEl = document.querySelector('a-scene');
-    // restore vr mode if that's whence we came.
-    // debugger;
-    // let event = new Event('vrdisplayactivate');
-    // console.log(`ResultsSceneComponent.addResources: emitting vrdisplayactivate method 1`);
-    // // document.querySelector('app-root').dispatchEvent(event);
-    // window.dispatchEvent(event);
-    // console.log(`ResultsSceneComponent.addResources: emitting vrdisplayactivate method 2`);
-    // this.vrdisplayactivate.emit(null);
-    // (this.sceneEl as any).enterVR();
 
     this.utils.bgSoundInit(this.sceneEl, document.getElementById('bg-music-radio'));
     this.appPrefix = this.base.appPrefix

@@ -6,6 +6,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../environments/environment';
 import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
+// note: 'redux-persist' has a dependency on react, so we can't use in an ng evironment
+// import {persistStore, persistReducer} from 'redux-persist';
+// import {persistState} from 'redux-sessionstorage'
+import { persistState } from 'redux-localstorage'
+import { createStore, compose } from 'redux';
 
 // redux
 import { rootReducer, IAppState, INITIAL_STATE } from './store/store';
@@ -42,6 +47,10 @@ const appRoutes:Routes = [
   {path: 'vrgal/main', component: MainComponent},
  ]
 
+//       const enhancer3 : any = compose(
+//         persistState()
+//       )
+// debugger;
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,29 +71,67 @@ const appRoutes:Routes = [
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {
+  // ps = persistState;
   constructor(
     private ngRedux: NgRedux<IAppState>,
     // private ngRedux: NgRedux<ICountState>,
     // private ngRedux: NgRedux<any>,
-    private devTools: DevToolsExtension
+    private devTools: DevToolsExtension,
+    // private ps : persistState,
   ) {
     let enhancers = [];
 
     if (!environment.production && devTools.isEnabled()) {
       enhancers = [ ...enhancers, devTools.enhancer() ];
     }
+    // persist-redux stuff
+    // const persistConfig : any = {
+    //   key: 'root',
+    //   storage: 'sessionStorage'
+    // }
+    // const persistedReducer : any = persistReducer(persistConfig, rootReducer)
+    // let persistStore : any = createStore(persistedReducer)
+    // ngRedux.provideStore(persistStore);
+    // let persistStore = ngRedux.provideStore(persistedReducer)
+    // end persist-redux
+    // redux-sessionstorage start
+    // const createPersistentStore = compose(
+    //   persistState(/*paths, config*/)
+    // )(createStore)
+//     const enhancer = compose(
+//   /* [middlewares] */,
+//   persistState(/*paths, config*/),
+// )
+//
+// const store = createStore(/*reducer, [initialState]*/, enhancer)
+      // enhancers = [ ...enhancers, persistState() ];
+      // enhancers.push(persistState());
+      // debugger;
+      // const enhancer2 : any = compose(
+      // )
+
+    // redux-sessionstorage end
+    // let initState :any = sessionStorage.getItem('vtstate') || INITIAL_STATE;
+    let initState = INITIAL_STATE;
+
+    if(sessionStorage.getItem('vtstate')) {
+      initState = JSON.parse(sessionStorage.getItem('vtstate'));
+    }
+    // debugger;
+    if (initState.cr1) {
+      console.log(`AppModule: initstate.count2 = ${initState.cr1.count2}`)
+    }
+
     // Tell @angular-redux/store about our rootReducer and our initial state.
     // It will use this to create a redux store for us and wire up all the
     // events.
     ngRedux.configureStore(
       rootReducer,
-      INITIAL_STATE,
-      [],
-      enhancers );
-    // ngRedux.configureStore(
-    //   combineReducers(countReducer),
-    //   INITIAL_STATE,
-    //   [],
-    //   enhancers );
+      // INITIAL_STATE,
+      initState,
+      // [],
+      enhancers
+      // enhancer3
+    );
   }
 }

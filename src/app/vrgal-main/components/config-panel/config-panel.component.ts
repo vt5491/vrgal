@@ -18,7 +18,7 @@ export class ConfigPanelComponent implements OnInit {
   // bgMusicOnSubscription;
   // @select('config.bgMusicOn') bgMusicOnSubscription2: Observable<boolean>;
   // bgMusicOn : boolean;
-  @select(['config', 'bgMusicOn']) bgMusicOn;
+  @select(['config', 'bgMusicOn']) bgMusicOn$;
 
   constructor(
     private base: CoreBaseService,
@@ -43,7 +43,7 @@ export class ConfigPanelComponent implements OnInit {
     //   console.log(`---> bgMusicOn2 driven, newState=${newState}`)
     // })
 
-    this.bgMusicOn.subscribe(this.toggleBgMusic);
+    this.bgMusicOn$.subscribe(this.toggleBgMusic);
   }
 
   ngOnInit() {

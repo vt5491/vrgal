@@ -5,3 +5,19 @@ http://localhost:9876/debug.html
 note: you have to manually refresh the browser to drive the test.
 Just start with 'ng test' like always, then change the url in the browser.
 
+# 2018-06-28
+2) With angular 6, edit these files:
+
+vrgal/node_modules/@angular-devkit/build-angular/src/angular-cli-files/plugins
+
+files:
+karma-context.html
+karma-debug.html
+
+to have:
+  <!--vt add -->
+  <script src="assets/libs/aframe-master.js"></script>
+  <!--vt end -->
+
+in <head>
+

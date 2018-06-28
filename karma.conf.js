@@ -7,7 +7,12 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    frameworks: ['jasmine', '@angular-devkit/build-angular', 'browserify'],
+    //vt add
+    // preprocessors: {
+    //   'src/assets/libs/*.js': [ 'browserify' ]
+    // },
+    //vt end
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
@@ -17,13 +22,14 @@ module.exports = function (config) {
       //vt end
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
+      require('karma-browserify')
     ],
     //vt add
     // customContextFile: './src/environments/context_aframe_ut.html',
     // customClientContextFile: './src/environments/context_aframe_ut.html',
     // files: [
-    //   // 
+    //   //
     //   //user add
     //   { pattern: 'node_modules/aframe/dist/aframe-master.js', included: false, served: true },
     //   { pattern: 'node_modules/three/build/three.js', included: false, served: true }

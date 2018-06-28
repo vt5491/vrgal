@@ -1,1 +1,19 @@
-<a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+<!-- <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere> -->
+<a-circle id="curated-query"
+  (click)="queryCurated($event)"
+  position="-2 -0.5 0"
+  rotation="0 0 0"
+  color="#4CC309" height="2" width="2"
+  material="side: double">
+</a-circle>
+<a-text value="Curated Gallery\n(recommended)"
+  position="-2 -2.0 0" align="center" eight="8.2" idth="0.2">
+</a-text>
+<a-circle id="all-query"
+  (click)="queryAll($event)"
+  position="2 -0.5 0" rotation="0 0 0"
+  color="#4CC3C9" height="2" width="2"
+  material="side: double"
+  >
+</a-circle>
+<a-text value="Full Gallery" position="2 -2.0 0" align="center"></a-text>
