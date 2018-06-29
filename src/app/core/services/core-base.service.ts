@@ -11,11 +11,15 @@ export class CoreBaseService {
   // vrizeSvcUrl = "http://192.168.50.158:3000"
   vrizeSvcUrl = environment.metaDataServiceUrl;
 
+  // Note: if you update appPrefix here you *must* also update the aframe side:
+  // 'libs/aframe/system-base.js'
+  static appPrefix = "vrgal5491";
   // generic.. ok as long as everything is running on the same host machine
   // actually, ok for the admin part, but vr-gallery/query-select needs a
   // remote server (server is not running on same ip as the SPA)
   // vrizeSvcUrl = "http://localhost:3000"
-  appPrefix = "vrgal"
+  // appPrefix = "vrgal5491"
+  appPrefix = CoreBaseService.appPrefix;
   liftPrefix = "vrize-";
   examplesPath = 'assets/threejs-env/examples';
 

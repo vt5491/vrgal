@@ -37,6 +37,7 @@ import { QuerySubComponent } from './vrgal-main/components/query-sub/query-sub.c
 import { ResultSubComponent } from './vrgal-main/components/result-sub/result-sub.component';
 // services
 import { CoreDataExampleService } from './core/services/core-data-example.service';
+import { CoreBaseService } from './core/services/core-base.service';
 
 const appRoutes:Routes = [
   {path: '', component: AframeCubeComponent},
@@ -114,13 +115,14 @@ export class AppModule {
     // let initState :any = sessionStorage.getItem('vtstate') || INITIAL_STATE;
     let initState = INITIAL_STATE;
 
-    if(sessionStorage.getItem('vtstate')) {
-      initState = JSON.parse(sessionStorage.getItem('vtstate'));
+    if(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`)) {
+      initState = JSON.parse(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`));
     }
     // debugger;
-    if (initState.cr1) {
-      console.log(`AppModule: initstate.count2 = ${initState.cr1.count2}`)
-    }
+    // if (initState.cr1) {
+    //   console.log(`AppModule: initstate.count2 = ${initState.cr1.count2}`)
+    // }
+    // console.log(`AppModule: CoreBaseService.appPrefixClass = ${CoreBaseService.appPrefix}`);
 
     // Tell @angular-redux/store about our rootReducer and our initial state.
     // It will use this to create a redux store for us and wire up all the

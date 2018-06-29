@@ -17,7 +17,7 @@ export class ConfigPanelComponent implements OnInit {
 
   // bgMusicOnSubscription;
   // @select('config.bgMusicOn') bgMusicOnSubscription2: Observable<boolean>;
-  // bgMusicOn : boolean;
+  bgMusicOn : boolean;
   @select(['config', 'bgMusicOn']) bgMusicOn$;
 
   constructor(
@@ -42,6 +42,7 @@ export class ConfigPanelComponent implements OnInit {
     //   // debugger;
     //   console.log(`---> bgMusicOn2 driven, newState=${newState}`)
     // })
+    this.bgMusicOn = this.ngRedux.getState().config.bgMusicOn;
 
     this.bgMusicOn$.subscribe(this.toggleBgMusic);
   }
@@ -62,20 +63,29 @@ export class ConfigPanelComponent implements OnInit {
       // the default ('checked' attribute on <a-gui-radio> doesn't work properly on ng)
 
       // (bgMusicEl.getElementsByTagName('a-animation')[0] as any).emit('radioAnimation')
-      window.setTimeout( () => {
+      // for some reason, the a-gui-vr button under angular always start unchecked, in spite
+      // of what the actual 'checked' value is, thus we have to manually set it if
+      // bgMusicOn is true.
+      // }
+      if (this.bgMusicOn) {
+        window.setTimeout( () => {
+          (bgMusicEl.getElementsByTagName('a-animation')[0] as any).emit('radioAnimation')
+        }, 1000 )}
+      })
+      // window.setTimeout( () => {
       // console.log(`ConfigPanel: now setting button color`);
       // debugger;
       // (bgMusicEl.getAttribute('material') as any).color ='#ed5b21';
       // console.log(`ConfigPanel: now emmiting radioAnimation`);
       // (bgMusicEl as any).emit('radioAnimation');
       //comment this out if you want the bg music to default to 'off'
-        (bgMusicEl.getElementsByTagName('a-animation')[0] as any).emit('radioAnimation')
-      }, 1000 )
+      //   (bgMusicEl.getElementsByTagName('a-animation')[0] as any).emit('radioAnimation')
+      // }, 1000 )
       // console.log(`ConfigPanel: now kicking off fake click`);
       // bgMusicEl.dispatchEvent(new CustomEvent('click',
       // { detail:
       //   {intersection: {point: new THREE.Vector3(-1.0779723726968995, 0.00246196904143081, 0.009999999776483472)} }}));
-    })
+    // })
     // bgMusicEl.dispatchEvent(new Event('click'));
     // document.dispatchEvent(new Event('no-click'));
     // console.log(`ConfigPanelComponent.ngOnInit: post bgMusicEl.checked=${bgMusicEl.getAttribute('checked')}`);
@@ -121,10 +131,12 @@ export class ConfigPanelComponent implements OnInit {
       if( el.components.sound.isPlaying) {
         console.log(`toggleBgMusic: pausing sound`)
         el.components.sound.pauseSound();
+        this.bgMusicOn = false;
       }
       else {
         console.log(`toggleBgMusic: playing sound`)
         el.components.sound.playSound();
+        this.bgMusicOn = true;
       }
     }
 

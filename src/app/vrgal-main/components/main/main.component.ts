@@ -63,7 +63,9 @@ export class MainComponent implements OnInit {
     // debugger;
     this.ngRedux.dispatch(this.counterActions.increment());
     this.ngRedux.dispatch(this.counterActions.increment());
-    sessionStorage.setItem('vtstate', JSON.stringify(this.ngRedux.getState() as any));
+    // sessionStorage.setItem(`${this.base.appPrefix}_store`, JSON.stringify(this.ngRedux.getState() as any));
+    // this.utils.persistStore(this.ngRedux);
+    this.utils.saveAppState(this.ngRedux);
 
   }
 

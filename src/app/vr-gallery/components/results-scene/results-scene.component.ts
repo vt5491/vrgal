@@ -97,10 +97,10 @@ export class ResultsSceneComponent implements OnInit {
 
         // debugger;
       console.log(`resultsSceneComponent.ngOnInit: ngRouted=${this.ngRouted}, referrer=${document.referrer}`);
-      if (sessionStorage.getItem(storageKey)) {
-        console.log(`ResultScene.ngOnInit: restoring prior appState`);
-        this.utils.restoreAppState(this.ngRedux, this.actions);
-      }
+      // if (sessionStorage.getItem(storageKey)) {
+      //   console.log(`ResultScene.ngOnInit: restoring prior appState`);
+      //   this.utils.restoreAppState(this.ngRedux, this.actions);
+      // }
       // var el = document.querySelector("a-log");
       // el.setAttribute("visible", "false");
     }

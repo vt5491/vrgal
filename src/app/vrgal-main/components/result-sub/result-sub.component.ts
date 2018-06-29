@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { ExamplesService } from '../../../core/services/examples.service';
+import { NgRedux } from '@angular-redux/store';
+import {IAppState} from "../../../store/store";
 
 @Component({
   selector: 'app-result-sub',
@@ -16,6 +18,7 @@ export class ResultSubComponent implements OnInit {
     private base: CoreBaseService,
     private utils: CoreUtilsService,
     private examples: ExamplesService,
+    private ngRedux: NgRedux<IAppState>,
   ) { }
 
   ngOnInit() {
@@ -73,7 +76,7 @@ export class ResultSubComponent implements OnInit {
     // and define our own click handler (so we can increment stats before xferring)
     linkEl.addEventListener('click', (evt) => {
       // save the appStore
-      //vt-xthis.utils.saveAppState(this.ngRedux);
+      this.utils.saveAppState(this.ngRedux);
       // console.log(`now in user click handler`);
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.

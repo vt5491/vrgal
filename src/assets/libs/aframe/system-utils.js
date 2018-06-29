@@ -21,15 +21,16 @@ AFRAME.registerSystem('system-utils', {
     // this.abc = 7;
     //TODO: update base to have this as a convenience method
     // let appPrefixLc = String.prototype.toLocaleLowerCase(base.data.appPrefix);
-    let appPrefixLc = 'vrgal';
-    console.log(`system-utils:prefix=${appPrefixLc}`);
+    // let appPrefixLc = 'vrgal';
+    let appPrefix = base.data.appPrefix;
+    console.log(`system-utils:prefix=${appPrefix}`);
     // window.addEventListener(appPrefixLc + 'addexample', this.onAddExample);
     let sceneEl = this.el
-    sceneEl.addEventListener(appPrefixLc + 'addexample', this.onAddExample);
-    window.addEventListener(appPrefixLc + '_' + 'createlink', this.createLink);
-    window.addEventListener(appPrefixLc + '_' + 'create_img_asset', this.createImgAsset);
-    window.addEventListener(appPrefixLc + '_' + 'create_popup_img', this.createExamplePopupImg);
-    window.addEventListener(appPrefixLc + '_' + 'create_view_source_btn', this.createViewSourceBtn);
+    sceneEl.addEventListener(appPrefix + 'addexample', this.onAddExample);
+    window.addEventListener(appPrefix + '_' + 'createlink', this.createLink);
+    window.addEventListener(appPrefix + '_' + 'create_img_asset', this.createImgAsset);
+    window.addEventListener(appPrefix + '_' + 'create_popup_img', this.createExamplePopupImg);
+    window.addEventListener(appPrefix + '_' + 'create_view_source_btn', this.createViewSourceBtn);
     // window.addEventListener(appPrefixLc + '_' + 'add_link_hover', this.addLinkHoverEvtListener);
   },
   onVtTestEvt: function () {

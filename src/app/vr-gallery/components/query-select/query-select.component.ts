@@ -481,9 +481,9 @@ export class QuerySelectComponent implements OnInit {
     // }
   }
 
-  dummyClick2(evt: Event) {
-    this.utils.restoreAppState(this.ngRedux, this.actions);
-  }
+  // dummyClick2(evt: Event) {
+  //   this.utils.restoreAppState(this.ngRedux, this.actions);
+  // }
 
   dummyClick3(evt: Event) {
     this.ngRedux.dispatch(this.actions.increment());

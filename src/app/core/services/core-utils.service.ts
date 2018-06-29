@@ -179,6 +179,8 @@ export class CoreUtilsService {
     }
   }
 
+  /*
+  Jesus...what was I thinking on this.  Replaced by much easier method.
   // save ng-redux state on session storage
   // This is hopefully just a temporary solution until I can figure out
   // 'redux-persist' and how it integrates into 'ng-redux'
@@ -258,6 +260,7 @@ export class CoreUtilsService {
       // store.dispatch(actionObj.set(15))
     }
   }
+  */
 
 
   toggleSubScenes() {
@@ -279,5 +282,15 @@ export class CoreUtilsService {
 
   }
 
+  // this is just kind of generic method that could be applied to any store
+  persistStore(store) {
+  // persistStore(store : NgRedux<IAppState>){
+    sessionStorage.setItem(`${this.base.appPrefix}_store`, JSON.stringify(store.getState() as any));
+  }
+
+  // this is more specific to this particular app
+  saveAppState(store : NgRedux<IAppState>) {
+    sessionStorage.setItem(`${this.base.appPrefix}_appState`, JSON.stringify(store.getState() as any));
+  }
 
 }
