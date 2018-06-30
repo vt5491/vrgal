@@ -24,14 +24,20 @@ export class ResultSubComponent implements OnInit {
   ngOnInit() {
   }
 
-  queryGenResult(data) {
+  queryGenResult(parms) {
     console.log(`ResultSubComponent.queryGenResult: now processing query`)
 
-    let result$ = this.examples.queryCurated();
-    result$.subscribe(
-      data => {this.addResults((data as any).examples)},
-      err => {console.log(`err=${err}`);
-    })
+    switch (parms.queryType) {
+      case "curated" : {
+        let result$ = this.examples.queryCurated();
+        result$.subscribe(
+          data => {this.addResults((data as any).examples)},
+          err => {console.log(`err=${err}`);
+        })
+
+        break;
+      }
+    }
   }
 
   addResults(results) {

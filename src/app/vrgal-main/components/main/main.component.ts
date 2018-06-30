@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { CounterActions } from '../../../store/app.actions';
+import { CounterActions, RuntimeActions } from '../../../store/app.actions';
+// import { IQueryResult } from '../../../store/runtime-reducer';
 import {IAppState} from "../../../store/store";
 
 import { CoreBaseService } from '../../../core/services/core-base.service';
@@ -20,6 +21,7 @@ export class MainComponent implements OnInit {
     private ngRedux: NgRedux<IAppState>,
     // private ngRedux: NgRedux<any>,
     private counterActions: CounterActions,
+    private runtimeActions: RuntimeActions,
   ) {
   }
 
@@ -69,8 +71,15 @@ export class MainComponent implements OnInit {
 
   }
 
-  loadStore(evt) {
-
+  setLastQuery(evt) {
+    debugger;
+  //   let lastQuery : IQueryResult = {
+  //     queryType: 'abc',
+  //     data: [{a: 7, b: "hi"}],
+  //   }
+  //
+  //   this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
+  //
   }
 
 }

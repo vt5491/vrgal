@@ -23,7 +23,7 @@ export class QuerySubComponent implements OnInit {
   queryCurated(evt: Event) {
     console.log(`QuerySubComponent.queryCurated: now calling genResult`)
     // this.queryGenResult.emit(null);
-    this.resultSubComponent.queryGenResult({})
+    this.resultSubComponent.queryGenResult({queryType: "curated"})
   }
 
   queryAll(evt: Event) {

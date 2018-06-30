@@ -46,3 +46,43 @@ export class ConfigActions {
     } as any);
   }
 }
+
+// @Injectable()
+// export class RuntimeActions {
+//   static SET_LAST_QUERY = 'SET_LAST_QUERY';
+//   static SET = 'SET'
+//
+//   setLastQuery(val): Action {
+//     return ({
+//       type: RuntimeActions.SET_LAST_QUERY,
+//       val: val
+//     } as any);
+//   }
+//   set(val): Action {
+//     return ({
+//       type: RuntimeActions.SET,
+//       val: val
+//     } as any);
+//   }
+// }
+@Injectable()
+export class RuntimeActions {
+  static BG_MUSIC_ON = 'BG_MUSIC_ON';
+  static BG_MUSIC_OFF = 'BG_MUSIC_OFF';
+  static SET = 'SET'
+
+  bgMusicOn(): Action {
+    return { type: ConfigActions.BG_MUSIC_ON };
+  }
+
+  bgMusicOff(): Action {
+    return { type: ConfigActions.BG_MUSIC_OFF };
+  }
+
+  set(val): Action {
+    return ({
+      type: ConfigActions.SET,
+      val: val
+    } as any);
+  }
+}

@@ -85,55 +85,20 @@ export class AppModule {
     if (!environment.production && devTools.isEnabled()) {
       enhancers = [ ...enhancers, devTools.enhancer() ];
     }
-    // persist-redux stuff
-    // const persistConfig : any = {
-    //   key: 'root',
-    //   storage: 'sessionStorage'
-    // }
-    // const persistedReducer : any = persistReducer(persistConfig, rootReducer)
-    // let persistStore : any = createStore(persistedReducer)
-    // ngRedux.provideStore(persistStore);
-    // let persistStore = ngRedux.provideStore(persistedReducer)
-    // end persist-redux
-    // redux-sessionstorage start
-    // const createPersistentStore = compose(
-    //   persistState(/*paths, config*/)
-    // )(createStore)
-//     const enhancer = compose(
-//   /* [middlewares] */,
-//   persistState(/*paths, config*/),
-// )
-//
-// const store = createStore(/*reducer, [initialState]*/, enhancer)
-      // enhancers = [ ...enhancers, persistState() ];
-      // enhancers.push(persistState());
-      // debugger;
-      // const enhancer2 : any = compose(
-      // )
-
-    // redux-sessionstorage end
     // let initState :any = sessionStorage.getItem('vtstate') || INITIAL_STATE;
     let initState = INITIAL_STATE;
 
-    if(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`)) {
-      initState = JSON.parse(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`));
-    }
-    // debugger;
-    // if (initState.cr1) {
-    //   console.log(`AppModule: initstate.count2 = ${initState.cr1.count2}`)
+    // if(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`)) {
+    //   initState = JSON.parse(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`));
     // }
-    // console.log(`AppModule: CoreBaseService.appPrefixClass = ${CoreBaseService.appPrefix}`);
 
     // Tell @angular-redux/store about our rootReducer and our initial state.
     // It will use this to create a redux store for us and wire up all the
     // events.
-    ngRedux.configureStore(
-      rootReducer,
-      // INITIAL_STATE,
-      initState,
-      // [],
-      enhancers
-      // enhancer3
-    );
+    // ngRedux.configureStore(
+    //   rootReducer,
+    //   initState,
+    //   enhancers
+    // );
   }
 }
