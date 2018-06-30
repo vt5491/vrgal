@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { CounterActions } from '../../../store/app.actions';
+import { CounterActions, RuntimeActions } from '../../../store/app.actions';
 import {IAppState} from "../../../store/store";
+import { IQueryResult } from '../../../store/runtime-reducer';
 
 import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
+import { QuerySubComponent } from '../query-sub/query-sub.component';
+import { ResultSubComponent } from '../result-sub/result-sub.component';
 
 
 @Component({
+  providers: [ResultSubComponent],
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
@@ -20,6 +24,8 @@ export class MainComponent implements OnInit {
     private ngRedux: NgRedux<IAppState>,
     // private ngRedux: NgRedux<any>,
     private counterActions: CounterActions,
+    private runtimeActions: RuntimeActions,
+    private resultSubComponent : ResultSubComponent,
   ) {
   }
 
@@ -31,32 +37,27 @@ export class MainComponent implements OnInit {
   initScene() {
     let resultScene = document.querySelector('app-result-sub');
     resultScene.setAttribute('visible', 'false');
+
+    // debugger;
+    let lastRoute = this.ngRedux.getState().runtime.lastRoute;
+    if (lastRoute === "result-sub") {
+      this.resultSubComponent.queryGenResult({queryType: "curated"})
+      // this.toggleSubScenes(null);
+    }
   }
+
+  // showResults(evt: Event) {
+  //   let sceneEl = document.querySelector('a-scene');
+  //
+  //   let appResultSubEl = document.createElement('app-result-sub');
+  //   sceneEl.appendChild(appResultSubEl);
+  //
+  //   this.utils.toggleSubScenes();
+  //
+  // }
 
   toggleSubScenes(evt: Event) {
     this.utils.toggleSubScenes();
-    // console.log(`MainComponent.toggleSubScenes: entered`);
-    // // let ssa = document.querySelector('app-sub-scene-a'); let ssb = document.querySelector('app-sub-scene-b');
-    // // let ssaVisible : any= ssa.getAttribute('visible');
-    // // let ssbVisible : any= ssb.getAttribute('visible');
-    // //
-    // // ssa.setAttribute('visible', ssaVisible ? 'false' : 'true');
-    // // ssb.setAttribute('visible', ssbVisible ? 'false' : 'true');
-    // let queryScene = document.querySelector('app-query-sub');
-    // let resultScene = document.querySelector('app-result-sub');
-    //
-    // let querySceneVisible : any= queryScene.getAttribute('visible');
-    // let resultSceneVisible : any= resultScene.getAttribute('visible');
-    //
-    // queryScene.setAttribute('visible', querySceneVisible ? 'false' : 'true');
-    // resultScene.setAttribute('visible', resultSceneVisible ? 'false' : 'true');
-    //
-    // this.ngRedux.dispatch(this.actions.increment());
-    // let state=this.ngRedux.getState();
-    // // debugger;
-    // console.log(`MainComponent.toggleSubScenes: state.cr1.count=${state.cr1.count}, state.cr1.count2=${state.cr1.count2}`)
-    // console.log(`MainComponent.toggleSubScenes: state.config.bgMusicOn=${state.config.bgMusicOn}`)
-
   }
 
   persistStore(evt) {
@@ -69,8 +70,32 @@ export class MainComponent implements OnInit {
 
   }
 
-  loadStore(evt) {
+  setLastQuery(evt) {
+    console.log(`MainComponent.setLastQuery: entered`);
+    // debugger;
+    // this.ngRedux.dispatch(this.runtimeActions.bgMusicOn());
+    // let lastQuery : IQueryResult = {
+    //   queryType: 'abc',
+    //   data: [{a: 7, b: "hi"}],
+    // }
+    let lastQuery : IQueryResult = {
+      queryType: 'curated',
+      data: [{
+        id: 1,
+        lift_score: 100,
+        name: "webgl_mirror.html",
+        tag: "mini-gal" ,
+      }],
+    }
+    this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
 
+  }
+
+  setLastRoute(evt) {
+    console.log(`MainComponent.setLastQuery: entered`);
+
+    // debugger;
+    this.ngRedux.dispatch(this.runtimeActions.setLastRoute("abc"));
   }
 
 }

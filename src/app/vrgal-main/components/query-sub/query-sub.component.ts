@@ -21,9 +21,15 @@ export class QuerySubComponent implements OnInit {
   }
 
   queryCurated(evt: Event) {
-    console.log(`QuerySubComponent.queryCurated: now calling genResult`)
-    // this.queryGenResult.emit(null);
-    this.resultSubComponent.queryGenResult({})
+    // let sceneEl = document.querySelector('a-scene');
+    //
+    // let appResultSubEl = document.createElement('app-result-sub');
+    // sceneEl.appendChild(appResultSubEl);
+    // appResultSubEl.addEventListener("load", (event) => {
+      console.log(`QuerySubComponent.queryCurated: now calling genResult`)
+      // this.queryGenResult.emit(null);
+      this.resultSubComponent.queryGenResult({queryType: "curated"})
+    // });
   }
 
   queryAll(evt: Event) {

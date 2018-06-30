@@ -4,6 +4,7 @@ import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { ExamplesService } from '../../../core/services/examples.service';
 import { NgRedux } from '@angular-redux/store';
 import {IAppState} from "../../../store/store";
+import { CounterActions, RuntimeActions } from '../../../store/app.actions';
 
 @Component({
   selector: 'app-result-sub',
@@ -19,22 +20,52 @@ export class ResultSubComponent implements OnInit {
     private utils: CoreUtilsService,
     private examples: ExamplesService,
     private ngRedux: NgRedux<IAppState>,
+    private runtimeActions: RuntimeActions,
   ) { }
 
   ngOnInit() {
   }
 
-  queryGenResult(data) {
+  queryGenResult(params) {
     console.log(`ResultSubComponent.queryGenResult: now processing query`)
 
-    let result$ = this.examples.queryCurated();
-    result$.subscribe(
-      data => {this.addResults((data as any).examples)},
-      err => {console.log(`err=${err}`);
-    })
+    // let result$ = this.examples.queryCurated();
+    // result$.subscribe(
+    //   data => {this.addResults((data as any).examples)},
+    //   err => {console.log(`err=${err}`);
+    // })
+    let lastQueryType, lastData;
+    if (this.ngRedux.getState().runtime.lastQuery) {
+      lastQueryType = this.ngRedux.getState().runtime.lastQuery.queryType;
+      lastData = this.ngRedux.getState().runtime.lastQuery.data;
+    }
+
+    // pull from ngRedux
+    if (lastQueryType) {
+      switch(lastQueryType) {
+        case "curated" : {
+          this.addResults(lastData);
+        }
+      }
+    }
+    // assume it's a new query, so get the raw data.
+    else {
+      switch (params.queryType) {
+        case "curated" : {
+          let result$ = this.examples.queryCurated();
+          result$.subscribe(
+            data => {this.addResults((data as any).examples)},
+            err => {console.log(`err=${err}`);
+          })
+
+          break;
+        }
+      }
+    }
   }
 
   addResults(results) {
+    // debugger;
     console.log(`ResultSubComponent.addResults: results.length=${results.length}`);
     this.exampleResults = results;
     this.addLinks();
@@ -75,18 +106,24 @@ export class ResultSubComponent implements OnInit {
     // linkEl.setAttribute('on', 'no-click');
     // and define our own click handler (so we can increment stats before xferring)
     linkEl.addEventListener('click', (evt) => {
+      // set last route so we know where to return to.
+      this.ngRedux.dispatch(this.runtimeActions.setLastRoute("result-sub"));
       // save the appStore
       this.utils.saveAppState(this.ngRedux);
       // console.log(`now in user click handler`);
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.
+      //TODO: don't do this upon cache recall
       this.examples.incExampleStat(example_id, "clicks")
         .subscribe(rsp => {
           console.log(`click: stats now updated`);
         },
         (err) => {console.log(`ResultsSceneComponent.clickHandler: err=${err}`)},
         // the finally block.. transfer in all cases, even if stats *not* updated
-        () => { (window as any).location=href}
+        () => {
+          // debugger;
+          (window as any).location=href
+        }
       )
     });
     //

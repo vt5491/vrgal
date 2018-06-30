@@ -18,6 +18,9 @@ import { HeaderComponent } from './components/header/header.component';
     ConfigPanelComponent,
     HelpPanelComponent,
     HeaderComponent],
+  // providers: [
+  //   ResultSubComponent,
+  // ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class VrgalMainModule { }

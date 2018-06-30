@@ -17,7 +17,7 @@ import { rootReducer, IAppState, INITIAL_STATE } from './store/store';
 import { combineReducers } from 'redux';
 // import { countReducer } from './store/count-reducer';
 import { ICountState } from './store/count-reducer';
-import { CounterActions } from './store/app.actions';
+import { CounterActions, RuntimeActions } from './store/app.actions';
 
 // user modules
 import { AppComponent } from './app.component';
@@ -67,6 +67,7 @@ const appRoutes:Routes = [
   providers: [
     CoreDataExampleService,
     CounterActions,
+    RuntimeActions,
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
@@ -128,7 +129,8 @@ export class AppModule {
     // It will use this to create a redux store for us and wire up all the
     // events.
     ngRedux.configureStore(
-      rootReducer,
+      // rootReducer as <IAppState, any>,
+      rootReducer as any,
       // INITIAL_STATE,
       initState,
       // [],

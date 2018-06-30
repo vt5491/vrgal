@@ -1,10 +1,9 @@
 import { Action, combineReducers } from 'redux';
 import { CounterActions } from './app.actions';
 import { ConfigActions } from './app.actions';
-import { CountReducer } from './count-reducer';
-import { ConfigReducer } from './config-reducer';
-import { IConfigState, CONFIG_STATE_INITIAL } from './config-reducer';
-import { ICountState, COUNT_STATE_INITIAL } from './count-reducer';
+import { CountReducer, ICountState, COUNT_STATE_INITIAL } from './count-reducer';
+import { ConfigReducer, IConfigState, CONFIG_STATE_INITIAL } from './config-reducer';
+import { RuntimeReducer, IRuntimeState, RUNTIME_STATE_INITIAL } from './runtime-reducer';
 
 export interface IAppState {
   // count: number;
@@ -12,6 +11,7 @@ export interface IAppState {
   // bgMusicOn: boolean;
   cr1: ICountState;
   config: IConfigState;
+  runtime: IRuntimeState;
 }
 
 // export const INITIAL_STATE: IAppState = {
@@ -22,7 +22,8 @@ export const INITIAL_STATE: IAppState = {
   // COUNT_STATE_INITIAL,
   // CONFIG_STATE_INITIAL;
   cr1: COUNT_STATE_INITIAL,
-  config: CONFIG_STATE_INITIAL
+  config: CONFIG_STATE_INITIAL,
+  runtime: RUNTIME_STATE_INITIAL,
 }
 //
 // export function rootReducer(lastState: IAppState, action: Action): IAppState {
@@ -54,6 +55,10 @@ let cr1 = cr.reducer;
 // debugger;
 let configReducer = new ConfigReducer();
 let config = configReducer.reducer;
+
+let runtimeReducer = new RuntimeReducer();
+let runtime = runtimeReducer.reducer;
+
 let rootReducer = combineReducers({
 // export default function rootReducer= combineReducers({
 // export default rootReducer = combineReducers({
@@ -61,6 +66,7 @@ let rootReducer = combineReducers({
   cr1,
   config,
   // config : configReducer
+  runtime,
 })
 
 // export rootReducer;
