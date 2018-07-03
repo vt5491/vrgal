@@ -138,12 +138,12 @@ export class ResultsSceneComponent implements OnInit {
       // this.addLink(this.exampleResults[i], i);
       let k = Object.keys(this.exampleResults)[i];
       // this.addLink(this.exampleResults[k], i);
-      this.addLink2(this.exampleResults[k], i);
+      this.addLink(this.exampleResults[k], i);
     }
 
   }
 
-  addLink2(data, index) {
+  addLink(data, index) {
     console.log(`ResultsSceneComponent.addLink2: now creating link`);
     let linkParentEl = document.querySelector('#links');
     let linkEl = document.createElement('a-entity');
@@ -202,41 +202,41 @@ export class ResultsSceneComponent implements OnInit {
   )
 }
 
-  addLink(data, index) {
-    console.log(`resultsSceneComponent.addLink: http result=${data}`);
-    console.log(`resultsSceneComponent.addLink: http result.id=${data.id}`);
-    console.log(`resultsSceneComponent.addLink: http result.name=${data.name}`);
-    console.log(`resultsSceneComponent.addLink: http result.category=${data.category}`);
-    console.log(`resultsSceneComponent.addLink: http result.created_at=${data.created_at}`);
-    // this.name = data.name;
-    // this.category = data.category;
-    let scene: any = document.querySelector('a-scene');
-    let appPrefix = this.base.appPrefix
-    let evtPrefix = `${appPrefix}_createlink`
-    console.log(`querySelect: evtPrefix=${evtPrefix}`);
-
-    let evtDetail = {}
-    evtDetail['href'] = `assets/threejs-env/examples/vrize-${data.name}`
-    //temp hack to move it down during testing
-    // data.pos.y += 5;
-    evtDetail['pos'] = data.pos
-    evtDetail['title'] = data.name;
-
-    // evtDetail['id'] = `example-link-${index}`;
-    let imgRoot = data['name'].replace(/\.html$/, '')
-    evtDetail['id'] = `${imgRoot}-link`;
-    // evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
-    evtDetail['image'] = `#${imgRoot}-thumb`;
-
-    // add in the rails example_id, so event handler can update stats
-    evtDetail['example_id'] = data.id;
-
-    let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
-    evt.initEvent(`${appPrefix}_createlink`, true, true);
-    // scene.emit(`${appPrefix}_createlink`);
-    //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
-    scene.dispatchEvent(evt)
-  }
+  // addLink(data, index) {
+  //   console.log(`resultsSceneComponent.addLink: http result=${data}`);
+  //   console.log(`resultsSceneComponent.addLink: http result.id=${data.id}`);
+  //   console.log(`resultsSceneComponent.addLink: http result.name=${data.name}`);
+  //   console.log(`resultsSceneComponent.addLink: http result.category=${data.category}`);
+  //   console.log(`resultsSceneComponent.addLink: http result.created_at=${data.created_at}`);
+  //   // this.name = data.name;
+  //   // this.category = data.category;
+  //   let scene: any = document.querySelector('a-scene');
+  //   let appPrefix = this.base.appPrefix
+  //   let evtPrefix = `${appPrefix}_createlink`
+  //   console.log(`querySelect: evtPrefix=${evtPrefix}`);
+  //
+  //   let evtDetail = {}
+  //   evtDetail['href'] = `assets/threejs-env/examples/vrize-${data.name}`
+  //   //temp hack to move it down during testing
+  //   // data.pos.y += 5;
+  //   evtDetail['pos'] = data.pos
+  //   evtDetail['title'] = data.name;
+  //
+  //   // evtDetail['id'] = `example-link-${index}`;
+  //   let imgRoot = data['name'].replace(/\.html$/, '')
+  //   evtDetail['id'] = `${imgRoot}-link`;
+  //   // evtDetail['image'] = `assets/img/thumbs/${imgRoot}_thumb.png`;
+  //   evtDetail['image'] = `#${imgRoot}-thumb`;
+  //
+  //   // add in the rails example_id, so event handler can update stats
+  //   evtDetail['example_id'] = data.id;
+  //
+  //   let evt = new CustomEvent(`${appPrefix}_createlink`, { detail: evtDetail });
+  //   evt.initEvent(`${appPrefix}_createlink`, true, true);
+  //   // scene.emit(`${appPrefix}_createlink`);
+  //   //note: 'createlink' events are handled 'src/assets/libs/aframe/system-utils.js
+  //   scene.dispatchEvent(evt)
+  // }
 
   // add thumbs to the assets list
   addImgAssets() {

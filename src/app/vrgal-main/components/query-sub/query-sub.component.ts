@@ -33,7 +33,7 @@ export class QuerySubComponent implements OnInit {
   }
 
   queryAll(evt: Event) {
-
+    this.resultSubComponent.queryGenResult({queryType: "all_lifted"})
   }
 
   tmp() {

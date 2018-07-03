@@ -186,4 +186,8 @@ export class ExamplesService {
 
   }
 
+  queryAllLifted() {
+    return this.get(`${this.base.vrizeSvcUrl}/examples/all_lifted.json`)
+  }
+
 }

@@ -38,6 +38,18 @@ export class MainComponent implements OnInit {
     let resultScene = document.querySelector('app-result-sub');
     resultScene.setAttribute('visible', 'false');
 
+    // this is done in app.module.ts
+    // re-hydrate the ngredux store, if any
+    // if(sessionStorage.getItem(`${this.base.appPrefix}_appState`)) {
+    //   debugger;
+    //   // let lastQuery = JSON.parse(this.ngRedux.getState().runtime.lastQuery);
+    //   let appState = JSON.parse(sessionStorage.getItem(`${this.base.appPrefix}_appState`));
+    //   let lastQuery = appState.runtime.lastQuery;
+    //   if (lastQuery) {
+    //     this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
+    //   }
+    // }
+
     // debugger;
     let lastRoute = this.ngRedux.getState().runtime.lastRoute;
     if (lastRoute === "result-sub") {

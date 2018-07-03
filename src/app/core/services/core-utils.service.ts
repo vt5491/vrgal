@@ -18,6 +18,7 @@ export class CoreUtilsService {
   constructor(
     private base: CoreBaseService,
     private http: HttpClient,
+    private ngRedux: NgRedux<IAppState>,
   ) {
     console.log(`CoreUtilsService.ctor: entered`);
     this.dataStore = {}
@@ -180,7 +181,8 @@ export class CoreUtilsService {
   }
 
   /*
-  Jesus...what was I thinking on this.  Replaced by much easier method.
+  Jesus...what was I thinking on this.  Replaced by much easier implementation.
+  ..see 'saveAppState' further down in the code.
   // save ng-redux state on session storage
   // This is hopefully just a temporary solution until I can figure out
   // 'redux-persist' and how it integrates into 'ng-redux'
@@ -291,6 +293,36 @@ export class CoreUtilsService {
   // this is more specific to this particular app
   saveAppState(store : NgRedux<IAppState>) {
     sessionStorage.setItem(`${this.base.appPrefix}_appState`, JSON.stringify(store.getState() as any));
+  }
+
+  // We save some a-frame info outside of ngRedux, since it's not really
+  // "purely" app level data.
+  saveDollyState() {
+    let scene = document.querySelector('a-scene');
+    let dolly = scene.querySelector('#dolly');
+    let dollyObj = (dolly as any).object3D;
+
+    let dollyPos = dolly.getAttribute('position');
+    sessionStorage.setItem(`${this.base.appPrefix}_lastDollyPos`, JSON.stringify(dollyPos));
+
+    let dollyRot: any = {};
+    // Note: Object3D rotation keys are physically stored as "_x, _y, _z", presumably
+    // so the 'order' property can override.  There are wrapper "x", "y", and "z" methods
+    // however.  Thus we need to set each "xyz" in lastDollyRot individually e.g
+    // mass assignment will assign keys of "_x" etc.
+    dollyRot.x = dollyObj.rotation.x;
+    dollyRot.y = dollyObj.rotation.y;
+    dollyRot.z = dollyObj.rotation.z;
+
+    // console.log(`save-state.saveState: dollyRot.y=${dollyRot.y}`);
+    sessionStorage.setItem(`${this.base.appPrefix}_lastDollyRot`, JSON.stringify(dollyRot));
+  }
+
+  // You have to be careful about referencing 'this.ngRedux' in callbacks, as you will
+  // probably get a closure to an old version of the store object.  Thus we need to
+  // always get the current copy.
+  getCurrentNgRedux() {
+    return this.ngRedux;
   }
 
 }

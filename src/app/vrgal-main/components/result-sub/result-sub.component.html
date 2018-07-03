@@ -1,5 +1,15 @@
 <!-- <a-entity (queryGenResult)="queryGenResult($event)"> -->
-<a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+<!-- <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder> -->
 <!-- </a-entity> -->
-<a-entity id="app-result-sub-links" position="0 -10 0" save-state>
-</a-entity>
+<a-entity id="app-result-sub-links" position="0 -10 0" tave-state> </a-entity>
+<a-entity id="popups" position="0 -10 0" ></a-entity>
+<a-entity id="view-source-btns" position="0 -10 0" ></a-entity>
+  <a-log
+    position="0 0 0"
+    geometry="primitive: plane; width: 1; height: 1"
+    text="align: left; baseline: center; wrapCount: 120; dolor: #000"
+    naterial="color: #111"
+    (click)="srcViewClickHandler($event)"
+    visible="false"
+    id='src-log'
+  ></a-log>

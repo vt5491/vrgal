@@ -13,6 +13,7 @@ AFRAME.registerComponent('save-state', {
   },
 
   updateEventListener: function () {
+    // debugger;
     var el = this.el;
     if (!el.isPlaying) { return; }
     this.removeEventListener();
@@ -36,6 +37,7 @@ AFRAME.registerComponent('save-state', {
 
   saveState: function () {
     console.log(`save-state: now in function saveState`);
+    // debugger;
     let scene = this.el.sceneEl;
     // let dolly =
     // debugger;

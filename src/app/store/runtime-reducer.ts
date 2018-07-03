@@ -26,10 +26,13 @@ export class RuntimeReducer {
     console.log(`RuntimeReducer: action.type=${action.type}`)
   // debugger;
   switch(action.type) {
-    case RuntimeActions.SET_LAST_QUERY: return {
-      lastQuery: {
-        queryType: action.val.queryType,
-        data: action.val.data,
+    case RuntimeActions.SET_LAST_QUERY: {
+      // debugger;
+      return {
+        lastQuery: {
+          queryType: action.val.queryType,
+          data: action.val.data,
+        }
       }
     };
     case RuntimeActions.SET_LAST_ROUTE: return {
@@ -41,31 +44,3 @@ export class RuntimeReducer {
   }
  }
 }
-
-// export interface IRuntimeState {
-//   // count: number;
-//   // count2: number;
-//   bgMusicOn: boolean;
-// }
-//
-// export const RUNTIME_STATE_INITIAL: IRuntimeState = {
-//   bgMusicOn: true,
-// }
-//
-//
-// export class RuntimeReducer {
-//
-//  public reducer(lastState: IRuntimeState = {bgMusicOn: true}, action) {
-//     console.log(`RuntimeReducer: action.type=${action.type}`)
-//   switch(action.type) {
-//     case RuntimeActions.BG_MUSIC_OFF: return {
-//       bgMusicOn: false,
-//     };
-//     case RuntimeActions.BG_MUSIC_ON: return {
-//       bgMusicOn: true,
-//     };
-//     default:
-//       return lastState;
-//   }
-//  }
-// }

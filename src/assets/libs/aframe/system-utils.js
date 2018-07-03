@@ -340,10 +340,13 @@ AFRAME.registerSystem('system-utils', {
     el.addEventListener('click', (evt) => {
       // console.log(`system-utils: click for exampleRoot=${evt.detail.exampleRoot}`);
       console.log(`system-utils: click for exampleRoot=${exampleRoot}`);
+      // debugger;
       let sceneEl = document.querySelector('a-scene');
+      let appPrefix = sceneEl.systems['system-base'].data.appPrefix
       // and emit a done event so ng2 can do any processing
       sceneEl.dispatchEvent(new CustomEvent(
-        'vrgal_view_source_btn_clicked',
+        // 'vrgal_view_source_btn_clicked',
+        `${appPrefix}_view_source_btn_clicked`,
         { detail: {
           'exampleRoot': exampleRoot,
           'btnEl' : el,
