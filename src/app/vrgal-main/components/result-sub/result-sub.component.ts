@@ -44,12 +44,14 @@ export class ResultSubComponent implements OnInit {
       lastQueryData = this.ngRedux.getState().runtime.lastQuery.data;
     }
     // debugger;
+    console.log(`ResultSubComponent.queryGenResult: lastQueryType=${lastQueryType}`);
+    console.log(`ResultSubComponent.queryGenResult: lastQueryData=${lastQueryData}`);
 
     // pull from ngRedux
-    if (lastQueryType) {
+    if (lastQueryType && params.queryType === lastQueryType) {
       // debugger;
       this.addResults(lastQueryData);
-      console.log(`ResultSubComponent.queryGenResult: lastQueryData=${lastQueryData}`);
+      // console.log(`ResultSubComponent.queryGenResult: lastQueryData=${lastQueryData}`);
       // switch(lastQueryType) {
       //   case "curated" : {
       //     this.addResults(lastData);
@@ -103,9 +105,28 @@ export class ResultSubComponent implements OnInit {
     }
   }
 
+  // Clear out any screen artifacts from prior queries
+  clearResults() {
+    let linksEl = document.getElementById("app-result-sub-links");
+    while (linksEl.firstChild) {
+      linksEl.removeChild(linksEl.firstChild);
+    }
+
+    let popupsEl = document.getElementById("popups");
+    while (popupsEl.firstChild) {
+      popupsEl.removeChild(popupsEl.firstChild);
+    }
+
+    let sourceBtnsEl = document.getElementById("view-source-btns");
+    while (sourceBtnsEl.firstChild) {
+      sourceBtnsEl.removeChild(sourceBtnsEl.firstChild);
+    }
+  }
+
   addResults(results) {
     // debugger;
     this.sceneEl = document.querySelector('a-scene');
+    this.clearResults();
 
     console.log(`ResultSubComponent.addResults: results.length=${results.length}`);
     this.exampleResults = results;
@@ -158,6 +179,8 @@ export class ResultSubComponent implements OnInit {
     let configPanelEl = document.querySelector('app-config-panel');
     this.renderer.setAttribute(configPanelEl, 'position',`0 ${yPos - 3 * elemHeight} 0`);
 
+    let helpPanelEl = document.querySelector('app-help-panel');
+    this.renderer.setAttribute(helpPanelEl, 'position',`0 ${yPos - 3 * elemHeight -0.5} 0`);
   }
 
   // addLink(data, pos) {
@@ -190,13 +213,13 @@ export class ResultSubComponent implements OnInit {
       this.utils.saveDollyState();
 
       // set last route so we know where to return to.
-      // this.ngRedux.dispatch(this.runtimeActions.setLastRoute("result-sub"));
-      let currentStore = this.utils.getCurrentNgRedux();
-      currentStore.dispatch(this.runtimeActions.setLastRoute("result-sub"));
+      this.ngRedux.dispatch(this.runtimeActions.setLastRoute("result-sub"));
+      // let currentStore = this.utils.getCurrentNgRedux();
+      // currentStore.dispatch(this.runtimeActions.setLastRoute("result-sub"));
       // save the appStore
-      debugger;
-      // this.utils.saveAppState(this.ngRedux);
-      this.utils.saveAppState(currentStore);
+      // debugger;
+      this.utils.saveAppState(this.ngRedux);
+      // this.utils.saveAppState(currentStore);
       // console.log(`now in user click handler`);
       // note: we just use a closure to specify the example_id instead of reading
       // the attribute since we have one event handler per link anyway.
@@ -436,6 +459,12 @@ export class ResultSubComponent implements OnInit {
     logGeom.height = 0;
     logEl.setAttribute('geometry', logGeom);
     logEl.setAttribute("visible", "false");
+  }
+
+  returnToMain(evt: Event) {
+    this.ngRedux.dispatch(this.runtimeActions.setLastRoute("query-sub"));
+    console.log(`ResultSubComponent.returnToMain: new route=${this.ngRedux.getState().runtime.lastRoute}`)
+    this.utils.toggleSubScenes();
   }
 
 

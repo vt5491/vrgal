@@ -119,7 +119,7 @@ export class AppModule {
     if(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`)) {
       initState = JSON.parse(sessionStorage.getItem(`${CoreBaseService.appPrefix}_appState`));
     }
-    debugger;
+    // debugger;
     // if (initState.cr1) {
     //   console.log(`AppModule: initstate.count2 = ${initState.cr1.count2}`)
     // }
@@ -133,7 +133,7 @@ export class AppModule {
       rootReducer as any,
       // INITIAL_STATE,
       initState,
-      // [],
+      [],
       enhancers
       // enhancer3
     );

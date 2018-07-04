@@ -12,4 +12,17 @@ export class HelpPanelComponent implements OnInit {
   ngOnInit() {
   }
 
+  onHelpHoverEnter(evt: Event) {
+    let handHelpEl = document.querySelector("#hand-overview-chart");
+    handHelpEl.setAttribute("visible","true");
+    // (evt.target as any).setAttribute("visible","true");
+    // debugger;
+  }
+
+  onHelpHoverExit(evt: Event) {
+    let handHelpEl = document.querySelector("#hand-overview-chart");
+    handHelpEl.setAttribute("visible","false");
+    // (evt.target as any).setAttribute("visible","true");
+  }
+
 }

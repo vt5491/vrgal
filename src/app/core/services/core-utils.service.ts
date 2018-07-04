@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter, Output, } from '@angular/core';
 import { CoreBaseService } from './core-base.service';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 // import 'rxjs/add/operator/map';
@@ -10,6 +10,7 @@ import {IAppState} from "../../store/store";
 import * as THREE from "three";
 @Injectable()
 export class CoreUtilsService {
+  @Output() subSceneChange = new EventEmitter();
 
   // This is used for transferring data between components.  Add a component specific
   // key, so you don't conflict with other components in case they're using this too.
@@ -267,6 +268,7 @@ export class CoreUtilsService {
 
   toggleSubScenes() {
     console.log(`CoreUtils.toggleSubScenes: entered`);
+    let sceneEl = document.querySelector('a-scene');
     let queryScene = document.querySelector('app-query-sub');
     let resultScene = document.querySelector('app-result-sub');
 
@@ -281,6 +283,21 @@ export class CoreUtilsService {
     // // debugger;
     // console.log(`MainComponent.toggleSubScenes: state.cr1.count=${state.cr1.count}, state.cr1.count2=${state.cr1.count2}`)
     // console.log(`MainComponent.toggleSubScenes: state.config.bgMusicOn=${state.config.bgMusicOn}`)
+    // this.subSceneChange.emit("abc");
+    let detail = {};
+
+    // debugger;
+    if (resultScene.getAttribute('visible')) {
+      detail = {old: 'query-sub', new: 'result-sub'};
+    }
+    else{
+      detail = {old: 'result-sub', new: 'query-sub'};
+    }
+
+    sceneEl.dispatchEvent(new CustomEvent('subSceneChange', {
+      detail: detail,
+      bubbles: true
+    }));
 
   }
 

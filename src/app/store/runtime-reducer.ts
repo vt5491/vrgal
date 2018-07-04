@@ -32,11 +32,12 @@ export class RuntimeReducer {
         lastQuery: {
           queryType: action.val.queryType,
           data: action.val.data,
-        }
+        },
+        lastRoute: lastState.lastRoute,
       }
     };
     case RuntimeActions.SET_LAST_ROUTE: return {
-      // lastRoute: action.val.lastRoute
+      lastQuery: lastState.lastQuery,
       lastRoute: action.val
     };
     default:

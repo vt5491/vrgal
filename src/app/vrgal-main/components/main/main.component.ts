@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { CounterActions, RuntimeActions } from '../../../store/app.actions';
 import {IAppState} from "../../../store/store";
@@ -26,6 +26,7 @@ export class MainComponent implements OnInit {
     private counterActions: CounterActions,
     private runtimeActions: RuntimeActions,
     private resultSubComponent : ResultSubComponent,
+    private renderer: Renderer2,
   ) {
   }
 
@@ -52,9 +53,21 @@ export class MainComponent implements OnInit {
 
     // debugger;
     let lastRoute = this.ngRedux.getState().runtime.lastRoute;
-    if (lastRoute === "result-sub") {
-      this.resultSubComponent.queryGenResult({queryType: "curated"})
+    let runtime = this.ngRedux.getState().runtime;
+    let lastQueryType = null;
+    if( runtime.lastQuery && runtime.lastQuery.queryType) {
+      lastQueryType = runtime.lastQuery.queryType;
+    }
+    console.log(`MainComponent.initScene: lastRoute=${lastRoute}, lastQueryType=${lastQueryType}`);
+    if (lastRoute && lastRoute  === "result-sub") {
+      // this.resultSubComponent.queryGenResult({queryType: "curated"})
+      this.resultSubComponent.queryGenResult({queryType: lastQueryType})
       // this.toggleSubScenes(null);
+    }
+    else {
+      // restore the base position of the config panel
+      let configPanelEl = document.querySelector('app-config-panel');
+      this.renderer.setAttribute(configPanelEl, 'position',`0 0 0`);
     }
   }
 
@@ -82,32 +95,44 @@ export class MainComponent implements OnInit {
 
   }
 
-  setLastQuery(evt) {
-    console.log(`MainComponent.setLastQuery: entered`);
-    // debugger;
-    // this.ngRedux.dispatch(this.runtimeActions.bgMusicOn());
-    // let lastQuery : IQueryResult = {
-    //   queryType: 'abc',
-    //   data: [{a: 7, b: "hi"}],
-    // }
-    let lastQuery : IQueryResult = {
-      queryType: 'curated',
-      data: [{
-        id: 1,
-        lift_score: 100,
-        name: "webgl_mirror.html",
-        tag: "mini-gal" ,
-      }],
+  // setLastQuery(evt) {
+  //   console.log(`MainComponent.setLastQuery: entered`);
+  //   // debugger;
+  //   // this.ngRedux.dispatch(this.runtimeActions.bgMusicOn());
+  //   // let lastQuery : IQueryResult = {
+  //   //   queryType: 'abc',
+  //   //   data: [{a: 7, b: "hi"}],
+  //   // }
+  //   let lastQuery : IQueryResult = {
+  //     queryType: 'curated',
+  //     data: [{
+  //       id: 1,
+  //       lift_score: 100,
+  //       name: "webgl_mirror.html",
+  //       tag: "mini-gal" ,
+  //     }],
+  //   }
+  //   this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
+  //
+  // }
+  //
+  // setLastRoute(evt) {
+  //   console.log(`MainComponent.setLastQuery: entered`);
+  //
+  //   // debugger;
+  //   this.ngRedux.dispatch(this.runtimeActions.setLastRoute("abc"));
+  // }
+  subSceneChange(evt: CustomEvent) {
+    console.log(`MainComponent.subSceneChange: evt.detail.old=${evt.detail.old}, evt.detail.new=${evt.detail.new}`);
+
+    if(evt.detail.new === 'query-sub') {
+      // restore the base position of the config panel
+      let configPanelEl = document.querySelector('app-config-panel');
+      this.renderer.setAttribute(configPanelEl, 'position',`0 0 0`);
+
+      let helpPanelEl = document.querySelector('app-help-panel');
+      this.renderer.setAttribute(helpPanelEl, 'position',`0 -0.5 0`);
     }
-    this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
-
-  }
-
-  setLastRoute(evt) {
-    console.log(`MainComponent.setLastQuery: entered`);
-
-    // debugger;
-    this.ngRedux.dispatch(this.runtimeActions.setLastRoute("abc"));
   }
 
 }

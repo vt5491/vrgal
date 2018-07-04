@@ -1,3 +1,14 @@
-<p>
-  help-panel works!
-</p>
+<a-entity>
+  <a-circle
+    position="0 -4 0"
+    radius="0.25"
+    (mouseenter)="onHelpHoverEnter($event)"
+    (mouseleave)="onHelpHoverExit($event)"
+  >
+  </a-circle>
+  <a-image id="hand-overview-chart"
+    src="#handOverviewImg" position="5 -4 0.2"
+    width="8.8" height="4" visible="false">
+  </a-image>
+  <a-text value="Navigation Help" position="0 -4.5 0.2" align="center"></a-text>
+</a-entity>

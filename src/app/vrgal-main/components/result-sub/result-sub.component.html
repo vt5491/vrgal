@@ -1,9 +1,19 @@
 <!-- <a-entity (queryGenResult)="queryGenResult($event)"> -->
 <!-- <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder> -->
 <!-- </a-entity> -->
-<a-entity id="app-result-sub-links" position="0 -10 0" tave-state> </a-entity>
-<a-entity id="popups" position="0 -10 0" ></a-entity>
-<a-entity id="view-source-btns" position="0 -10 0" ></a-entity>
+<a-circle id="return-to-main"
+  (click)="returnToMain($event)"
+  position="0 2 0"
+  rotation="0 0 0"
+  color="#4CC309" height="2" width="2"
+  material="side: double">
+</a-circle>
+<a-text value="Return to Main"
+  position="0 0.5 0" align="center" eight="8.2" idth="0.2">
+</a-text>
+<a-entity id="app-result-sub-links" position="0 -12 0" tave-state> </a-entity>
+<a-entity id="popups" position="0 -12 0" ></a-entity>
+<a-entity id="view-source-btns" position="0 -12 0" ></a-entity>
   <a-log
     position="0 0 0"
     geometry="primitive: plane; width: 1; height: 1"
