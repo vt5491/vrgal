@@ -136,6 +136,9 @@ export class ExamplesService {
     let url = `${this.server}examples/${exampleId}/stats/increment.json?metric=${metric}`;
     let body = new Object();
 
+    // if (metric === 'clicks') {
+    //   debugger;
+    // };
     return this.put(url, body)
       // .subscribe(rsp => {
       //   console.log(`ExampleService.incExampleStat: incremented ${metric}`);

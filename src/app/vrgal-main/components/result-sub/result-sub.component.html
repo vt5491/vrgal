@@ -14,7 +14,7 @@
 <a-entity id="app-result-sub-links" position="0 -12 0" tave-state> </a-entity>
 <a-entity id="popups" position="0 -12 0" ></a-entity>
 <a-entity id="view-source-btns" position="0 -12 0" ></a-entity>
-  <a-log
+  <!-- <a-log
     position="0 0 0"
     geometry="primitive: plane; width: 1; height: 1"
     text="align: left; baseline: center; wrapCount: 120; dolor: #000"
@@ -22,4 +22,15 @@
     (click)="srcViewClickHandler($event)"
     visible="false"
     id='src-log'
-  ></a-log>
+  ></a-log> -->
+<a-entity
+  log
+  position="0 0 0"
+  geometry="primitive: plane"
+  material="color: #fff"
+  text="align: left; baseline: center; wrapCount: 120; color: #000"
+  (click)="srcViewClickHandler($event)"
+  visible="false"
+  id='src-log'
+>
+</a-entity>

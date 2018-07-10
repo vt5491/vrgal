@@ -17,6 +17,7 @@ export class ResultSubComponent implements OnInit {
 
   exampleResults : [any];
   sceneEl : Element;
+  pulledFromCache : boolean = false;
 
   constructor(
     private base: CoreBaseService,
@@ -44,12 +45,14 @@ export class ResultSubComponent implements OnInit {
       lastQueryData = this.ngRedux.getState().runtime.lastQuery.data;
     }
     // debugger;
-    console.log(`ResultSubComponent.queryGenResult: lastQueryType=${lastQueryType}`);
+    console.log(`ResultSubComponent.queryGenResult: lastQueryType=${lastQueryType}, params.queryType=${params.queryType}`);
     console.log(`ResultSubComponent.queryGenResult: lastQueryData=${lastQueryData}`);
 
     // pull from ngRedux
+    // debugger;
     if (lastQueryType && params.queryType === lastQueryType) {
       // debugger;
+      this.pulledFromCache = true;
       this.addResults(lastQueryData);
       // console.log(`ResultSubComponent.queryGenResult: lastQueryData=${lastQueryData}`);
       // switch(lastQueryType) {
@@ -203,7 +206,8 @@ export class ResultSubComponent implements OnInit {
     // linkEl.setAttribute('position', `${2.5 * index} 0 0`);
     linkEl.setAttribute('id', `${imgRoot}-link`);
     // add in the rails example_id, so event handler can update stats
-    let example_id = data.id;
+    // let example_id = data.id;
+    let example_id = data.example_id;
     linkEl.setAttribute('example_id', example_id);
     // disable the system 'on' event handler
     // linkEl.setAttribute('on', 'no-click');
@@ -245,6 +249,15 @@ export class ResultSubComponent implements OnInit {
     // impressions stats are updated at query level since every refresh of
     // the results scene would drive the impressions count.
     // this.incImpressions(example_id);
+    console.log(`this.pulledFromCache=${this.pulledFromCache}`);
+    if (!this.pulledFromCache) {
+      this.examples.incExampleStat(example_id, "impressions")
+        .subscribe(rsp => {
+          console.log(`impressions: stats now updated`);
+        },
+        (err) => {console.log(`ResultsSceneComponent.impHandler: err=${err}`)},
+      )
+    }
   }
 
   // add thumbs to the assets list
@@ -337,7 +350,8 @@ export class ResultSubComponent implements OnInit {
     evtDetail['pos'] = { x: data.pos.x + 1.5, y: data.pos.y -1, z: 0.1};
     evtDetail['exampleRoot'] = exampleRoot;
     evtDetail['id'] = `${exampleRoot}-viewSourceBtn`;
-    evtDetail['exampleId'] = data.id;
+    // evtDetail['exampleId'] = data.id;
+    evtDetail['exampleId'] = data.example_id;
 
     let evt = new CustomEvent(`${this.base.appPrefix}_create_view_source_btn`, { detail: evtDetail });
     evt.initEvent(`${this.base.appPrefix}_create_view_source_btn`, true, true);
@@ -381,6 +395,7 @@ export class ResultSubComponent implements OnInit {
         }
       );
       // and increment code_view stats
+      // debugger;
       this.examples.incExampleStat(evt.detail.exampleId, "code_views")
         .subscribe(rsp => {
           console.log(`code_views: stats now updated`);
@@ -449,6 +464,12 @@ export class ResultSubComponent implements OnInit {
     if (viewSrcBtn) {
       viewSrcBtn.setAttribute('color', '#FFF');
     }
+    // this.examples.incExampleStat(evt.detail.exampleId, "code_views")
+    //   .subscribe(rsp => {
+    //     console.log(`code_views: stats now updated`);
+    //   },
+    //   (err) => {console.log(`ResultsSceneComponent.addViewSrcClickHandler: err=${err.message}`)},
+    // )
   }
 
   hideSrcLog(logEl) {
