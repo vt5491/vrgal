@@ -31,6 +31,8 @@ https.createServer({
     key: fs.readFileSync('servers/meta-data-proxy/certs/localhost.key'),
     cert: fs.readFileSync('servers/meta-data-proxy/certs/localhost.crt')
   }, app).listen(port);
+// http.createServer(function (req, res) {
+// }, app).listen(port);
 console.log(`https listening on port ${port}`);
 // the following line is how to start in http mode.
 // app.listen(port, () => console.log(`Example app listening on port ${port}`))

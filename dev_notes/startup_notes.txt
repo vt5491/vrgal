@@ -42,6 +42,7 @@ ii) startup with node (or nodemon if developing)
 node servers/meta-data-proxy/index.js
 
 Note: run on same server as the rails server
+Note2: No. run on same console (new tab) as the nodemon server.
 
 do "netstat -atn | grep 1337" to verify.
 

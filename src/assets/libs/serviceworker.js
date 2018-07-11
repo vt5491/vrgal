@@ -7,8 +7,8 @@ var cacheFirstFiles = [
   // 'assets/models/controller.gltf',
   // 'assets/sounds/Siddhartha_-_01_-_Lore_abridged.ogg',
   // 'assets/sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg'
-  '../sounds/Siddhartha_-_01_-_Lore_abridged.ogg',
-  '../sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg'
+  //'../sounds/Siddhartha_-_01_-_Lore_abridged.ogg',
+  //'../sounds/Siddhartha_-_07_-_There_Is_Only_This_Love_abridged.ogg'
 ];
 
 var networkFirstFiles = [

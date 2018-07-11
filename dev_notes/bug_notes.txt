@@ -1,0 +1,11 @@
+2018-07-10
+1) Sound doesn't work on firefox period (including nightly).  This is true with OR or Vive.
+
+2) With Chrome:
+a) Sound doesn't work with OR
+b) It works great with htc vive.
+
+3) Chrome is useless anyway (for my app)
+Because it doesn't issue vrdisplayactivate events upon transferring to another web site.  Thus
+you keep losing VR.  Transferring to a lifted three.js loses vr.  And if you transfer back
+to a-frame, same thing.

@@ -72,9 +72,9 @@ export class ResultSubComponent implements OnInit {
         case "curated" : {
           let result$ = this.examples.queryCurated();
 
-
           result$.subscribe(
             data => {
+              // debugger;
               let lastQuery : any = {};
               lastQuery.queryType = 'curated';
               lastQuery.data = (data as any).examples;
@@ -188,7 +188,7 @@ export class ResultSubComponent implements OnInit {
 
   // addLink(data, pos) {
   addLink(data) {
-    console.log(`ResultsSubComponent.addLink: now creating link`);
+    // console.log(`ResultsSubComponent.addLink: now creating link`);
     let linkParentEl = document.querySelector('#app-result-sub-links');
     let linkEl = document.createElement('a-entity');
 
@@ -249,7 +249,7 @@ export class ResultSubComponent implements OnInit {
     // impressions stats are updated at query level since every refresh of
     // the results scene would drive the impressions count.
     // this.incImpressions(example_id);
-    console.log(`this.pulledFromCache=${this.pulledFromCache}`);
+    // console.log(`this.pulledFromCache=${this.pulledFromCache}`);
     if (!this.pulledFromCache) {
       this.examples.incExampleStat(example_id, "impressions")
         .subscribe(rsp => {
