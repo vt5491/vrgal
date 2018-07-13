@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { takeWhile, takeUntil, first } from 'rxjs/operators'
 import { NgRedux } from '@angular-redux/store';
 import {IAppState} from "../../store/store";
+import { ConfigActions } from '../../store/app.actions';
 
 
 import * as THREE from "three";
@@ -20,6 +21,7 @@ export class CoreUtilsService {
     private base: CoreBaseService,
     private http: HttpClient,
     private ngRedux: NgRedux<IAppState>,
+    private configActions : ConfigActions,
   ) {
     console.log(`CoreUtilsService.ctor: entered`);
     this.dataStore = {}
@@ -340,6 +342,38 @@ export class CoreUtilsService {
   // always get the current copy.
   getCurrentNgRedux() {
     return this.ngRedux;
+  }
+
+  // originally implemented in configPanel.component
+  toggleBgMusicState() {
+    console.log(`CoreUtils.toggleBgMusic: entered`);
+    let state=this.ngRedux.getState();
+    console.log(`ConfigPanelComponent.toggleBgMusic: pre state.config.bgMusicOn=${state.config.bgMusicOn}`)
+
+    switch(state.config.bgMusicOn) {
+      case true:
+      {
+        console.log(`setting off`);
+        this.ngRedux.dispatch(this.configActions.bgMusicOff());
+        break;
+      }
+      case false:
+      {
+        console.log(`setting on`);
+        this.ngRedux.dispatch(this.configActions.bgMusicOn());
+        break;
+      }
+
+      default:
+        this.ngRedux.dispatch(this.configActions.bgMusicOn());
+
+    }
+    // this.utils.toggleSound(document.querySelector('#bg-music'));
+    state = this.ngRedux.getState();
+    console.log(`ConfigPanelComponent.toggleBgMusic: post state.config.bgMusicOn=${state.config.bgMusicOn}`)
+
+    // debugger;
+    // console.log(`-->bgMusicOn2=${this.bgMusicOn2}`);
   }
 
 }

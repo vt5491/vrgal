@@ -91,35 +91,36 @@ export class ConfigPanelComponent implements OnInit {
     // console.log(`ConfigPanelComponent.ngOnInit: post bgMusicEl.checked=${bgMusicEl.getAttribute('checked')}`);
   }
 
-  toggleBgMusicState(evt: Event) {
-    console.log(`ConfigPanelComponent.toggleBgMusic: entered`);
-    let state=this.ngRedux.getState();
-    console.log(`ConfigPanelComponent.toggleBgMusic: pre state.config.bgMusicOn=${state.config.bgMusicOn}`)
-
-    switch(state.config.bgMusicOn) {
-      case true:
-      {
-        console.log(`setting off`);
-        this.ngRedux.dispatch(this.configActions.bgMusicOff());
-        break;
-      }
-      case false:
-      {
-        console.log(`setting on`);
-        this.ngRedux.dispatch(this.configActions.bgMusicOn());
-        break;
-      }
-
-      default:
-        this.ngRedux.dispatch(this.configActions.bgMusicOn());
-
-    }
-    // this.utils.toggleSound(document.querySelector('#bg-music'));
-    state = this.ngRedux.getState();
-    console.log(`ConfigPanelComponent.toggleBgMusic: post state.config.bgMusicOn=${state.config.bgMusicOn}`)
-
-    // debugger;
-    // console.log(`-->bgMusicOn2=${this.bgMusicOn2}`);
+  toggleBgMusicState(evt?: Event) {
+    this.utils.toggleBgMusicState();
+    // console.log(`ConfigPanelComponent.toggleBgMusic: entered`);
+    // let state=this.ngRedux.getState();
+    // console.log(`ConfigPanelComponent.toggleBgMusic: pre state.config.bgMusicOn=${state.config.bgMusicOn}`)
+    //
+    // switch(state.config.bgMusicOn) {
+    //   case true:
+    //   {
+    //     console.log(`setting off`);
+    //     this.ngRedux.dispatch(this.configActions.bgMusicOff());
+    //     break;
+    //   }
+    //   case false:
+    //   {
+    //     console.log(`setting on`);
+    //     this.ngRedux.dispatch(this.configActions.bgMusicOn());
+    //     break;
+    //   }
+    //
+    //   default:
+    //     this.ngRedux.dispatch(this.configActions.bgMusicOn());
+    //
+    // }
+    // // this.utils.toggleSound(document.querySelector('#bg-music'));
+    // state = this.ngRedux.getState();
+    // console.log(`ConfigPanelComponent.toggleBgMusic: post state.config.bgMusicOn=${state.config.bgMusicOn}`)
+    //
+    // // debugger;
+    // // console.log(`-->bgMusicOn2=${this.bgMusicOn2}`);
   }
 
   toggleBgMusic(newState) {

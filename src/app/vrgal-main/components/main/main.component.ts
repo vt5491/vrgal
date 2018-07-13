@@ -8,10 +8,12 @@ import { CoreBaseService } from '../../../core/services/core-base.service';
 import { CoreUtilsService } from '../../../core/services/core-utils.service';
 import { QuerySubComponent } from '../query-sub/query-sub.component';
 import { ResultSubComponent } from '../result-sub/result-sub.component';
+import { ConfigPanelComponent } from '../config-panel/config-panel.component';
+import { ConfigActions } from '../../../store/app.actions';
 
 
 @Component({
-  providers: [ResultSubComponent],
+  providers: [ResultSubComponent, ConfigPanelComponent],
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
@@ -26,16 +28,65 @@ export class MainComponent implements OnInit {
     private counterActions: CounterActions,
     private runtimeActions: RuntimeActions,
     private resultSubComponent : ResultSubComponent,
+    // private configPanelComponent : ConfigPanelComponent,
     private renderer: Renderer2,
+    private configActions : ConfigActions,
   ) {
   }
 
   ngOnInit() {
+    let bgMusicAssetEl = document.querySelector('#bg-music-chill');
+    // bgMusicAssetEl.addEventListener('load', (evt) => {
+    bgMusicAssetEl.addEventListener('play', (evt) => {
+      console.log(`MainComponent.bgSoundInit: bgMusicAssetEl sound has been loaded`);
+      this.initBgMusic();
+    })
+    let bgMusicEl = document.querySelector('#bg-music');
+    bgMusicEl.addEventListener('loaded', (evt) => {
+      console.log(`MainComponent.bgSoundInit: bgMusicEl sound has been loaded`);
+      // this.initBgMusic();
+      setTimeout(() => {this.initBgMusic()}, 2000);
+    })
     document.querySelector('a-scene')
       .addEventListener('loaded', this.initScene.bind(this))
   }
 
   initScene() {
+    // let bgMusicAssetEl = document.querySelector('#bg-music-chill');
+    // bgMusicAssetEl.addEventListener('error', (evt) => {
+    // // bgMusicEl.addEventListener('timeout', (evt) => {
+    //   console.log(`MainComponent.bgSoundInit: sound has been loaded`);
+    //   this.initBgMusic();
+    // })
+    // this.initBgMusic();
+    // let sceneEl = document.querySelector('a-scene');
+    // let bgMusicEl = document.querySelector('#bg-music-chill');
+    // console.log(`MainComponent.initScene: setting sound event listener`);
+    // let assetsEl = document.querySelector('a-assets');
+    // let fl = (assetsEl as any).fileLoader
+    // fl.onLoad = (arg) => {
+    //   console.log(`asset loaded: ${arg}`);
+    // }
+    // let bgMusicAssetEl = document.querySelector('#bg-music-chill');
+    // let bgMusicEl = document.querySelector('#bg-music');
+    // // bgMusicEl.addEventListener('loaded', (evt) => {
+    // // bgMusicAssetEl.addEventListener('loaded', (evt) => {
+    // bgMusicAssetEl.addEventListener('load', (evt) => {
+    // // bgMusicEl.addEventListener('timeout', (evt) => {
+    //   console.log(`CoreUtils.bgSoundInit: sound has been loaded`);
+    //   this.initBgMusic();
+    // })
+    // yes, a hack to do it based on time.  But using 'load', 'loaded' et al.
+    // events, I just can't get this to drive.  So just go with this for now.
+    setTimeout(() => {this.initBgMusic()}, 2000);
+    // this.initBgMusic();
+    // let bgMusicEl = document.querySelector('#bg-music');
+    // bgMusicEl.addEventListener('loaded', (evt) => {
+    //   console.log(`MainComponent.bgSoundInit: bgMusicEl sound has been loaded`);
+    //   // this.initBgMusic();
+    //   setTimeout(() => {this.initBgMusic()}, 2000);
+    // })
+
     let resultScene = document.querySelector('app-result-sub');
     resultScene.setAttribute('visible', 'false');
 
@@ -132,6 +183,40 @@ export class MainComponent implements OnInit {
 
       let helpPanelEl = document.querySelector('app-help-panel');
       this.renderer.setAttribute(helpPanelEl, 'position',`0 -0.5 0`);
+    }
+  }
+
+  // turn off bg music if the config-panel has it set to 'off'
+  initBgMusic() {
+    let state=this.ngRedux.getState();
+    console.log(`MainComponent.initBgMusic: state.config.bgMusicOn=${state.config.bgMusicOn}`)
+    // this.configPanelComponent.toggleBgMusicState();
+    // this.utils.toggleBgMusicState();
+    // debugger;
+    let bgMusicEl: any = document.querySelector('#bg-music');
+    // debugger;
+    if(bgMusicEl.components && bgMusicEl.components.sound) {
+      // just make sure sound is synced to state
+      switch(state.config.bgMusicOn) {
+        case true:
+        {
+          console.log(`initBgMusic: setting on`);
+          // this.ngRedux.dispatch(this.configActions.bgMusicOn());
+          bgMusicEl.components.sound.playSound();
+          break;
+        }
+        case false:
+        {
+          console.log(`initBgMusic: setting off`);
+          // this.ngRedux.dispatch(this.configActions.bgMusicOff());
+          bgMusicEl.components.sound.pauseSound();
+          break;
+        }
+
+        default:
+        // this.ngRedux.dispatch(this.configActions.bgMusicOn());
+
+      }
     }
   }
 
