@@ -7,11 +7,13 @@ const https = require("https");
 const request=require('request');
 const bodyParser = require('body-parser');
 const port = 1337;
+//const port = 3000;
 const util = require('util')
 
 let readBasePath = 'data/examples';
 let tmpPath = 'tmp/examples';
 let appPrefix = 'vrize';
+let keyPath, certPath, user;
 
 var options = {
   host: 'localhost',
@@ -26,15 +28,34 @@ var options = {
 var metaDataServer = "http://localhost:3000";
 // var metaDataServer = "https://localhost:3000";
 
-console.log('meta-data-proxy: entered');
+user = process.env.USER;
+console.log(`meta-data-proxy: entered, user=${user}`);
+if (user === 'ubuntu') {
+  // production path
+  keyPath ='servers/meta-data-proxy/certs/privkey2.pem';  
+  certPath = 'servers/meta-data-proxy/certs/fullchain2.pem';
+}
+else {
+  // dev path
+  keyPath = 'servers/meta-data-proxy/certs/localhost.key';  
+  certPath = 'servers/meta-data-proxy/certs/localhost.crt';  
+}
 https.createServer({
-    key: fs.readFileSync('servers/meta-data-proxy/certs/localhost.key'),
-    cert: fs.readFileSync('servers/meta-data-proxy/certs/localhost.crt')
+    //key: fs.readFileSync('servers/meta-data-proxy/certs/localhost.key'),
+    //key: fs.readFileSync('/etc/letsencrypt/archive/infinitewheelie.org/privkey2.pem'),
+    //key: fs.readFileSync('servers/meta-data-proxy/certs/privkey2.pem'),
+    key: fs.readFileSync(keyPath),
+    //cert: fs.readFileSync('servers/meta-data-proxy/certs/localhost.crt')
+    //cert: fs.readFileSync('/etc/letsencrypt/archive/infinitewheelie.org/cert2.pem')
+    //cert: fs.readFileSync('servers/meta-data-proxy/certs/cert2.pem')
+    //cert: fs.readFileSync('servers/meta-data-proxy/certs/fullchain2.pem')
+    cert: fs.readFileSync(certPath)
   }, app).listen(port);
 // http.createServer(function (req, res) {
 // }, app).listen(port);
-console.log(`https listening on port ${port}`);
 // the following line is how to start in http mode.
+//app.listen(port)
+console.log(`listening on port ${port}`);
 // app.listen(port, () => console.log(`Example app listening on port ${port}`))
 
 // Parsers for POST data
@@ -89,6 +110,7 @@ app.get("/examples/all_lifted.json", (req, resOuter, next) => {
 
 app.get("/examples/all_curated.json", (req, resOuter, next) => {
   request.get(`${metaDataServer}/examples/by_tag.json?tag=mini-gal`,options,function(err,res,body){
+  //request.get(`http://127.0.0.1:3000/examples/by_tag.json?tag=mini-gal`,options,function(err,res,body){
       if(err) {
         console.log(`err=${err}`);
       }
