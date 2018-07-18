@@ -78,7 +78,7 @@ export class MainComponent implements OnInit {
     // })
     // yes, a hack to do it based on time.  But using 'load', 'loaded' et al.
     // events, I just can't get this to drive.  So just go with this for now.
-    setTimeout(() => {this.initBgMusic()}, 2000);
+    setTimeout(() => {this.initBgMusic()}, 3000);
     // this.initBgMusic();
     // let bgMusicEl = document.querySelector('#bg-music');
     // bgMusicEl.addEventListener('loaded', (evt) => {
