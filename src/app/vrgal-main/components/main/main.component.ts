@@ -11,6 +11,9 @@ import { ResultSubComponent } from '../result-sub/result-sub.component';
 import { ConfigPanelComponent } from '../config-panel/config-panel.component';
 import { ConfigActions } from '../../../store/app.actions';
 
+const { version: appVersion } = require('../../../../../package.json')
+// import { environment } from '../../environments/environment';
+
 
 @Component({
   providers: [ResultSubComponent, ConfigPanelComponent],
@@ -109,7 +112,7 @@ export class MainComponent implements OnInit {
     if( runtime.lastQuery && runtime.lastQuery.queryType) {
       lastQueryType = runtime.lastQuery.queryType;
     }
-    console.log(`MainComponent.initScene: lastRoute=${lastRoute}, lastQueryType=${lastQueryType}`);
+    console.log(`MainComponent.initScene: appVersion=${appVersion}`);
     if (lastRoute && lastRoute  === "result-sub") {
       // this.resultSubComponent.queryGenResult({queryType: "curated"})
       this.resultSubComponent.queryGenResult({queryType: lastQueryType})
