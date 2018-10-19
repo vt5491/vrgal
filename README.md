@@ -21,14 +21,21 @@ Wouldn't it be nicer to experience these examples using full immersive VR?  Imag
 
 VRGAL, using an [automated parsing algorithm](https://github.com/vt5491/vrgal/tree/master/src/app/vrize) , is able to "lift" or "vr-ize" a large percentage of these "flat" three.js examples to be VR compatible (with the goal of adding many more). Then, using an A-frame based front-end, VRGAL combines these examples into one common interface: a VR "gallery" with which to browse the library.
 
-While this can useful to all interested users, it is hoped this will be especially useful for  game programmers.  To this end, VRGAL allows you to browse the source code from within the app as well.  
+While this can useful to all interested users, it is hoped this will be especially useful for  game programmers.  To this end, VRGAL allows you to browse the source code for the lifted THREE.js scripts from within the app as well.  
+
+### User Guide
+#### Movement
+Supports Oculus Rift and HTC Vive controllers.
+
+Move by doing a "full grab" and then pulling:
+
 
 ### Motivation
 As an amateur games programmer, one unfortunate fact of life I realized upon writing my first _real_ game was that _good enough_ was, well, not _good enough_.  This is not necessarily true for "standard" apps, where good enough _can_ be _good enough_.  This is because a standard app has some utility even if it's not perfect, esp. if your app is doing something useful that saves people time.  
 
-But games are different.  Games are not a necessity: they are a  luxury.  No one "has to" play your game, they have to _want_ to play it.  And since people only have a limited amount of time to play games, and there's plenty of competition out there (let's face it, every programmer and their brother wants to be a games programmer ), why should anyone play your amateuristic, half-baked, non-polished game?  In short, the bar for _acceptable_ in games is much higher than for standard web apps.
+But games are different.  Games are not a necessity: they are a  luxury.  No one "has to" play your game, they have to _want_ to play it.  And since people only have a limited amount of time to play games, and there's plenty of competition, why should anyone play your amateuristic, half-baked, non-polished game?  In short, the bar for _acceptable_ in games is much higher than for standard web apps.
 
-For a programmer, once you have the game mechanics working, the best way to improve your game (literally and metaphorically) is to improve your game's aesthetics. There are two way you can do this: learning a tool like Blender, and the other is to exploit some of the advanced features in your graphics library, such as lighting and shaders. As a means toward the latter, a good way to learn about aesthetics is to browse and _study_ the three.js examples library.
+For a programmer, once you have the game mechanics working, the best way to improve your game (literally and metaphorically) is to improve your game's aesthetics. There are two way you can do this: learning a tool like Blender to improve your scene visuals, and the other is to exploit some of the advanced features in your graphics library, such as lighting and shaders. As a means toward the latter, a good way to do this is to browse and _study_ the three.js examples library.
 
 This was the situation I found myself in upon trying to improve my game's look and feel. Unfortunately, my motivation waned when I realized I could only view three.js examples in a simple flat screen.  This form factor just didn't incentivize me, and perhaps more importantly, gave me no sense of what it would actually look like in VR.
 
@@ -40,10 +47,14 @@ Note: the parser succeeds because almost all the three.js examples are written i
 
 As of this writing, I've managed to lift about fifty examples with a success rate of about 67% (in short, I'm able to lift about 2 out of every 3 examples).
 
-I liken the examples library be like having a warehouse full of fine art paintings -- of which buried amongst are some Picassos and Rembrandts waiting to be discovered, just sitting there waiting for someone to put them in a frame (the equivalent of VR-lifting) and hang them up somewhere.  That's what VRGAL is all about.
+I liken the THREE.js examples library to a warehouse full of fine art paintings, of which there are some potential Picassos and Rembrandts, waiting for someone to come along and frame them (the equivalent of VR-lifting) and then hang them up somewhere.  
+
+That's what VRGAL is all about.
 
 ## Code Base Overview
 VRGAL is composed of an A-frame front-end client housed in an angular 6 SPA (single-page application), a node-based admin server, a node/express proxy server, and a Rails 5 back-end server responsible for keeping track of example meta-data.
 
+### Related
+[vrize service repo](https://github.com/vt5491/vrize-service)
 ## Release History
 2018-07-17: Alpha.
