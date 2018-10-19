@@ -31,7 +31,8 @@
               "src/assets/libs/aframe/system-base.js",
               "src/assets/libs/aframe/system-utils.js",
               "src/assets/libs/grab-vt.js",
-              "src/assets/libs/aframe/hand-controls-vt.js"
+              "src/assets/libs/aframe/hand-controls-vt.js",
+              "src/assets/libs/aframe/laser-controls-vt.js"
             ]
           },
           "configurations": {

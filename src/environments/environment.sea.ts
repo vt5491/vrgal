@@ -8,5 +8,6 @@ export const environment = {
   // the url for the rails meta-data service
   //metaDataServiceUrl : "http://192.168.1.147:3000"
   //metaDataServiceUrl : "http://192.168.1.148:1337"
-  metaDataServiceUrl : "https://192.168.1.148:1337"
+  //metaDataServiceUrl : "https://192.168.1.148:1337"
+  metaDataServiceUrl : "https://192.168.1.115:1337"
 };

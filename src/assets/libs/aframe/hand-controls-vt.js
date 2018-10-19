@@ -67,12 +67,18 @@ AFRAME.registerComponent('hand-controls-vt', {
     this.onTrackpadTouchStart = function () { self.handleButton('trackpad', 'touchstart'); };
     this.onTrackpadTouchEnd = function () { self.handleButton('trackpad', 'touchend'); };
     this.onTriggerDown = function () { self.handleButton('trigger', 'down'); };
+    //this.onTriggerDown = function () { console.log('triggerDown pressed');self.handleButton('trigger', 'down'); };
     this.onTriggerUp = function () { self.handleButton('trigger', 'up'); };
     this.onTriggerTouchStart = function () { self.handleButton('trigger', 'touchstart'); };
     this.onTriggerTouchEnd = function () { self.handleButton('trigger', 'touchend'); };
     this.onGripTouchStart = function () { self.handleButton('grip', 'touchstart'); };
     this.onGripTouchEnd = function () { self.handleButton('grip', 'touchend'); };
-    this.onThumbstickDown = function () { self.handleButton('thumbstick', 'down'); };
+    //vt this.onThumbstickDown = function () { self.handleButton('thumbstick', 'down'); };
+    //vt add
+    this.onThumbstickDown = function () { console.log('thumbstickDown pressed');
+      window.history.back();
+      self.handleButton('thumbstick', 'down'); };
+    //vt end
     this.onThumbstickUp = function () { self.handleButton('thumbstick', 'up'); };
     this.onAorXTouchStart = function () { self.handleButton('AorX', 'touchstart'); };
     this.onAorXTouchEnd = function () { self.handleButton('AorX', 'touchend'); };
