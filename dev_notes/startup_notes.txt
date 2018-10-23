@@ -41,6 +41,9 @@ i)cd to $VRGAL root
 ii) startup with node (or nodemon if developing) 
 node servers/meta-data-proxy/index.js
 
+or
+node servers/meta-data-proxy/index.js > ~/resources/logs/node_2018-10-15.log 2> ~/resources/logs/node_2018-10-15_err.log &
+
 Note: run on same server as the rails server
 Note2: No. run on same console (new tab) as the nodemon server.
 

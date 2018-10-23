@@ -1,0 +1,46 @@
+# 2018-10-18
+From infinitewheelie.org $VRGAL dir:
+
+1) ng build --prod
+
+This will put the bundle into "dist" folder.
+
+2) cd dist
+
+3) cp -R * /var/www/html
+
+This is a hot deployment.  No need to cycle apache.  
+
+Note: Don't forget to update version in package.json so message:
+
+MainComponent.initScene: appVersion=0.8.0
+
+
+on console.log appears correctly.
+
+
+Note 2: I cannot get UTs to run on dev or on prod.
+
+# 2018-10-22
+4) Renewing certificate keys
+
+a) sudo certbot renew --dry-run
+
+remove dry-run for real.  This will create the following: 
+
+/etc/letsencrypt/live/infinitewheelie.org/fullchain.pem
+/etc/letsencrypt/live/infinitewheelie.org/privkey.pem
+
+b) Don't forget to copy these two pems to the certs dir of the meta-data-proxy (port 1337):
+
+from ~/resources/github/vrgal/servers/meta-data-proxy/certs:
+
+sudo cp /etc/letsencrypt/live/infinitewheelie.org/fullchain.pem ./fullchain2.pem
+sudo cp /etc/letsencrypt/live/infinitewheelie.org/privkey.pem ./privkey2.pem
+
+c) use https://www.sslshopper.com/ssl-checker.html to check:
+infinitewheelie.org and infinitewheelier.org:1337
+
+see https://stackoverflow.com/questions/52940438/how-to-refresh-ssl-certificate-for-proxy-server-on-port-1337/52941741#52941741
+
+
