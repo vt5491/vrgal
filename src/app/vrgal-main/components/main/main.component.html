@@ -11,7 +11,7 @@
   </a-assets>
   <a-entity id="dolly" position="0 0 8" wasd-plus-controls sticky-state>
     <a-camera near="0.1" user-height="0" position="0 0 0" id="camera" wasd-controls-enabled="false"></a-camera>
-    <a-entity hand-controls-vt="left" position="0 0 0" grab></a-entity>
+    <a-entity id="hand" hand-controls-vt="left" position="0 0 0" grab></a-entity>
     <!-- <a-entity laser-controls="hand: right" position="0 0 0"></a-entity> -->
     <a-entity laser-controls-vt="hand: right" position="0 0 0"></a-entity>
   </a-entity>
@@ -23,5 +23,14 @@
   <app-config-panel position="0 0 0"></app-config-panel>
   <app-help-panel position="0 -0.5 0"></app-help-panel>
   <a-sound id="bg-music" autoplay="true" loop="true" src="#bg-music-chill"></a-sound>
+  <a-plane id="hand-popup-plane" position="-0.0 0.2 0.0"
+    width="0.15" height="0.35" color="#111" visible="false"></a-plane>
+  <a-text id="hand-popup-text"
+    value='to move: "grab" and pull\nto rotate: "point" and swivel\nto return: thumbstick down'
+    position="0 0.14 -0.0"
+    width="0.55" height="0.75"
+    rotation="0 0 -90"
+    visible="false">
+  </a-text>
   <a-sky src="#sky" theta-length="330"></a-sky>
 </a-scene>

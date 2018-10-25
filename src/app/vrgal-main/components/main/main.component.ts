@@ -104,8 +104,18 @@ export class MainComponent implements OnInit {
     //     this.ngRedux.dispatch(this.runtimeActions.setLastQuery(lastQuery));
     //   }
     // }
+    // this.addHandPopup();
+    let handPopupStatusKey = `${this.base.appPrefix}-handPopupStatus`;
+    let handPopupStatus = sessionStorage.getItem(handPopupStatusKey);
 
-    // debugger;
+    if (!handPopupStatus) {
+      // show if never been displayed on the session
+      this.initHandPopup();
+
+      // and toggle as "shown" so we don't keep displaying it.
+      sessionStorage.setItem(handPopupStatusKey, "1");
+    }
+
     let lastRoute = this.ngRedux.getState().runtime.lastRoute;
     let runtime = this.ngRedux.getState().runtime;
     let lastQueryType = null;
@@ -125,15 +135,31 @@ export class MainComponent implements OnInit {
     }
   }
 
-  // showResults(evt: Event) {
-  //   let sceneEl = document.querySelector('a-scene');
-  //
-  //   let appResultSubEl = document.createElement('app-result-sub');
-  //   sceneEl.appendChild(appResultSubEl);
-  //
-  //   this.utils.toggleSubScenes();
-  //
-  // }
+  initHandPopup () {
+    let hand = document.querySelector('#hand');
+    let handPopupPlane = document.querySelector('#hand-popup-plane');
+    handPopupPlane.setAttribute("visible","true");
+    let handPopupText = document.querySelector('#hand-popup-text');
+    handPopupText.setAttribute("visible","true");
+
+    window.addEventListener('gripclose', () => {
+      (hand as any).remove(handPopupPlane);
+
+      handPopupPlane.setAttribute("visible","false");
+      handPopupText.setAttribute("visible","false");
+    }, true)
+
+    window.addEventListener('gripdown', () => {
+      (hand as any).remove(handPopupPlane);
+
+      handPopupPlane.setAttribute("visible","false");
+      handPopupText.setAttribute("visible","false");
+    }, true);
+
+    (handPopupPlane as any).add(handPopupText);
+
+    (hand as any).add(handPopupPlane);
+  }
 
   toggleSubScenes(evt: Event) {
     this.utils.toggleSubScenes();
