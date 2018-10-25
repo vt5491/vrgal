@@ -23,7 +23,7 @@ ng serve vrgal --aot --configuration=val --host 0.0.0.0 --ssl 1 --ssl-key ~/vtst
 b) Start the express server.  cd to $VRGAL and run from the root directory:
 (in black on yellow console)
 
-nodemon servers/data-examples/index2.js 
+nodemon servers/data-examples/index2.js
 
 This will be port 3002.  It's the data server that updates the files in the git repo
 
@@ -38,11 +38,14 @@ This will start on port 3000, and the server interfaces with the meta-data in th
 
 d) Startup the meta-data proxy server:
 i)cd to $VRGAL root
-ii) startup with node (or nodemon if developing) 
+ii) startup with node (or nodemon if developing)
 node servers/meta-data-proxy/index.js
 
 or
 node servers/meta-data-proxy/index.js > ~/resources/logs/node_2018-10-15.log 2> ~/resources/logs/node_2018-10-15_err.log &
+
+on production better to use pm2:
+pm2 start servers/meta-data-proxy/index.js
 
 Note: run on same server as the rails server
 Note2: No. run on same console (new tab) as the nodemon server.
@@ -63,7 +66,3 @@ $VRGAL/src/app/core/services/core-base.service.ts
 
 Update 2018-04-15: Now they're specified by angular environment files.  I have two : 'sea' and 'val',
 depending on your development location.
-
-
-
-

@@ -9,11 +9,13 @@ This will put the bundle into "dist" folder.
 
 3) cp -R * /var/www/html
 
-This is a hot deployment.  No need to cycle apache.  
+This is a hot deployment.  No need to cycle apache.
 
 Note: Don't forget to update version in package.json so message:
 
 MainComponent.initScene: appVersion=0.8.0
+
+Note: you don't updage MainComponent, just update package.json.
 
 
 on console.log appears correctly.
@@ -26,7 +28,7 @@ Note 2: I cannot get UTs to run on dev or on prod.
 
 a) sudo certbot renew --dry-run
 
-remove dry-run for real.  This will create the following: 
+remove dry-run for real.  This will create the following:
 
 /etc/letsencrypt/live/infinitewheelie.org/fullchain.pem
 /etc/letsencrypt/live/infinitewheelie.org/privkey.pem
@@ -42,5 +44,3 @@ c) use https://www.sslshopper.com/ssl-checker.html to check:
 infinitewheelie.org and infinitewheelier.org:1337
 
 see https://stackoverflow.com/questions/52940438/how-to-refresh-ssl-certificate-for-proxy-server-on-port-1337/52941741#52941741
-
-
