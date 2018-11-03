@@ -13,6 +13,7 @@ export class AppComponent {
   title = 'app';
   constructor(private _router: Router) {
     // debugger;
+    console.log(`AppComponent: router.url=${this._router.url}, window.location.pathname=${window.location.pathname}`);
     if (!environment.production) {
       console.log(`router.config.length pre=${this._router.config.length}`);
 

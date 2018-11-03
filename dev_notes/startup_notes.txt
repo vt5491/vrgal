@@ -37,6 +37,8 @@ rails s
 This will start on port 3000, and the server interfaces with the meta-data in the mysql server.
 
 d) Startup the meta-data proxy server:
+(in black on yellow console)
+
 i)cd to $VRGAL root
 ii) startup with node (or nodemon if developing)
 node servers/meta-data-proxy/index.js

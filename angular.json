@@ -33,7 +33,9 @@
               "src/assets/libs/grab-vt.js",
               "src/assets/libs/aframe/hand-controls-vt.js",
               "src/assets/libs/aframe/laser-controls-vt.js"
-            ]
+            ],
+            "deployUrl" : "/apps/vrgal/",
+            "baseHref" : "/apps/vrgal/"
           },
           "configurations": {
             "production": {

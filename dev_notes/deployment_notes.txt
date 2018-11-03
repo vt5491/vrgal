@@ -1,13 +1,26 @@
 # 2018-10-18
+1) update git on production an deploying
 From infinitewheelie.org $VRGAL dir:
 
-1) ng build --prod
+a) git pull
+
+b) ng build --prod
 
 This will put the bundle into "dist" folder.
 
-2) cd dist
+c) cd /var/www/html/apps/vrgal
 
-3) cp -R * /var/www/html
+rm -rf *
+
+or:
+cd $VRGAL_DEPLOY/app/vrgal
+
+Yes, you need to do this because otherwise you get many version of main and scripts etc.
+You may also get into a state where apache doesn't know which version of the build to use.
+
+d) cd dist
+
+e) sudo cp -R * /var/www/html/app/vrgal
 
 This is a hot deployment.  No need to cycle apache.
 
@@ -20,11 +33,17 @@ Note: you don't updage MainComponent, just update package.json.
 
 on console.log appears correctly.
 
+f) URL to get to is:
+https://infinitewheelie.org/apps/vrgal/
+
+Note: this will drive the default path '' in src/app.module.ts.  'https://infinitewheelie.org/apps/vrgal/vrgal/main' works in development
+but not in production.
+
 
 Note 2: I cannot get UTs to run on dev or on prod.
 
 # 2018-10-22
-4) Renewing certificate keys
+2) Renewing certificate keys
 
 a) sudo certbot renew --dry-run
 

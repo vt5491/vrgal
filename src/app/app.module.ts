@@ -40,7 +40,10 @@ import { CoreDataExampleService } from './core/services/core-data-example.servic
 import { CoreBaseService } from './core/services/core-base.service';
 
 const appRoutes:Routes = [
-  {path: '', component: AframeCubeComponent},
+  //{path: '', component: AframeCubeComponent},
+  // Note: on EC2 (production) the default path ('') is the only one that matches.
+  // In development, 'https://192.168.50.158:4200/apps/vrgal/vrgal/main' works too.
+  {path: '', component: MainComponent},
   {path: 'vr-gallery/link-select', component: LinkSelectComponent},
   {path: 'vr-gallery/query-select', component: QuerySelectComponent},
   {path: 'vr-gallery/results-scene', component: ResultsSceneComponent},
