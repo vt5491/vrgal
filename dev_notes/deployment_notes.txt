@@ -16,17 +16,17 @@ for doing something on ec2.
 
 c) cd /var/www/html/apps/vrgal
 
-rm -rf *
+sudo rm -rf *
 
 or:
-cd $VRGAL_DEPLOY/app/vrgal
+cd $VRGAL_DEPLOY/apps/vrgal
 
 Yes, you need to do this because otherwise you get many version of main and scripts etc.
 You may also get into a state where apache doesn't know which version of the build to use.
 
 d) cd dist
 
-e) sudo cp -R * /var/www/html/app/vrgal
+e) sudo cp -R * /var/www/html/apps/vrgal
 
 This is a hot deployment.  No need to cycle apache.
 
@@ -48,11 +48,24 @@ but not in production.
 
 Note 2: I cannot get UTs to run on dev or on prod.
 
+# 2018-12-13
 g) how to start servers:
 do a 'crontab -l' to see the commands:
 
 @reboot /bin/bash -l -c 'cd /home/ubuntu/resources/github/vrize-service && rails s --environment=production'
 @reboot /bin/bash -l -c 'cd /home/ubuntu/resources/github/vrgal && pm2 start servers/meta-data-proxy/index.js'
+
+h) How to cycle the express (proxy) server:
+
+some useful commands before:
+
+pm2 status
+pm2 logs
+
+ps -ef | grep "node"
+-> check the pid, so you can verify it changed later.
+
+
 
 # 2018-10-22
 2) Renewing certificate keys
