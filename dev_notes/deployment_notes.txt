@@ -8,6 +8,12 @@ b) ng build --prod
 
 This will put the bundle into "dist" folder.
 
+update: with ng 6+ you should now say:
+ng build --configuration=production
+
+Note: I do have an environment=ec2.  However, don't use this, it was just a test
+for doing something on ec2.
+
 c) cd /var/www/html/apps/vrgal
 
 rm -rf *
@@ -42,6 +48,12 @@ but not in production.
 
 Note 2: I cannot get UTs to run on dev or on prod.
 
+g) how to start servers:
+do a 'crontab -l' to see the commands:
+
+@reboot /bin/bash -l -c 'cd /home/ubuntu/resources/github/vrize-service && rails s --environment=production'
+@reboot /bin/bash -l -c 'cd /home/ubuntu/resources/github/vrgal && pm2 start servers/meta-data-proxy/index.js'
+
 # 2018-10-22
 2) Renewing certificate keys
 
@@ -63,3 +75,6 @@ c) use https://www.sslshopper.com/ssl-checker.html to check:
 infinitewheelie.org and infinitewheelier.org:1337
 
 see https://stackoverflow.com/questions/52940438/how-to-refresh-ssl-certificate-for-proxy-server-on-port-1337/52941741#52941741
+
+example:
+sudo ssl-cert-check -c /etc/letsencrypt/live/infinitewheelie.org/fullchain.pem
